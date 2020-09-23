@@ -1,0 +1,12 @@
+.idea/
+bin/
+node_modules/
+*.iml
+release/
+npm-debug.log
+/app
+dist/
+logs/
+coverage/
+package-lock.json
+yarn-error.log

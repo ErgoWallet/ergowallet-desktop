@@ -1,0 +1,1 @@
+# Ergo Desktop Wallet

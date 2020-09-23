@@ -1,0 +1,1 @@
+export const minBoxValue = 100_000;

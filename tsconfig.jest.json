@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "outDir": "./app",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "allowJs": false,
+    "module": "CommonJS"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
