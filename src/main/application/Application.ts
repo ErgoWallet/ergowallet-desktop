@@ -90,7 +90,13 @@ export default class Application extends EventEmitter {
     if (this.currentWallet == null) {
       return [];
     }
-    return this.currentWallet.getUnspentBoxes();
+    // map result to response format because of BigInt
+    return this.currentWallet.getUnspentBoxes()
+      .map((item) => ({
+        ...item,
+        value: item.value.toString(),
+        assets: item.assets.map((a) => ({...a, amount: a.amount.toString()}))
+      }));
   }
 
   public getTransactions(): Array<any> {

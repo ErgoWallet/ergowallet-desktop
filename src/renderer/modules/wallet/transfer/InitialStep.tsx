@@ -8,10 +8,11 @@ import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {fromErg} from "../../../../common/utils";
 import TokensValues from "../TokensValues";
 import {minBoxValue} from "../../../../common/constants";
-import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import {ErgoBox} from "../../../../common/backend-types";
+import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
 
 interface InitialStepProps {
-  fromBoxes: Array<WalletBox>;
+  fromBoxes: Array<ErgoBox>;
   onContinue?: any;
   backendApi?: any;
 }
@@ -23,9 +24,8 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
   const amountRef = React.createRef<any>();
 
   // Total nanoERG available
-  const totalMoney: MoneyUnits = fromBoxes.reduce((total: MoneyUnits, box: any) => {
-    return total.plus(new MoneyUnits(box.value, 9));
-  }, new MoneyUnits(0, 9));
+  const boxes = new ErgoBoxSet(fromBoxes);
+  const totalMoney = new MoneyUnits(boxes.balance('ERG'), 9);
 
   const [recipient, setRecipient] = React.useState('');
   const [recipientError, setRecipientError] = React.useState('');
@@ -114,7 +114,7 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
 
   return (
     <>
-      <div>Spend boxes</div>
+      <Box mb={1}>Spend boxes</Box>
       <Grid container direction="column">
         {fromBoxes.map((box) => {
           return (

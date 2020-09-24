@@ -13,7 +13,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import TransferDialog from "../transfer/TransferDialog";
-import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import {ErgoBox} from "../../../../common/backend-types";
+import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -25,16 +26,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
+function Send (props: {fromBoxes: Array<ErgoBox>}): React.ReactElement {
+  const { fromBoxes } = props;
   const classes = useStyles();
   const [asset, setAsset] = React.useState('ERG');
   const [transferDlgOpen, setTransferDlgOpen ] = React.useState(false);
 
-  const { fromBoxes } = props;
-
-  const total: MoneyUnits = fromBoxes.reduce((total: MoneyUnits, box: any) => {
-    return total.plus(new MoneyUnits(box.value, 9));
-  }, new MoneyUnits(0, 9));
+  const boxSet = new ErgoBoxSet(fromBoxes);
+  const total = new MoneyUnits(boxSet.balance('ERG'), 9);
 
   function handleChange(event: React.ChangeEvent<{ value: string }>): void {
     setAsset(event.target.value);
@@ -79,7 +78,7 @@ function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
               disabled={!canSend}
               onClick={handleSendClick}
               variant="contained"
-              color={'secondary'}
+              color="secondary"
               endIcon={<SendOutlinedIcon />}
             >
               Send

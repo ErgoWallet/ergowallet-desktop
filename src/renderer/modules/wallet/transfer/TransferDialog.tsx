@@ -7,7 +7,7 @@ import InitialStep from "./InitialStep";
 import ConfirmationStep from "./ConfirmationStep";
 import {UnsignedTransaction} from "../../../../main/application/services/wallet/TransactionBuilder";
 import FinalStep from "./FinalStep";
-import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import {ErgoBox} from "../../../../common/backend-types";
 
 enum Page {
   INITIAL,
@@ -18,7 +18,7 @@ enum Page {
 interface TransferProps {
   open: boolean;
   onClose: () => void;
-  fromBoxes: Array<WalletBox>;
+  fromBoxes: Array<ErgoBox>;
 }
 
 const useStyles = makeStyles((theme) => ({

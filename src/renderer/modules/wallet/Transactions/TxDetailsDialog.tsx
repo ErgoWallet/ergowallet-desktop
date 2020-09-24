@@ -76,27 +76,32 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
           </Typography>
         </Grid>
         {/* Tx Schema - Inputs -> Outputs */}
-        <Grid container direction={"column"} wrap="nowrap">
+        <Grid container direction="column" wrap="nowrap">
           {/* inputs list */}
           <Grid item>
 
             <Grid container direction={'column'}>
               {
                 tx.inputs.map((i: any) => (
-                  <Grid item key={i.id}>
-                    <Grid container wrap={"nowrap"} spacing={1} alignItems="baseline" justify={'space-between'}>
-                      <Grid item>
-                        {(i.address.length > 60) ? (
-                          <Address shortened={true} value={i.address} />
-                        ) : (
-                          <Address shortened={false} value={i.address} />
-                        )}
-                      </Grid>
-                      <Grid item>
-                        <AssetValue amount={i.value} decimals={9} symbol={"ERG"}/>
-                      </Grid>
-                    </Grid>
-                  </Grid>
+                  <Box key={i.id} display="flex">
+                    <Box flexBasis={0} flexGrow={2}>
+                      {(i.address.length > 60) ? (
+                        <Address shortened={true} value={i.address} />
+                      ) : (
+                        <Address shortened={false} value={i.address} />
+                      )}
+                    </Box>
+                    <Box
+                      flexBasis={0}
+                      flexGrow={1}
+                      display="flex"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <TokensValues assets={i.assets} />
+                      <AssetValue amount={i.value} decimals={9} symbol="ERG"/>
+                    </Box>
+                  </Box>
                 ))
               }
             </Grid>
@@ -111,10 +116,10 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
 
           {/* outputs list */}
           <Grid item>
-            <Grid container direction={'column'}>
+            <Grid container direction="column">
               {
                 tx.outputs.map((i: any) => (
-                  <Box key={i.id} display={"flex"}>
+                  <Box key={i.id} display="flex">
                       <Box flexBasis={0} flexGrow={2}>
                         {(i.address.length > 60) ? (
                           <Address shortened={true} value={i.address} />

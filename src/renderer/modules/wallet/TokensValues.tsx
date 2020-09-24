@@ -1,5 +1,4 @@
-import {Box} from "@material-ui/core";
-import Chip from "@material-ui/core/Chip";
+import {Box, Chip} from "@material-ui/core";
 import AssetValue from "../../components/AssetValue";
 import * as React from "react";
 
