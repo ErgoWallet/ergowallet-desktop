@@ -16,7 +16,12 @@ const useStyles = makeStyles(() => ({
 
 function NewMnemonic(props: {onSubmit?: (mnemonic: string) => void}) {
   const classes = useStyles();
+  const [checked, setChecked] = React.useState(false);
   const [mnemonic, setMnemonic] = React.useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   React.useEffect(() => {
     const generate = async () => {
@@ -54,12 +59,13 @@ function NewMnemonic(props: {onSubmit?: (mnemonic: string) => void}) {
           Never share recovery phrase with anyone, store it securely
         </Alert>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} spacing={1}>
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={<Checkbox checked={checked} value="remember" color="primary" onChange={handleChange}/>}
           label="I understand that if I lose my recovery phrase, I will not be able to access my wallet"
         />
         <Button
+          disabled={!checked}
           disableElevation
           color={'primary'}
           variant={'contained'}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Container, Button, Chip, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import { remove } from '../../../utils';
+import * as _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   verifiedBox: {
@@ -23,31 +23,32 @@ const useStyles = makeStyles((theme) => ({
 
 function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
   const classes = useStyles();
-  const words = props.mnemonic.split(' ');
+  const original = props.mnemonic.split(' ');
+  const words = _.shuffle(original);
   const [state, setState] = React.useState({
-    selected: [],
-    unselected: [].concat(words)
+    selected: new Array<string>(),
+    unselected: new Array<string>().concat(words)
   })
 
   function addWord(word: string) {
     const {selected, unselected} = state;
 
     const newSelected = selected.concat([word]);
-    const newUnselected = remove(unselected, word);
-
+    _.remove(unselected, (w: string) => w === word);
     setState({
       selected: newSelected,
-      unselected: newUnselected
+      unselected: unselected
     });
   }
 
   function removeWord(word: string) {
     const {selected, unselected} = state;
-    const newSelected = remove(selected, word);
+    // const newSelected = remove<string>(selected, word);
+    _.remove(selected, (w: string) => w === word);
     const newUnselected = unselected.concat([word]);
 
     setState({
-      selected: newSelected,
+      selected: selected,
       unselected: newUnselected
     });
   }
@@ -55,8 +56,8 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
   const {selected, unselected} = state;
 
   // Compare original phrase with confirmed one
-  const isValid = (selected.length === words.length) &&
-    selected.every((value, index) => value === words[index]);
+  const isValid = (selected.length === original.length) &&
+    selected.every((value, index) => value === original[index]);
 
   return (
     <Grid container direction="column" spacing={1}>
@@ -90,8 +91,8 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
       <Grid item lg={12} md={12} sm={12} xs={12}>
         <Button
           disableElevation
-          color={'primary'}
-          variant={'contained'}
+          color="primary"
+          variant="contained"
           disabled={!isValid}
           onClick={() => props.onConfirmed()}
         >

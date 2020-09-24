@@ -65,7 +65,7 @@ export default class TransactionBuilder {
       outputs: []
     };
 
-    const fromBoxes = [];
+    const fromBoxes = new Array<WalletBox>();
     spendingBoxes.forEach((id) => {
       const box = this.unspentBoxes.get(id);
       if (box) {
@@ -82,12 +82,12 @@ export default class TransactionBuilder {
     );
 
     // For each input which holds tokens we create separate output
-    fromBoxes.forEach((inputBox) => {
+    fromBoxes.forEach((inputBox: any) => {
       if (inputBox.assets && inputBox.assets.length > 0) {
         tx.outputs.push({
           address: inputBox.address,
           value: minBoxValue.toString(),
-          assets: inputBox.assets.map((a) => ({ tokenId: a.tokenId, amount: a.amount.toString() }))
+          assets: inputBox.assets.map((a: any) => ({ tokenId: a.tokenId, amount: a.amount.toString() }))
         });
         totalAvailable = totalAvailable.minus(new MoneyUnits(minBoxValue, 9));
       }

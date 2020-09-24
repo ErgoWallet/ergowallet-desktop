@@ -15,7 +15,7 @@ export interface WalletBox {
   address: string;
   spentTransactionId: string | null;
   assets: Array<TokenValue>;
-  additionalRegisters: AdditionalRegisters;
+  additionalRegisters: AdditionalRegisters | {};
 }
 
 export interface Wallet {

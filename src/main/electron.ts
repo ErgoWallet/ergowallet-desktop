@@ -27,7 +27,7 @@ if (!gotTheLock) {
   // Load primary instance of application
   app.on('before-quit', () => {
     application.stop();
-    console.log('Electron app before-quit done');
+    console.debug('Electron app before-quit done');
   });
 
   app.on('ready', async () => {
@@ -42,10 +42,10 @@ if (!gotTheLock) {
 
     // First: set ready event handler to show window
     mainWindow.on('ready-to-show', () => {
+      console.debug("Main window ready to show");
       mainWindow.show();
       mainWindow.focus();
     });
-
 
     application.on('WalletUpdated', () => {
       mainWindow.webContents.send('WalletUpdated', {});

@@ -27,7 +27,7 @@ export interface Output {
   address: string;
   spentTransactionId: string;
   assets: Array<TokenValue>;
-  additionalRegisters: AdditionalRegisters;
+  additionalRegisters: AdditionalRegisters | {};
 }
 
 export interface Input {

@@ -59,12 +59,18 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
     setPage(Pages.VerifyMnemonic);
   }
 
+  async function isNameAvailable(walletName: string): Promise<boolean> {
+    const exists = await backend.isWalletExists(walletName);
+    return !exists;
+  }
+
   let content = null;
   if (page === Pages.InitWalletParams) {
     content = (
       <InitWalletParams
         onSetParams={handleSetParams}
         onCancel={cancelCreation}
+        isNameAvailable={isNameAvailable}
       />
       );
   } else if (page === Pages.CreateMnemonic) {
