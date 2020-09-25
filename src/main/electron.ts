@@ -51,6 +51,11 @@ if (!gotTheLock) {
       mainWindow.webContents.send('WalletUpdated', {});
     });
 
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+      console.error(event);
+      console.error(`Fail load main window content. (${errorCode}: ${errorDescription})`);
+    });
+
     // Second: load main page asynchronously
     await mainWindow.loadFile(path.join(__dirname, '/../index.html'));
   });
