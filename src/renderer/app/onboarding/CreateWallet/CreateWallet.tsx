@@ -74,7 +74,11 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
       />
       );
   } else if (page === Pages.CreateMnemonic) {
-    content = (<NewMnemonic onSubmit={handleNewMnemonic} />);
+    content = (
+      <NewMnemonic
+        onSubmit={handleNewMnemonic}
+        backendApi={backend}
+      />);
   } else if (page === Pages.VerifyMnemonic) {
     content = (
       <ConfirmMnemonic

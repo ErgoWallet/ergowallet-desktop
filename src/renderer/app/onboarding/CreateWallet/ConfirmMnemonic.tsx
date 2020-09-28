@@ -1,9 +1,13 @@
 import * as React from 'react';
-import {Container, Button, Chip, Grid} from "@material-ui/core";
+import {Container, Button, Chip, Grid, Box, Card, CardActions, CardContent, CardHeader} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import * as _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    border: 'none',
+    backgroundColor: 'inherit'
+  },
   verifiedBox: {
     border: "1px solid ".concat(theme.palette.divider),
     minHeight: '200px',
@@ -16,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(0.5),
     '& > *': {
       margin: theme.spacing(0.5),
-    }
+    },
+    minHeight: '100px'
   }
 }));
 
@@ -60,35 +65,40 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
     selected.every((value, index) => value === original[index]);
 
   return (
-    <Grid container direction="column" spacing={1}>
-      <Grid item lg={12} md={12} sm={12} xs={12}>
-        Click the words to put them next to each other in the correct order.
-      </Grid>
-      <Grid item lg={12} md={12} sm={12} xs={12}>
-          <div className={classes.verifiedBox}>
-            {selected.map((word, index) => (
-              <Chip
-                onDelete={() => removeWord(word)}
-                color="primary"
-                variant="outlined"
-                key={word}
-                label={`${index + 1}. ${word}`}
-              />))
-            }
-          </div>
-      </Grid>
-      <Grid item lg={12} md={12} sm={12} xs={12}>
-        <Container className={classes.unselectedChips}>
-          {unselected.map((word) => (
-            <Chip
-              key={word}
-              label={word}
-              onClick={() => addWord(word)}
-            />))
-          }
-        </Container>
-      </Grid>
-      <Grid item lg={12} md={12} sm={12} xs={12}>
+    <Card variant="outlined" className={classes.root}>
+      <CardHeader title={"Verify recovery phrase"} />
+      <CardContent>
+        <Box display="flex" flexDirection="column" >
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            Click the words to put them next to each other in the correct order.
+          </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <div className={classes.verifiedBox}>
+              {selected.map((word, index) => (
+                <Chip
+                  onDelete={() => removeWord(word)}
+                  color="primary"
+                  variant="outlined"
+                  key={word}
+                  label={`${index + 1}. ${word}`}
+                />))
+              }
+            </div>
+          </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Container className={classes.unselectedChips}>
+              {unselected.map((word) => (
+                <Chip
+                  key={word}
+                  label={word}
+                  onClick={() => addWord(word)}
+                />))
+              }
+            </Container>
+          </Grid>
+        </Box>
+      </CardContent>
+      <CardActions>
         <Button
           disableElevation
           color="primary"
@@ -98,8 +108,8 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
         >
           Confirm
         </Button>
-      </Grid>
-    </Grid>
+      </CardActions>
+    </Card>
   );
 }
 

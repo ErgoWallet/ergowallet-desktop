@@ -1,6 +1,6 @@
 # Ergo Desktop Wallet
 
-Non-custodial desktop wallet for <a href="https://ergoplatform.org" target="_blank">Ergo Platform</a> blockchain
+Non-custodial desktop wallet for [Ergo Platform](https://ergoplatform.org) blockchain
 
 ### How to run application
 

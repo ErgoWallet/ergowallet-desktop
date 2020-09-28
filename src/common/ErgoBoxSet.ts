@@ -24,6 +24,6 @@ export class ErgoBoxSet {
   }
 
   public balance(tokenId: string): bigint {
-    return this.balances.get(tokenId);
+    return this.balances.get(tokenId) || BigInt(0);
   }
 }

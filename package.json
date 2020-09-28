@@ -121,9 +121,12 @@
     "asar": true,
     "extraResources": [],
     "mac": {
+      "icon": "resources/icon.icns",
       "category": "public.app-category.developer-tools"
     },
     "linux": {
+      "category": "Network",
+      "icon": "resources/icons",
       "target": [
         "AppImage"
       ]
