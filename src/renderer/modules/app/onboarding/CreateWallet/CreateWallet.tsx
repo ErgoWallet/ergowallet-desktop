@@ -4,7 +4,7 @@ import ConfirmMnemonic from "./ConfirmMnemonic";
 import InitWalletParams from "../InitWalletParams";
 import NewMnemonic from "./NewMnemonic";
 import {makeStyles} from "@material-ui/core/styles";
-import * as backend from "../../../Backend";
+import * as backend from "../../../../Backend";
 
 // ****************************************************************************
 // This wizard contains following steps:

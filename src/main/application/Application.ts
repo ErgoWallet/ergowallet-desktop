@@ -1,5 +1,6 @@
 import * as vault from './ipc-handlers/vault';
 import * as wallet from './ipc-handlers/wallet';
+import * as app from './ipc-handlers/app';
 import {Connector} from '../ergoplatform/connector/Connector';
 import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/explorer';
 import {Vault} from "./services/vault/Vault";
@@ -19,9 +20,11 @@ export default class Application extends EventEmitter {
   private currentWallet: Wallet | null = null;
   private readonly connector: Connector;
   private blockchain: BlockchainService;
+  private settings: any;
 
   constructor() {
     super();
+    this.settings = { termsAccepted: false };
     this.connector = new Connector(new ExplorerClient(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
@@ -32,18 +35,25 @@ export default class Application extends EventEmitter {
   public start(): void {
     this.blockchain.start();
     this.setIpcHandlers();
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    sleep(5000).then(() => this.emit('AppReady'));
+
+    // Load settings
+    // this.emit('AppReady');
   }
 
   public stop(): void {
     this.blockchain.stop();
     this.blockchain.removeAllListeners(BlockchainService.HEIGHT_CHANGED_EVENT);
     this.closeCurrentWallet();
-    this.removeAllListeners('WalletUpdated');
   }
 
   private setIpcHandlers(): void {
     vault.setHandlers(this);
     wallet.setHandlers(this);
+    app.setHandlers(this);
   }
 
   public generateMnemonic(): string {
@@ -147,6 +157,16 @@ export default class Application extends EventEmitter {
       }
     }
     return txId;
+  }
+
+  public getSettings(): any {
+    return this.settings;
+  }
+
+  public updateSettings(settings: any) {
+    console.debug('Updating settings: ' +  JSON.stringify(settings));
+    this.settings = settings;
+    this.emit('SettingsUpdated');
   }
 }
 

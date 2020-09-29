@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, TextField, Grid, Box} from "@material-ui/core";
-import Mnemonic from "../../../../common/Mnemonic";
+import Mnemonic from "../../../../../common/Mnemonic";
 
 
 // ****************************************************************************

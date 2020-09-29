@@ -25,7 +25,6 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-
 function Send (props: {fromBoxes: Array<ErgoBox>}): React.ReactElement {
   const { fromBoxes } = props;
   const classes = useStyles();

@@ -18,7 +18,6 @@ export interface UnsignedTransaction {
 
   /** Unsigned Tx for broadcasting */
   ergoTx?: any;
-
 }
 
 export interface SignedTransaction {

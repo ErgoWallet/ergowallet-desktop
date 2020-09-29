@@ -4,7 +4,7 @@ import InputMnemonic from "./InputMnemonic";
 import {Container} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 
-import * as backend from '../../../Backend';
+import * as backend from '../../../../Backend';
 
 // ****************************************************************************
 // This wizard contains following steps:

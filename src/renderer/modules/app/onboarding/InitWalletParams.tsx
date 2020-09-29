@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Box, Button, Grid} from "@material-ui/core";
-import Input from '../../components/Input';
+import Input from '../../../components/Input';
 
 // ****************************************************************************
 // Set Wallet Name and Password

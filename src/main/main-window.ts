@@ -8,6 +8,7 @@ export function createWindow(options): BrowserWindow {
     height: 650,
     icon: options.appIconPath,
     webPreferences: {
+      enableRemoteModule: false,
       spellcheck: false,
       nodeIntegration: true,
     }

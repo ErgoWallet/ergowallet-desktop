@@ -3,12 +3,17 @@ import {Container, CssBaseline, ThemeProvider} from '@material-ui/core';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
 import {createHistory, createMemorySource, LocationProvider,} from "@reach/router"
-import theme from "../ui/theme";
+import theme from "../../ui/theme";
 import CreateWallet from "./onboarding/CreateWallet/CreateWallet";
 import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
 import withWidth from '@material-ui/core/withWidth';
-import * as backend from '../Backend';
+import * as backend from '../../Backend';
 import {Alert, AlertTitle} from "@material-ui/lab";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/root-reducer";
+import Loading from "./Loading";
+import Terms from "./Terms";
+import {fetchAppSettings} from "./app-slice";
 
 let source = createMemorySource("/")
 let history = createHistory(source)
@@ -25,6 +30,8 @@ enum CreationMode {
 }
 
 const App = (props: any) => {
+  const dispatch = useDispatch();
+  const app = useSelector((state: RootState) => state.app);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [creationMode, setCreationMode] = React.useState<CreationMode>(CreationMode.Unknown);
 
@@ -49,6 +56,32 @@ const App = (props: any) => {
   function handleImportWallet() {
     setCreationMode(CreationMode.Import);
   }
+
+  async function handleAcceptTerms() {
+    const settings = {
+      ...app.settings,
+      termsAccepted: true
+    };
+    await backend.updateSettings(settings);
+  }
+
+  if (!app.ready) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Loading />
+      </ThemeProvider>
+    );
+  }
+
+  if (!app.settings.termsAccepted) {
+    return (
+      <Terms
+        onAccepted={handleAcceptTerms}
+      />);
+  }
+
+  // Application is READY - display wizard or login screen
 
   let content = null;
 

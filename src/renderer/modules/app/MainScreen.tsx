@@ -1,15 +1,15 @@
 import {AppBar, Button, Container, IconButton, Toolbar} from '@material-ui/core';
 import {RouteComponentProps, Router, useNavigate} from '@reach/router';
 import * as React from 'react';
-import Exchange from '../modules/exchange/Exchange';
-import Wallet from '../modules/wallet/Wallet';
-import Settings from '../modules/settings/Settings';
+import Exchange from '../exchange/Exchange';
+import Wallet from '../wallet/Wallet';
+import Settings from '../settings/Settings';
 import {makeStyles} from '@material-ui/core/styles';
 import {SettingsOutlined as SettingsIcon} from '@material-ui/icons';
 import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 import SyncOutlinedIcon from '@material-ui/icons/SyncOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
-import {ScrollToTop} from "../components/ScrollToTop";
+import {ScrollToTop} from "../../components/ScrollToTop";
 
 const ExchangeRoute = (props: RouteComponentProps) => (
   <>

@@ -2,6 +2,7 @@ import {app, BrowserWindow} from 'electron';
 import * as path from 'path';
 import Application from './application/Application';
 import {createWindow} from './main-window';
+import {Events} from "../common/backend-types";
 
 /** Main window instance */
 let mainWindow: BrowserWindow = null;
@@ -32,8 +33,6 @@ if (!gotTheLock) {
 
   app.on('ready', async () => {
 
-    // Start Core Application
-    application.start();
 
     // Create and show main window
     mainWindow = createWindow({
@@ -45,10 +44,21 @@ if (!gotTheLock) {
       console.debug("Main window ready to show");
       mainWindow.show();
       mainWindow.focus();
+
+      // Start Core Application
+      application.start();
     });
 
     application.on('WalletUpdated', () => {
-      mainWindow.webContents.send('WalletUpdated', {});
+      mainWindow.webContents.send('events', Events.WALLET_UPDATED);
+    });
+
+    application.on('AppReady', () => {
+      mainWindow.webContents.send('events', Events.APP_READY);
+    });
+
+    application.on('SettingsUpdated', () => {
+      mainWindow.webContents.send('events', Events.SETTINGS_UPDATED);
     });
 
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {

@@ -2,6 +2,14 @@ import {ipcRenderer} from "electron";
 import {Commands, ErgoBox} from "../common/backend-types";
 import {AddressInfo} from "../common/backend-types";
 
+export function getSettings(): Promise<any> {
+  return ipcRenderer.invoke(Commands.APP_GET_SETTINGS);
+}
+
+export function updateSettings(settings: any) {
+  return ipcRenderer.invoke(Commands.APP_UPDATE_SETTINGS, settings);
+}
+
 export function isWalletExists(walletName: string): Promise<boolean> {
   return ipcRenderer.invoke(Commands.VAULT_WALLET_EXISTS, walletName);
 }

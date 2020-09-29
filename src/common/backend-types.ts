@@ -16,7 +16,15 @@ export interface Event {
   payload: any;
 }
 
+export enum Events {
+  WALLET_UPDATED = 'wallet-updated',
+  APP_READY = 'app-ready',
+  SETTINGS_UPDATED = 'settings-updated'
+}
+
 export enum Commands {
+  APP_UPDATE_SETTINGS = 'update-settings',
+  APP_GET_SETTINGS = 'get-settings',
   GENERATE_MNEMONIC = 'generate-mnemonic',
 
   VAULT_GET_WALLETS = 'get-all-wallets',

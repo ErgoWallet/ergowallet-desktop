@@ -3,7 +3,7 @@ import {Avatar, Button, Container, Link, MenuItem, OutlinedInput, Select, TextFi
 import {makeStyles} from "@material-ui/core/styles";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import * as backend from '../../Backend';
+import * as backend from '../../../Backend';
 
 interface LoginScreenProps {
   onLogin?: any;
@@ -59,7 +59,6 @@ function LoginScreen(props: LoginScreenProps) {
   const canProceed = (wallet && wallet.length > 0);
 
   return (
-
     <Container component="main" maxWidth="xs" className={classes.container}>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
