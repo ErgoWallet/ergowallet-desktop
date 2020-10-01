@@ -4,6 +4,8 @@ import Application from './application/Application';
 import {createWindow} from './main-window';
 import {Events} from "../common/backend-types";
 
+console.debug(`userData: ${app.getPath('userData')}`);
+
 /** Main window instance */
 let mainWindow: BrowserWindow = null;
 

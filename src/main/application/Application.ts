@@ -11,6 +11,7 @@ import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
 import {ErgoBox} from "../../common/backend-types";
 import { EventEmitter } from 'events';
+import Settings from "./Settings";
 
 export default class Application extends EventEmitter {
 
@@ -20,11 +21,10 @@ export default class Application extends EventEmitter {
   private currentWallet: Wallet | null = null;
   private readonly connector: Connector;
   private blockchain: BlockchainService;
-  private settings: any;
+  private settings: Settings;
 
   constructor() {
     super();
-    this.settings = { termsAccepted: false };
     this.connector = new Connector(new ExplorerClient(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
@@ -35,13 +35,10 @@ export default class Application extends EventEmitter {
   public start(): void {
     this.blockchain.start();
     this.setIpcHandlers();
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    sleep(5000).then(() => this.emit('AppReady'));
 
     // Load settings
-    // this.emit('AppReady');
+    this.settings = new Settings();
+    this.emit('AppReady');
   }
 
   public stop(): void {
@@ -160,12 +157,12 @@ export default class Application extends EventEmitter {
   }
 
   public getSettings(): any {
-    return this.settings;
+    return this.settings.data();
   }
 
   public updateSettings(settings: any) {
     console.debug('Updating settings: ' +  JSON.stringify(settings));
-    this.settings = settings;
+    this.settings.update(settings);
     this.emit('SettingsUpdated');
   }
 }

@@ -10,7 +10,7 @@ const Terms = (props: TermsProps) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+      <Box display="flex" m={2} flexDirection="column" alignItems="center">
         <Box>
           <p>
             End-User License Agreement for Ergo Wallet<br/>

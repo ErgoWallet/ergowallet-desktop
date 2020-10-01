@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as constants from '../../../common/constants';
 import {Container, CssBaseline, ThemeProvider} from '@material-ui/core';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
@@ -58,9 +59,10 @@ const App = (props: any) => {
   }
 
   async function handleAcceptTerms() {
+    // We save latest terms version to mark terms accepted
     const settings = {
       ...app.settings,
-      termsAccepted: true
+      termsVersion: constants.termsVersion
     };
     await backend.updateSettings(settings);
   }
@@ -74,7 +76,7 @@ const App = (props: any) => {
     );
   }
 
-  if (!app.settings.termsAccepted) {
+  if (app.settings.termsVersion !== constants.termsVersion) {
     return (
       <Terms
         onAccepted={handleAcceptTerms}

@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ErgoBox} from "../../../common/backend-types";
 import {AppThunk} from "../../store/store";
 import * as backend from "../../Backend";
-import {getBoxesSuccess} from "../wallet/wallet-slice";
 
 interface AppState {
   ready: boolean;
-  settings: any;
+  settings: {
+    termsVersion?: string
+  };
 }
 
 const initialState: AppState = {
@@ -21,7 +21,7 @@ const appSlice = createSlice({
     appReady(state, action: PayloadAction<any>) {
       state.ready = true;
     },
-    getSettingsSuccess(state, action: PayloadAction<Array<ErgoBox>>) {
+    getSettingsSuccess(state, action: PayloadAction<any>) {
       state.settings = action.payload;
     },
   }

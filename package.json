@@ -53,7 +53,7 @@
     "style-loader": "^1.2.1",
     "ts-jest": "^26.1.1",
     "ts-loader": "^6.2.2",
-    "typescript": "3.9.6",
+    "typescript": "4.0.3",
     "url-loader": "^4.1.0",
     "webpack": "4.41.2",
     "webpack-cli": "^3.3.11"
@@ -70,6 +70,7 @@
     "bip32": "^2.0.5",
     "bip39": "^3.0.2",
     "clipboard-copy": "3.1.0",
+    "electron-store": "6.0.0",
     "lodash": "4.17.15",
     "node-fetch": "2.6.1",
     "react": "16.11.0",
@@ -78,7 +79,8 @@
     "recharts": "^1.8.5",
     "styled-components": "^5.1.1",
     "typeface-roboto": "^0.0.75",
-    "typeface-roboto-mono": "^0.0.75"
+    "typeface-roboto-mono": "^0.0.75",
+    "uuid": "8.3.0"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-babel",
