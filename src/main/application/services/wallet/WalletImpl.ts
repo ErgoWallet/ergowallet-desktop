@@ -5,7 +5,7 @@ import {Wallet, WalletBox, WalletTx} from "./Wallet";
 import {KeyManager as KeyManager3, KeyState} from "../../../../common/KeyManager";
 import TransactionBuilder, {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
-import {Output, Transaction} from "../../../ergoplatform/connector/types";
+import {Output, TokenValue, Transaction} from "../../../ergoplatform/connector/types";
 import {EventEmitter} from "events";
 
 const {KeyManager, Address, sign_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
@@ -41,7 +41,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
     const privateKeys = [];
     tx.ergoTx.inputs.forEach((input) => {
       const box = this.unspentBoxes.get(input.boxId);
-      boxesToSpend.push(box);
+      const ergBox = {
+        ...box,
+        value: Number(box.value),
+        assets: box.assets.map((a) => ({ tokenId: a.tokenId, amount: Number(a.amount) }))
+      };
+      boxesToSpend.push(ergBox);
 
       const address = box.address;
       // get private key for address
@@ -51,6 +56,11 @@ export class WalletImpl extends EventEmitter implements Wallet {
     });
 
     // sign tx
+
+    console.debug("ergoTx");
+    console.debug(JSON.stringify(tx.ergoTx));
+    console.debug("-------------");
+
     const signed = sign_tx(privateKeys, boxesToSpend, tx.ergoTx);
     console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
@@ -58,7 +68,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
   }
 
   public createTransaction(
-    spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, currentHeight: number
+    spendingBoxes: Array<string>,
+    recipient: string,
+    amount: string,
+    fee: string,
+    tokenId: string,
+    currentHeight: number
   ): UnsignedTransaction {
     // get next clean change address
     this.keyManager3.assertCleanKeys();
@@ -66,7 +81,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
     const context = { height: currentHeight };
     const builder = new TransactionBuilder(this.unspentBoxes, context);
-    return builder.create(spendingBoxes, recipient, amount, fee, changeKey.address);
+    return builder.create(spendingBoxes, recipient, amount, fee, changeKey.address, tokenId);
   }
 
   public getConfirmedTransactions(address: string): Array<any> {
@@ -80,16 +95,24 @@ export class WalletImpl extends EventEmitter implements Wallet {
   public addUnspent(box: Output): void {
     if (!this.unspentBoxes.get(box.id)) {
       console.log(`Adding ${JSON.stringify(box)}`);
+
+      const foundKey = this.keyManager3.getKey(box.address);
+      let addressType = "foreign";
+      if (foundKey) {
+        addressType = foundKey.internal ? "change" : "receive";
+      }
+
       const walletBox: WalletBox = {
         boxId: box.id,
         transactionId: box.txId,
-        value: box.value,
+        value: box.value.toString(),
         additionalRegisters: box.additionalRegisters,
-        assets: Array.from(box.assets),
+        assets: Array.from(box.assets.map((a: TokenValue) => ({tokenId: a.tokenId, amount: a.amount.toString()}))),
         index: box.index,
         ergoTree: box.ergoTree,
-        creationHeight: box.creationHeight,
+        creationHeight: Number(box.creationHeight.toString()),
         address: box.address,
+        addressType,
         spentTransactionId: box.spentTransactionId
       };
       this.unspentBoxes.set(box.id, walletBox);
@@ -98,15 +121,39 @@ export class WalletImpl extends EventEmitter implements Wallet {
   }
 
   public processTransactions(transactions: Array<Transaction>): void {
-    transactions.forEach((tx) => {
+    transactions.forEach((tx: Transaction) => {
+
+      const walletTx: WalletTx = {
+        ...tx,
+        value: "",
+        outputs: []
+      };
 
       tx.outputs.forEach((output, index) => {
 
+        let addressType = "foreign";
         // TODO: search key for ErgoTree
         const foundKey = this.keyManager3.getKey(output.address);
         if (foundKey) {
+          addressType = foundKey.internal ? "change" : "receive";
           this.keyManager3.markUsed(output.address);
         }
+
+        const walletBox: WalletBox = {
+          boxId: output.id,
+          transactionId: output.txId,
+          value: output.value.toString(),
+          additionalRegisters: output.additionalRegisters,
+          assets: Array.from(output.assets.map((a: TokenValue) => ({tokenId: a.tokenId, amount: a.amount.toString()}))),
+          index: output.index,
+          ergoTree: output.ergoTree,
+          creationHeight: Number(output.creationHeight.toString()),
+          address: output.address,
+          addressType,
+          spentTransactionId: output.spentTransactionId
+        };
+
+        walletTx.outputs.push(walletBox);
       });
 
       tx.inputs.forEach((input) => {
@@ -134,13 +181,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
         );
 
       const balance = received.minus(spent);
-      const extTx = {
-        ...tx,
-        value: balance.amount
-      };
+
+      walletTx.value = balance.amount;
+
 
       // update tx in storage
-      this.transactions.set(tx.id, extTx);
+      this.transactions.set(tx.id, walletTx);
       this.emit(WalletImpl.UPDATED_EVENT, {});
 
     });

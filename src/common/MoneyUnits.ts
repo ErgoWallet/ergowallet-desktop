@@ -44,12 +44,20 @@ export class MoneyUnits {
     return new MoneyUnits(result.toString(), this.decimals);
   }
 
+  lessThen(other: MoneyUnits): boolean {
+    return BigInt(this.amount) < BigInt(other.amount);
+  }
+
   isNegative(): boolean {
     return BigInt(this.amount) < BIG_INT_ZERO;
   }
 
   isPositive(): boolean {
     return BigInt(this.amount) > BIG_INT_ZERO;
+  }
+
+  isZero(): boolean {
+    return BigInt(this.amount) === BIG_INT_ZERO;
   }
 
   // Convert from smallest denomination (base units) to amount of token

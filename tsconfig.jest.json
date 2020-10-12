@@ -5,7 +5,8 @@
     "rootDir": "./src",
     "esModuleInterop": true,
     "allowJs": false,
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "types": ["react", "jest"]
   },
   "include": [
     "src/**/*.ts"

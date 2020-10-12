@@ -2,11 +2,11 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import * as backend from "../../Backend";
 import {AppThunk} from "../../store/store";
 import {groupByDay} from "./utils";
-import {ErgoBox} from "../../../common/backend-types";
+import {WalletBox} from "../../../main/application/services/wallet/Wallet";
 
 interface WalletState {
   addresses: any;
-  boxes: Array<ErgoBox>;
+  boxes: Array<WalletBox>;
   transactions: Record<string, Array<any>>;
 }
 
@@ -23,7 +23,7 @@ const walletSlice = createSlice({
     getAddressesSuccess(state, action: PayloadAction<any>) {
       state.addresses = action.payload;
     },
-    getBoxesSuccess(state, action: PayloadAction<Array<ErgoBox>>) {
+    getBoxesSuccess(state, action: PayloadAction<Array<WalletBox>>) {
       state.boxes = action.payload;
     },
     getTransSuccess(state, action: PayloadAction<any>) {

@@ -4,12 +4,11 @@ import * as app from './ipc-handlers/app';
 import {Connector} from '../ergoplatform/connector/Connector';
 import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/explorer';
 import {Vault} from "./services/vault/Vault";
-import {Wallet} from './services/wallet/Wallet';
+import {Wallet, WalletBox} from './services/wallet/Wallet';
 import {WalletImpl} from "./services/wallet/WalletImpl";
 import {BlockchainService} from './services/blockchain/BlockchainService';
 import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
-import {ErgoBox} from "../../common/backend-types";
 import { EventEmitter } from 'events';
 import Settings from "./Settings";
 
@@ -93,17 +92,11 @@ export default class Application extends EventEmitter {
     return [];
   }
 
-  public getUnspentBoxes(): Array<ErgoBox> {
+  public getUnspentBoxes(): Array<WalletBox> {
     if (this.currentWallet == null) {
       return [];
     }
-    // map result to response format because of BigInt
-    return this.currentWallet.getUnspentBoxes()
-      .map((item) => ({
-        ...item,
-        value: item.value.toString(),
-        assets: item.assets.map((a) => ({...a, amount: a.amount.toString()}))
-      }));
+    return this.currentWallet.getUnspentBoxes();
   }
 
   public getTransactions(): Array<any> {
@@ -122,14 +115,14 @@ export default class Application extends EventEmitter {
     return WalletImpl.validateAddress(address);
   }
 
-  public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string) {
+  public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
     if (this.currentWallet != null) {
       const height = this.blockchain.currentHeight;
       if (!height) {
         throw new Error('Current height is undefined');
       }
 
-      return this.currentWallet.createTransaction(spendingBoxes, recipient, amount, fee, height);
+      return this.currentWallet.createTransaction(spendingBoxes, recipient, amount, fee, tokenId, height);
     }
     throw new Error('There is no loaded wallet');
   }

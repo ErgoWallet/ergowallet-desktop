@@ -16,7 +16,7 @@ import TokensValues from "../TokensValues";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
-import {ErgoBox} from "../../../../common/backend-types";
+import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 const useRowStyles = makeStyles({
   root: {
@@ -26,7 +26,7 @@ const useRowStyles = makeStyles({
   },
 });
 
-function Row(props: {box: ErgoBox; selected: boolean; onSelect: any}): React.ReactElement {
+function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.ReactElement {
   const { box, selected, onSelect } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
@@ -84,11 +84,11 @@ function Outputs(): React.ReactElement {
     dispatch(fetchUnspentBoxes());
   }, []);
 
-  function isItemSelected(box: ErgoBox): boolean {
+  function isItemSelected(box: WalletBox): boolean {
     return selected.indexOf(box.boxId) !== -1;
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, box: ErgoBox) => {
+  const handleClick = (event: React.MouseEvent<unknown>, box: WalletBox) => {
     const selectedIndex = selected.indexOf(box.boxId);
     let newSelected: string[] = [];
 

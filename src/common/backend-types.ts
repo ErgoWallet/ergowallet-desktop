@@ -1,14 +1,9 @@
-import {WalletBox} from "../main/application/services/wallet/Wallet";
 import {TokenValue} from "../main/ergoplatform/connector/types";
 
 export interface AddressInfo {
   address: string;
 }
 export type ErgoTokenAmount = Omit<TokenValue, 'amount'> & { amount: string };
-export type ErgoBox = Omit<WalletBox, 'value' | 'assets'> & {
-  value: string;
-  assets: Array<ErgoTokenAmount>;
-};
 
 
 export interface Event {

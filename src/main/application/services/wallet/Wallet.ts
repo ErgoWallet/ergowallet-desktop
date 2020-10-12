@@ -1,20 +1,23 @@
 import {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
 import {AdditionalRegisters, Output, TokenValue, Transaction} from "../../../ergoplatform/connector/types";
 
-export interface WalletTx extends Transaction {
+export type WalletTx = Omit<Transaction, 'outputs'> & {
   value: any;
-}
+  outputs: Array<WalletBox>;
+};
+
 
 export interface WalletBox {
   boxId: string;
   transactionId: string;
   index: number;
-  value: bigint;
-  creationHeight: bigint;
+  value: string;
+  creationHeight: number;
   ergoTree: string;
   address: string;
+  addressType: string;
   spentTransactionId: string | null;
-  assets: Array<TokenValue>;
+  assets: Array<{ tokenId: string; amount: string }>;
   additionalRegisters: AdditionalRegisters | {};
 }
 
@@ -25,7 +28,7 @@ export interface Wallet {
   getConfirmedTransactions(address: string): Array<any>;
   processTransactions(transactions: Array<Transaction>): void;
   getAllTransactions(): Array<WalletTx>;
-  createTransaction(inputs: Array<any>, recipient: string, amount: string, fee: string, currentHeight: number): UnsignedTransaction;
+  createTransaction(inputs: Array<any>, recipient: string, amount: string, fee: string, tokenId: string, currentHeight: number): UnsignedTransaction;
   signTransaction(tx: UnsignedTransaction): SignedTransaction;
   close(): void;
 }

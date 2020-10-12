@@ -25,8 +25,8 @@ export function setHandlers(app: Application): void {
   });
 
   ipcMain.handle(Commands.WALLET_CREATE_TX,
-    (event: any, spendingBoxes: Array<string>, recipient: string, amount: string, fee: string) => {
-    return app.createTx(spendingBoxes, recipient, amount, fee);
+    (event: any, spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) => {
+    return app.createTx(spendingBoxes, recipient, amount, fee, tokenId);
   });
 
   ipcMain.handle(Commands.WALLET_SIGN_TX,

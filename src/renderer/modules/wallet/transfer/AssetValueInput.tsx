@@ -6,7 +6,7 @@ export interface AssetValueInputState {
   isValid: boolean;
 }
 
-interface AssetValueInputProps {
+export interface AssetValueInputProps {
   assetDecimals: number;
   assetSymbol: string;
   initialValue: string;
@@ -16,8 +16,13 @@ interface AssetValueInputProps {
 
 function AssetValueInput(props: AssetValueInputProps, ref: any): React.ReactElement {
   const { assetDecimals, assetSymbol, initialValue, onChange } = props;
-  const valueInputRegex = new RegExp("^\\d*(\\.\\d{0,"+assetDecimals+"})?$");
-  const valueValidRegex = new RegExp("^\\d+(\\.\\d{1,"+assetDecimals+"})?$");
+  const valueInputRegex = assetDecimals > 0 ?
+    new RegExp("^\\d*(\\.\\d{0,"+assetDecimals+"})?$") :
+    new RegExp("^\\d*$");
+
+  const valueValidRegex = assetDecimals > 0 ?
+    new RegExp("^\\d+(\\.\\d{1,"+assetDecimals+"})?$") :
+    new RegExp("^\\d+$");
 
   const [state, setState] = React.useState<AssetValueInputState>({
     value: initialValue,

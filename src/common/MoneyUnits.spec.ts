@@ -39,6 +39,11 @@ describe('MoneyUnits', () => {
     expect(result.amount).toEqual('677');
   });
 
+  it('isZero', () => {
+    const result = new MoneyUnits('678', 9).minus(new MoneyUnits('678', 9));
+    expect(result.isZero()).toBeTruthy();
+  });
+
   it('must be constructed only from integer value', () => {
     expect(() => new MoneyUnits('0.97', 9)).toThrow();
   });

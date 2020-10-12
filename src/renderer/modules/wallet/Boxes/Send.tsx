@@ -13,8 +13,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import TransferDialog from "../transfer/TransferDialog";
-import {ErgoBox} from "../../../../common/backend-types";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
+import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -25,14 +25,15 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Send (props: {fromBoxes: Array<ErgoBox>}): React.ReactElement {
+function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
   const { fromBoxes } = props;
   const classes = useStyles();
   const [asset, setAsset] = React.useState('ERG');
   const [transferDlgOpen, setTransferDlgOpen ] = React.useState(false);
 
   const boxSet = new ErgoBoxSet(fromBoxes);
-  const total = new MoneyUnits(boxSet.balance('ERG'), 9);
+  const decimals = asset === 'ERG' ? 9 : 0;
+  const total = new MoneyUnits(boxSet.balance(asset), decimals);
 
   function handleChange(event: React.ChangeEvent<{ value: string }>): void {
     setAsset(event.target.value);
@@ -68,7 +69,9 @@ function Send (props: {fromBoxes: Array<ErgoBox>}): React.ReactElement {
                 input={<OutlinedInput classes={{ input: classes.assetInput }} />}
                 onChange={handleChange}
               >
-                <MenuItem value={"ERG"}>ERG</MenuItem>
+                {boxSet.assetsIds().map((id: string) => (
+                  <MenuItem key={id} value={id}>{id.substr(0, 4)}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -87,6 +90,7 @@ function Send (props: {fromBoxes: Array<ErgoBox>}): React.ReactElement {
       </Grid>
       {transferDlgOpen && (
         <TransferDialog
+          assetId={asset}
           fromBoxes={fromBoxes}
           open={transferDlgOpen}
           onClose={handleTransferClose}

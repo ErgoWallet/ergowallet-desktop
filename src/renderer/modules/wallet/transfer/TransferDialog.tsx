@@ -7,7 +7,7 @@ import InitialStep from "./InitialStep";
 import ConfirmationStep from "./ConfirmationStep";
 import {UnsignedTransaction} from "../../../../main/application/services/wallet/TransactionBuilder";
 import FinalStep from "./FinalStep";
-import {ErgoBox} from "../../../../common/backend-types";
+import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 enum Page {
   INITIAL,
@@ -16,9 +16,10 @@ enum Page {
 }
 
 interface TransferProps {
+  assetId: string;
   open: boolean;
   onClose: () => void;
-  fromBoxes: Array<ErgoBox>;
+  fromBoxes: Array<WalletBox>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TransferDialog(props: TransferProps): React.ReactElement {
   const classes = useStyles();
-  const {onClose, open, fromBoxes} = props;
+  const {onClose, open, fromBoxes, assetId} = props;
 
   const [page, setPage] = React.useState<Page>(Page.INITIAL);
   const [unsignedTx, setUnsignedTx] = React.useState(null);
@@ -68,6 +69,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       case Page.INITIAL:
         return (
           <InitialStep
+            assetId={assetId}
             backendApi={backend}
             fromBoxes={fromBoxes}
             onContinue={openConfirmPage}
@@ -99,7 +101,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       open={open}
     >
       <DialogTitle disableTypography={true}>
-        <Typography variant="h6">Transfer ERG</Typography>
+        <Typography variant="h6">Transfer {assetId.substr(0, 5)}</Typography>
         <IconButton className={classes.closeButton} onClick={handleClose}>
           <CloseIcon />
         </IconButton>

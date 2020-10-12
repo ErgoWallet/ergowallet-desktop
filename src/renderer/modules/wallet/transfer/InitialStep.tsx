@@ -8,11 +8,12 @@ import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {fromErg} from "../../../../common/utils";
 import TokensValues from "../TokensValues";
 import {minBoxValue} from "../../../../common/constants";
-import {ErgoBox} from "../../../../common/backend-types";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
+import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 interface InitialStepProps {
-  fromBoxes: Array<ErgoBox>;
+  fromBoxes: Array<WalletBox>;
+  assetId: string;
   onContinue?: any;
   backendApi?: any;
 }
@@ -20,12 +21,13 @@ interface InitialStepProps {
 const initialFee = '0.001';
 
 function InitialStep(props: InitialStepProps): React.ReactElement {
-  const {fromBoxes, backendApi} = props;
+  const {fromBoxes, assetId, backendApi} = props;
   const amountRef = React.createRef<any>();
 
   // Total nanoERG available
   const boxes = new ErgoBoxSet(fromBoxes);
-  const totalMoney = new MoneyUnits(boxes.balance('ERG'), 9);
+  const decimals = assetId === 'ERG' ? 9 : 0;
+  const totalTokenAmount = new MoneyUnits(boxes.balance(assetId), decimals);
 
   const [recipient, setRecipient] = React.useState('');
   const [recipientError, setRecipientError] = React.useState('');
@@ -52,11 +54,15 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
   }, new MoneyUnits(0, 9));
 
   const fee = fromErg(feeStr);
-  const amount = fromErg(amountStr);
-  const change: MoneyUnits = totalMoney
-    .minus(amount)
+
+  let ergChange = new MoneyUnits(boxes.balance('ERG'), 9)
     .minus(fee)
     .minus(ergNeedsForTokens);
+
+  if (assetId === 'ERG') {
+    ergChange = ergChange
+      .minus(fromErg(amountStr));
+  }
 
   async function handleRecipientChange(event: React.ChangeEvent<{ value: string }>): Promise<void> {
     const address = event.target.value;
@@ -82,7 +88,7 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
       setError(null);
 
       const inputs = fromBoxes.map((b) => b.boxId);
-      const tx = await backendApi.createTransaction(inputs, recipient, amountInputState.value, feeInputState.value);
+      const tx = await backendApi.createTransaction(inputs, recipient, amountInputState.value, feeInputState.value, assetId);
 
       if (props.onContinue) {
         props.onContinue(tx);
@@ -98,11 +104,11 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
     (recipient === '') ||
     (!feeInputState.isValid) ||
     (!amountInputState.isValid) ||
-    change.isNegative();
+    ergChange.isNegative();
 
   function setMax(): void {
     // Minus tx fee
-    let maximum = totalMoney
+    let maximum = totalTokenAmount
       .minus(fee)
       .minus(ergNeedsForTokens);
 
@@ -139,8 +145,8 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
             <AssetValueInput
               ref={amountRef}
               onChange={handleAmountChange}
-              assetDecimals={9}
-              assetSymbol="ERG"
+              assetDecimals={decimals}
+              assetSymbol={assetId.substr(0, 4)}
               initialValue={amountInputState.value}
             />
           </Box>
@@ -179,7 +185,7 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
         />
       </Box>
       <Box component="div" mt={2}>
-        Change <AssetValue amount={change.amount} decimals={change.decimals} symbol="ERG"/>
+        Change <AssetValue amount={ergChange.amount} decimals={ergChange.decimals} symbol="ERG"/>
       </Box>
       {/* Error while creation ergo tx */}
       {error && (<Box>{JSON.stringify(error)}</Box>)}
