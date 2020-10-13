@@ -20,7 +20,7 @@ function FinalStep(props: FinalProps): React.ReactElement {
     <Box display="flex" flexDirection={"column"}>
       <Box>Transaction has been sent to network. If valid it will appears in history soon.</Box>
       <Box mt={2}>
-        ID <Hex value={txId} />
+        ID <Hex>{txId}</Hex>
       </Box>
 
       <Box mt={2}>

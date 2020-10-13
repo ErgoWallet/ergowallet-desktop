@@ -49,9 +49,9 @@ describe('TransactionBuilder', () => {
     );
 
     const totalOutput = ergoTx.outputs.reduce(
-      (total: BigInt, item: any) => total + BigInt(item.value),
-      BigInt(0));
-    expect(totalOutput.toString()).toEqual(box1.value);
+      (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
+      new MoneyUnits(0, 9));
+    expect(totalOutput.amount).toEqual(box1.value);
 
     console.log(JSON.stringify(ergoTx));
   });

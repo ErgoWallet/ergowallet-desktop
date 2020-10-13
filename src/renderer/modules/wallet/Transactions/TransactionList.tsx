@@ -42,7 +42,7 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
         <AssetValue amount={tx.value} decimals={9} symbol="ERG"/>
       </Box>
       <Box flexBasis={0} flexGrow={4}>
-        <Hex value={tx.id}/>
+        <Hex>{tx.id}</Hex>
       </Box>
       <Box flexBasis={0} flexGrow={1} display="flex" alignItems="center" minWidth={"2em"} maxWidth={"2em"}>
         <IconButton size="small" onClick={() => onDetailsClick(tx)}>

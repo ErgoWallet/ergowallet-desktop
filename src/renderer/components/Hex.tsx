@@ -1,21 +1,13 @@
 import * as React from 'react';
-import {makeStyles} from "@material-ui/core/styles";
+import styled from "styled-components";
 
-const useStyles = makeStyles(() => ({
-  hex: {
-    fontFamily: '"Roboto Mono", monospace',
-    // fontSize: '12px'
-  }
-}));
-
-function Hex(props: {value: string}): React.ReactElement {
-  const classes = useStyles({upperCase: true});
-  const { value } = props;
-  return (
-    <span className={classes.hex}>
-      {value}
-    </span>
-  );
+interface HexProps {
+  backgroundColor?: any;
 }
+
+const Hex = styled.span<HexProps>`
+  font-family: "Roboto Mono", monospace;
+  background-color: ${props => props.backgroundColor};
+`;
 
 export default Hex;

@@ -38,7 +38,7 @@ if (!gotTheLock) {
 
     // Create and show main window
     mainWindow = createWindow({
-      appIconPath: path.join(__dirname, '/../icons/favicon.png')
+      appIconPath: path.join(__dirname, '/../icons/16x16.png')
     });
 
     // First: set ready event handler to show window

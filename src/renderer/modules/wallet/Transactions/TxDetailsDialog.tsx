@@ -6,10 +6,11 @@ import {makeStyles} from "@material-ui/core/styles";
 import AssetValue from "../../../components/AssetValue";
 import Hex from "../../../components/Hex";
 import TokensValues from "../TokensValues";
+import {WalletTx} from "../../../../common/backend-types";
 
 interface TxDetailsProps {
   open: boolean;
-  tx: any;
+  tx: WalletTx;
   onClose: () => void;
 }
 
@@ -50,7 +51,7 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
             ID
           </Grid>
           <Grid item>
-            <Hex value={tx.id} />
+            <Hex>{tx.id}</Hex>
           </Grid>
         </Grid>
         <Grid container spacing={1}>
@@ -86,9 +87,9 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
                   <Box key={i.id} display="flex">
                     <Box flexBasis={0} flexGrow={2}>
                       {(i.address.length > 60) ? (
-                        <Address shortened={true} value={i.address} />
+                        <Address shortened={true} value={i.address} type={i.addressType}/>
                       ) : (
-                        <Address shortened={false} value={i.address} />
+                        <Address shortened={false} value={i.address} type={i.addressType}/>
                       )}
                     </Box>
                     <Box
@@ -122,9 +123,9 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
                   <Box key={i.id} display="flex">
                       <Box flexBasis={0} flexGrow={2}>
                         {(i.address.length > 60) ? (
-                          <Address shortened={true} value={i.address} />
+                          <Address shortened={true} value={i.address} type={i.addressType} />
                         ) : (
-                          <Address shortened={false} value={i.address} />
+                          <Address shortened={false} value={i.address} type={i.addressType} />
                         )}
                       </Box>
                       <Box

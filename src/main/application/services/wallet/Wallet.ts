@@ -15,7 +15,7 @@ export interface WalletBox {
   creationHeight: number;
   ergoTree: string;
   address: string;
-  addressType: string;
+  addressType?: string;
   spentTransactionId: string | null;
   assets: Array<{ tokenId: string; amount: string }>;
   additionalRegisters: AdditionalRegisters | {};

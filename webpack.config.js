@@ -62,7 +62,7 @@ module.exports = [
         template: './src/renderer/index.html'
       }),
       new CopyWebpackPlugin([
-        {from: path.join(__dirname, 'resources/icons/favicon.png'), to: './icons/'}
+        {from: path.join(__dirname, 'resources/icons/16x16.png'), to: './icons/'}
       ], {copyUnmodified: true}),
     ],
     resolve: {

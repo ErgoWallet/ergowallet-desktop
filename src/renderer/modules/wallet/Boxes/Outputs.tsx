@@ -45,7 +45,7 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
           <Address shortened={true} value={box.address}/>
         </TableCell>
         <TableCell style={{textTransform: "uppercase"}}>
-          <Hex value={box.boxId.substr(0, 16)+'...'}/>
+          <Hex>{box.boxId.substr(0, 16)+'...'}</Hex>
         </TableCell>
         <TableCell align="right">
           <Box display="flex">

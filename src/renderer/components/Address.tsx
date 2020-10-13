@@ -4,15 +4,28 @@ import Hex from "./Hex";
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import CopyToClipboard from "./CopyToClipboard";
 
-function Address(props: {value: string; shortened?: boolean; copy?: boolean}): React.ReactElement {
-  const { value, shortened, copy } = props;
+interface AddressProps {
+  value: string;
+  shortened?: boolean;
+  copy?: boolean;
+  type?: string;
+}
+
+function Address(props: AddressProps): React.ReactElement {
+  const { value, shortened, copy, type } = props;
   const val = shortened && value.length > 8 ?
     value.substr(0, 8) + '...' + value.slice(-8) :
     value;
+  let addressBgColor = 'inherit';
+  if (type === 'change')
+    addressBgColor = '#f4ebc1';
+  else if (type === 'receive')
+    addressBgColor = '#a0c1b8';
+
   return (
     <Box display="flex" alignItems="center">
       <Box>
-        <Hex value={val} />
+        <Hex backgroundColor={addressBgColor}>{val}</Hex>
       </Box>
       {(copy||shortened) && (
         <Box ml={1}>
