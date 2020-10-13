@@ -31,8 +31,12 @@ function Addresses (): React.ReactElement {
       <TableBody>
         {wallet.addresses.map((item) => (
           <TableRow key={item.address}>
-            <TableCell>{item.internal ? 'change':'receiving'}</TableCell>
-            <TableCell><Hex>{item.address}</Hex></TableCell>
+            <TableCell style={{backgroundColor: item.internal ? '#f4ebc1': '#a0c1b8'}}>
+              {item.internal ? "change" : "receiving"}
+            </TableCell>
+            <TableCell>
+              <Hex>{item.address}</Hex>
+            </TableCell>
             <TableCell>{item.path}</TableCell>
             <TableCell align="right">{item.txCount}</TableCell>
             <TableCell>{item.state}</TableCell>

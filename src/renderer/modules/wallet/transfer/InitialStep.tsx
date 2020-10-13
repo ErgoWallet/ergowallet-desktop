@@ -108,12 +108,15 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
 
   function setMax(): void {
     // Minus tx fee
-    let maximum = totalTokenAmount
-      .minus(fee)
-      .minus(ergNeedsForTokens);
+    let maximum = totalTokenAmount;
+    if (assetId === 'ERG') {
+      maximum = maximum
+        .minus(fee)
+        .minus(ergNeedsForTokens);
+    }
 
     if (maximum.isNegative()) {
-      maximum = new MoneyUnits('0', 9);
+      maximum = new MoneyUnits('0', decimals);
     }
     amountRef.current.setValue(maximum.toMainUnits());
   }
