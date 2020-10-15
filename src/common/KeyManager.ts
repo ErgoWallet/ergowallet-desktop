@@ -10,10 +10,13 @@ export enum KeyState {
 }
 
 class HdPubKey {
-  private bip32: BIP32Interface;
   public hdPath: string;
   public address: string;
   public state: KeyState;
+
+  private readonly publicKey: Buffer;
+  private readonly secretKey?: Buffer;
+  public index: number;
 
   /** Internal means it is for change only. */
   public internal: boolean;
@@ -22,9 +25,12 @@ class HdPubKey {
     const pathIndices = parse_hd_path(fullHdPath);
     this.internal = pathIndices[3] > 0;
 
-    this.bip32 = bip32;
+    this.publicKey = Buffer.from(bip32.publicKey);
+    this.secretKey = bip32.privateKey ? Buffer.from(bip32.privateKey) : null;
+    this.index = bip32.index;
+
     this.hdPath = fullHdPath;
-    this.address = Address.from_public_key(this.bip32.publicKey).get_addr();
+    this.address = Address.from_public_key(this.publicKey).get_addr();
     this.state = KeyState.Clean;
   }
 
@@ -32,16 +38,12 @@ class HdPubKey {
     this.state = state;
   }
 
-  public index(): number {
-    return this.bip32.index;
-  }
-
   public pubKey(): Buffer {
-    return this.bip32.publicKey;
+    return this.publicKey;
   }
 
   public privateKey(): Buffer {
-    return this.bip32.privateKey;
+    return this.secretKey;
   }
 
 }
@@ -55,9 +57,11 @@ export class KeyManager {
   hdPubKeys: Array<HdPubKey> = [];
 
   static recover(mnemonic: string): KeyManager {
-    const seed = bip39.mnemonicToSeedSync(mnemonic);
+    const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic);
+
     const masterKey = bip32.fromSeed(seed);
     const accountExtKey = masterKey.derivePath(KeyManager.AccountDerivationPath);
+
     const km = new KeyManager(accountExtKey);
 
     km.assertCleanKeys();
@@ -129,8 +133,8 @@ export class KeyManager {
   private maxKeyIndex(keys: HdPubKey[]): number {
     let max = 0;
     keys.forEach((key: HdPubKey) => {
-      if (key.index() > max) {
-        max = key.index();
+      if (key.index > max) {
+        max = key.index;
       }
     });
     return max;

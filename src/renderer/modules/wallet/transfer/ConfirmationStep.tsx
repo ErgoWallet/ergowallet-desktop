@@ -3,6 +3,8 @@ import {Box, Button, Link} from "@material-ui/core";
 import Address from "../../../components/Address";
 import AssetValue from '../../../components/AssetValue';
 import TokensValues from "../TokensValues";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 interface ConfirmProps {
   tx: any;
@@ -43,7 +45,7 @@ function ConfirmationStep(props: ConfirmProps): React.ReactElement {
       <Box mt={2} display="flex">
         <Box flexBasis={0} flexGrow={1}>Fee</Box>
         <Box flexBasis={0} flexGrow={1} display="flex" justifyContent="flex-end">
-          <AssetValue amount={tx.fee} decimals={9}/>
+          <AssetValue amount={tx.fee} decimals={9} symbol="ERG" />
         </Box>
       </Box>
       <Box mt={2}>
@@ -52,11 +54,12 @@ function ConfirmationStep(props: ConfirmProps): React.ReactElement {
           variant="body2"
           onClick={handleJsonClick}
         >
-          View JSON
+          {showJson ? "Hide JSON" : "View JSON"}
+          {showJson ? (<KeyboardArrowUpIcon />) : (<KeyboardArrowDownIcon />)}
         </Link>
       </Box>
       {showJson && (
-          <Box component={"pre"} overflow={"auto"} border={1} borderColor={"grey.200"}>
+          <Box component="pre" overflow={"auto"} border={1} borderColor={"grey.200"}>
             {JSON.stringify(tx.ergoTx, null, 2)}
           </Box>
       )}
@@ -66,10 +69,10 @@ function ConfirmationStep(props: ConfirmProps): React.ReactElement {
       <Box mt={2}>
         <Button
           variant="contained"
-          color={'secondary'}
+          color="secondary"
           onClick={handleSendClick}
         >
-          Send
+          Sign and Send
         </Button>
       </Box>
     </Box>

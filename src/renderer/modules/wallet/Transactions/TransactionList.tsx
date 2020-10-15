@@ -30,8 +30,12 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
       <HourglassEmptyOutlinedIcon fontSize="small" color="secondary"/>
     );
 
+  const handleRowClick = () => {
+    console.log('Row Click');
+  };
+
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" onClick={handleRowClick}>
       <Box flexBasis={0} flexGrow={1} maxWidth={"100px"} minWidth={"100px"}>
         {extractTime(Number(tx.timestamp || tx.creationTimestamp))}
       </Box>

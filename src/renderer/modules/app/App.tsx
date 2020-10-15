@@ -14,7 +14,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import Loading from "./Loading";
 import Terms from "./Terms";
-import {fetchAppSettings} from "./app-slice";
 
 let source = createMemorySource("/")
 let history = createHistory(source)
@@ -119,7 +118,6 @@ const App = (props: any) => {
               <div>This is TECH PREVIEW release. Current limitations:</div>
               <ul>
                 <li>Imported or Created wallets stored UNENCRYPTED in MEMORY during application launch</li>
-                <li>Only ERG transactions supported</li>
                 <li>PASSWORD means NOTHING yet</li>
               </ul>
             </Alert>

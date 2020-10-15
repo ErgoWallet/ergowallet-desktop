@@ -31,6 +31,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
     this.connector = connector;
     this.unspentMonitor = new UnspentMonitor(this, connector);
     this.transMonitor = new TransactionMonitor(connector, this);
+    this.transMonitor.on('LoadingStarted', ()  => {
+      console.debug('transMonitor.LoadingStarted');
+    });
+    this.transMonitor.on('LoadingFinished', () => {
+      console.debug('transMonitor.LoadingFinished');
+    });
 
     this.unspentMonitor.start();
     this.transMonitor.start();
@@ -165,17 +171,16 @@ export class WalletImpl extends EventEmitter implements Wallet {
         }
       });
 
+      const walletInputs = tx.inputs.filter((i) => this.keyManager3.getKey(i.address) !== undefined);
+      const walletOutputs = tx.outputs.filter((i) => this.keyManager3.getKey(i.address) !== undefined);
+
       // calculate tx value regarding our wallet
-      const received = tx.outputs
-        .filter((i) => this.keyManager3.getKey(i.address) !== undefined)
-        .reduce(
+      const received = walletOutputs.reduce(
           (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
           new MoneyUnits(0, 9)
         );
 
-      const spent = tx.inputs
-        .filter((i) => this.keyManager3.getKey(i.address) !== undefined)
-        .reduce(
+      const spent = walletInputs.reduce(
           (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
           new MoneyUnits(0, 9)
         );

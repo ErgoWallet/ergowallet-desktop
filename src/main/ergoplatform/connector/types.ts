@@ -44,6 +44,7 @@ export interface AddressSummary {
 export interface Transaction {
   id: string;
   timestamp: bigint;
+  inclusionHeight: number;
   size: number;
   confirmationsCount: number;
   inputs: Array<Input>;

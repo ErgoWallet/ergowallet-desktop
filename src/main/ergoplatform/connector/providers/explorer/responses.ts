@@ -13,6 +13,7 @@ export interface AddressSummaryResponse {
 export interface TransItem {
   id: string;
   headerId: string;
+  inclusionHeight: number;
   timestamp?: number; // for confirmed
   creationTimestamp?: number; // for unconfirmed
   confirmationsCount: number;

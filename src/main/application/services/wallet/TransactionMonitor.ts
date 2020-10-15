@@ -1,18 +1,20 @@
 import {SchedulerService} from "../../../../common/SchedulerService";
 import {Connector} from "../../../ergoplatform/connector/Connector";
 import {Wallet} from "./Wallet";
+import {EventEmitter} from "events";
 
-export class TransactionMonitor {
+export class TransactionMonitor extends EventEmitter {
   private schedulerService: SchedulerService;
   private connector: Connector;
   private wallet: Wallet;
 
   constructor(connector: Connector, wallet: Wallet) {
+    super();
     this.connector = connector;
     this.wallet = wallet;
     this.schedulerService = new SchedulerService(() => {
       this.loadTransactions();
-    }, 10000);
+    }, 30000);
   }
 
 
@@ -29,7 +31,7 @@ export class TransactionMonitor {
 
 
   private async loadTransactions(): Promise<void> {
-
+    this.emit('LoadingStarted');
     for (const addr of this.wallet.getAddresses()) {
       try {
         const result = await this.connector.getAddressSummary(addr.address);
@@ -57,6 +59,7 @@ export class TransactionMonitor {
         console.error(e);
       }
     }
+    this.emit('LoadingFinished');
   }
 
   private async loadAll(totalCount: number, address: string): Promise<Array<any>> {

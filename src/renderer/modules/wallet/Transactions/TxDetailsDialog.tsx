@@ -7,6 +7,8 @@ import AssetValue from "../../../components/AssetValue";
 import Hex from "../../../components/Hex";
 import TokensValues from "../TokensValues";
 import {WalletTx} from "../../../../common/backend-types";
+import {Input} from "../../../../main/ergoplatform/connector/types";
+import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 interface TxDetailsProps {
   open: boolean;
@@ -56,6 +58,14 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
         </Grid>
         <Grid container spacing={1}>
           <Grid item>
+            Block
+          </Grid>
+          <Grid item>
+            {tx.inclusionHeight}
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item>
             Confirmations
           </Grid>
           <Grid item>
@@ -83,13 +93,13 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
 
             <Grid container direction={'column'}>
               {
-                tx.inputs.map((i: any) => (
+                tx.inputs.map((i: Input) => (
                   <Box key={i.id} display="flex">
                     <Box flexBasis={0} flexGrow={2}>
                       {(i.address.length > 60) ? (
-                        <Address shortened={true} value={i.address} type={i.addressType}/>
+                        <Address shortened={true} value={i.address} />
                       ) : (
-                        <Address shortened={false} value={i.address} type={i.addressType}/>
+                        <Address shortened={false} value={i.address} />
                       )}
                     </Box>
                     <Box
@@ -99,8 +109,8 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
                       justifyContent="flex-end"
                       alignItems="center"
                     >
-                      <TokensValues assets={i.assets} />
-                      <AssetValue amount={i.value} decimals={9} symbol="ERG"/>
+                      {/*<TokensValues assets={i.assets} />*/}
+                      <AssetValue amount={i.value.toString()} decimals={9} symbol="ERG"/>
                     </Box>
                   </Box>
                 ))
@@ -119,8 +129,8 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
           <Grid item>
             <Grid container direction="column">
               {
-                tx.outputs.map((i: any) => (
-                  <Box key={i.id} display="flex">
+                tx.outputs.map((i: WalletBox) => (
+                  <Box key={i.boxId} display="flex">
                       <Box flexBasis={0} flexGrow={2}>
                         {(i.address.length > 60) ? (
                           <Address shortened={true} value={i.address} type={i.addressType} />
