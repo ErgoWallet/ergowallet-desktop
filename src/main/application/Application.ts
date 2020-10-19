@@ -7,12 +7,16 @@ import {Vault} from "./services/vault/Vault";
 import {Wallet, WalletBox} from './services/wallet/Wallet';
 import {WalletImpl} from "./services/wallet/WalletImpl";
 import {BlockchainService} from './services/blockchain/BlockchainService';
+import {UpdateService} from "./services/updater/UpdateService";
 import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 import Settings from "./Settings";
+import _ from "lodash";
 
 export default class Application extends EventEmitter {
+  public static APP_READY_EVENT = 'AppReady';
+  public static APP_LATEST_VERSION = 'LatestVersion';
 
   private baseUri = "https://api.ergoplatform.com/api/v0";
 
@@ -21,6 +25,7 @@ export default class Application extends EventEmitter {
   private readonly connector: Connector;
   private blockchain: BlockchainService;
   private settings: Settings;
+  private updater: UpdateService;
 
   constructor() {
     super();
@@ -29,18 +34,26 @@ export default class Application extends EventEmitter {
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
       console.log(JSON.stringify(event));
     });
+    this.updater = new UpdateService();
+    this.updater.on(UpdateService.CURRENT_VERSION_EVENT, (event) => {
+      const latestVer = event.tag_name ? _.trimStart(event.tag_name, "v") : null;
+      console.debug(`Latest version: ${latestVer}`);
+      this.emit(Application.APP_LATEST_VERSION, latestVer);
+    });
   }
 
   public start(): void {
     this.blockchain.start();
+    this.updater.start();
     this.setIpcHandlers();
 
     // Load settings
     this.settings = new Settings();
-    this.emit('AppReady');
+    this.emit(Application.APP_READY_EVENT);
   }
 
   public stop(): void {
+    this.updater.stop();
     this.blockchain.stop();
     this.blockchain.removeAllListeners(BlockchainService.HEIGHT_CHANGED_EVENT);
     this.closeCurrentWallet();
@@ -154,7 +167,7 @@ export default class Application extends EventEmitter {
   }
 
   public updateSettings(settings: any) {
-    console.debug('Updating settings: ' +  JSON.stringify(settings));
+    console.debug('Updating settings: ' + JSON.stringify(settings));
     this.settings.update(settings);
     this.emit('SettingsUpdated');
   }

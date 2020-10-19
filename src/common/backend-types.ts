@@ -9,14 +9,15 @@ export type ErgoTokenAmount = Omit<TokenValue, 'amount'> & { amount: string };
 export type WalletTx = walletTypes.WalletTx;
 
 export interface Event {
-  type: string;
+  type: Events;
   payload: any;
 }
 
 export enum Events {
   WALLET_UPDATED = 'wallet-updated',
   APP_READY = 'app-ready',
-  SETTINGS_UPDATED = 'settings-updated'
+  APP_LATEST_VERSION = 'app-latest-version',
+  SETTINGS_UPDATED = 'settings-updated',
 }
 
 export enum Commands {

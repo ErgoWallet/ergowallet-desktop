@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import Loading from "./Loading";
 import Terms from "./Terms";
+import NewVersionNotification from "./NewVersionNotification";
 
 let source = createMemorySource("/")
 let history = createHistory(source)
@@ -30,7 +31,6 @@ enum CreationMode {
 }
 
 const App = (props: any) => {
-  const dispatch = useDispatch();
   const app = useSelector((state: RootState) => state.app);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [creationMode, setCreationMode] = React.useState<CreationMode>(CreationMode.Unknown);
@@ -137,6 +137,7 @@ const App = (props: any) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {content}
+      <NewVersionNotification />
       {/*<div>{props.width}</div>*/}
     </ThemeProvider>
   );

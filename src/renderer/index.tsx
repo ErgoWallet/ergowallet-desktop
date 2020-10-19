@@ -6,8 +6,8 @@ import store from "./store/store";
 import {ipcRenderer, IpcRendererEvent} from "electron";
 import App from './modules/app/App';
 import {fetchAddresses, fetchTransactions, fetchUnspentBoxes} from "./modules/wallet/wallet-slice";
-import {appReady, fetchAppSettings} from "./modules/app/app-slice";
-import {Events} from "../common/backend-types";
+import {appLatestVersion, appReady, fetchAppSettings} from "./modules/app/app-slice";
+import {Event, Events} from "../common/backend-types";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -17,10 +17,10 @@ ReactDOM.render(
 );
 
 // Listen to Electron IPC events
-ipcRenderer.on("events", (event: IpcRendererEvent, e: Events) => {
+ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {
   console.log(e);
 
-  switch (e) {
+  switch (e.type) {
     case Events.WALLET_UPDATED:
       store.dispatch(fetchTransactions());
       store.dispatch(fetchUnspentBoxes());
@@ -34,5 +34,9 @@ ipcRenderer.on("events", (event: IpcRendererEvent, e: Events) => {
 
     case Events.SETTINGS_UPDATED:
       store.dispatch(fetchAppSettings());
+      break;
+
+    case Events.APP_LATEST_VERSION:
+      store.dispatch(appLatestVersion(e.payload));
   }
 });

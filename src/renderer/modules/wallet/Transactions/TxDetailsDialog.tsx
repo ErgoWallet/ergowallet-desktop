@@ -91,7 +91,7 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
           {/* inputs list */}
           <Grid item>
 
-            <Grid container direction={'column'}>
+            <Grid container direction="column">
               {
                 tx.inputs.map((i: Input) => (
                   <Box key={i.id} display="flex">

@@ -52,15 +52,22 @@ if (!gotTheLock) {
     });
 
     application.on('WalletUpdated', () => {
-      mainWindow.webContents.send('events', Events.WALLET_UPDATED);
+      mainWindow.webContents.send('events', { type: Events.WALLET_UPDATED });
     });
 
-    application.on('AppReady', () => {
-      mainWindow.webContents.send('events', Events.APP_READY);
+    application.on(Application.APP_READY_EVENT, () => {
+      mainWindow.webContents.send('events', { type: Events.APP_READY });
+    });
+
+    application.on(Application.APP_LATEST_VERSION, (version) => {
+      mainWindow.webContents.send('events', {
+        type: Events.APP_LATEST_VERSION,
+        payload: version
+      });
     });
 
     application.on('SettingsUpdated', () => {
-      mainWindow.webContents.send('events', Events.SETTINGS_UPDATED);
+      mainWindow.webContents.send('events', { type: Events.SETTINGS_UPDATED });
     });
 
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {

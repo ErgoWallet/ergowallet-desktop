@@ -77,6 +77,7 @@
     "react-dom": "16.11.0",
     "react-redux": "^7.2.1",
     "recharts": "^1.8.5",
+    "semver": "7.3.2",
     "styled-components": "^5.1.1",
     "typeface-roboto": "^0.0.75",
     "typeface-roboto-mono": "^0.0.75",

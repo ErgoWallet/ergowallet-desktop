@@ -2,8 +2,12 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppThunk} from "../../store/store";
 import * as backend from "../../Backend";
 
+const pkg = require('../../../../package.json');
+
 interface AppState {
   ready: boolean;
+  version: string;
+  latestVersion?: string;
   settings: {
     termsVersion?: string
   };
@@ -11,6 +15,7 @@ interface AppState {
 
 const initialState: AppState = {
   ready: false,
+  version: pkg.version,
   settings: {}
 };
 
@@ -21,6 +26,9 @@ const appSlice = createSlice({
     appReady(state, action: PayloadAction<any>) {
       state.ready = true;
     },
+    appLatestVersion(state, action: PayloadAction<any>) {
+      state.latestVersion = action.payload;
+    },
     getSettingsSuccess(state, action: PayloadAction<any>) {
       state.settings = action.payload;
     },
@@ -30,6 +38,7 @@ const appSlice = createSlice({
 // ------ Actions -----------
 export const {
   appReady,
+  appLatestVersion,
   getSettingsSuccess
 } = appSlice.actions;
 

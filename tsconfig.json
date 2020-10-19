@@ -5,7 +5,8 @@
     "outDir": "./app",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "types": ["react", "jest"]
+    "types": ["react", "jest"],
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts"
