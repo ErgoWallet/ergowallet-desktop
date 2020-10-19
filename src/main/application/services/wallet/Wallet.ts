@@ -1,5 +1,5 @@
 import {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
-import {AdditionalRegisters, Output, TokenValue, Transaction} from "../../../ergoplatform/connector/types";
+import {AdditionalRegisters, Output, Transaction} from "../../../ergoplatform/connector/types";
 
 export type WalletTx = Omit<Transaction, 'outputs'> & {
   value: any;

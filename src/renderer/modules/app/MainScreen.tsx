@@ -1,4 +1,4 @@
-import {AppBar, Button, Container, IconButton, Toolbar} from '@material-ui/core';
+import {AppBar, Button, Container, IconButton, Toolbar, Tooltip} from '@material-ui/core';
 import {RouteComponentProps, Router, useNavigate} from '@reach/router';
 import * as React from 'react';
 import Exchange from '../exchange/Exchange';
@@ -7,7 +7,6 @@ import Settings from '../settings/Settings';
 import {makeStyles} from '@material-ui/core/styles';
 import {SettingsOutlined as SettingsIcon} from '@material-ui/icons';
 import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
-import SyncOutlinedIcon from '@material-ui/icons/SyncOutlined';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import {ScrollToTop} from "../../components/ScrollToTop";
 
@@ -130,12 +129,16 @@ const MainScreen = (props: MainScreenProps) => {
             {/*</Button>*/}
           </div>
           <div className={classes.grow} />
-          <IconButton onClick={() => navigate('settings')} color="inherit">
-            <SettingsIcon />
-          </IconButton>
-          <IconButton onClick={props.onLogout} edge="end" color="inherit">
-            <ExitToAppOutlinedIcon />
-          </IconButton>
+          <Tooltip title={"Settings"}>
+            <IconButton onClick={() => navigate('settings')} color="inherit">
+              <SettingsIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={"Close wallet"}>
+            <IconButton onClick={props.onLogout} edge="end" color="inherit">
+              <ExitToAppOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
 

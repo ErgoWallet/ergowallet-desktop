@@ -64,7 +64,7 @@ function NewMnemonic(props: Props) {
               {/* Show 24 word in 3 columns with numbers */}
               {
                 [0, 1, 2].map((i) => (
-                  <Grid item lg={4} md={4} sm={4} container direction={'column'}>
+                  <Grid key={i} item lg={4} md={4} sm={4} container direction={'column'}>
                     { words.slice(i * wordsInColumn, (i + 1) * wordsInColumn).map((word: string, index: number) =>
                       (<div>{index+(i * wordsInColumn + 1)}. <span className={classes.phrase}>{word}</span></div>))
                     }
@@ -78,7 +78,7 @@ function NewMnemonic(props: Props) {
               Never share recovery phrase with anyone, store it securely
             </Alert>
           </Grid>
-          <Grid item xs={12} spacing={1}>
+          <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox checked={checked} value="remember" color="primary" onChange={handleChange}/>}
               label="I understand that if I lose my recovery phrase, I will not be able to access my wallet"

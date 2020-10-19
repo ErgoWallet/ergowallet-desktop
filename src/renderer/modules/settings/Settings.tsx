@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Tabs, Tab, Box} from '@material-ui/core';
+import {Box, MenuItem, Tab, Tabs, TextField} from '@material-ui/core';
 import Paper from '../../components/Paper';
 import About from './About';
 
@@ -28,20 +28,31 @@ function TabPanel(props: TabPanelProps) {
 function Settings(props: any) {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
   return (
     <React.Fragment>
-      <Tabs value={value} onChange={handleChange}>
+      <Tabs value={value} onChange={handleTabChange}>
         <Tab label="General"/>
         <Tab label="Wallet"/>
         <Tab label="About"/>
       </Tabs>
       <Paper>
         <TabPanel value={value} index={0}>
-          General settings
+          <TextField
+            fullWidth={true}
+            select
+            label="Display language"
+            value={"English"}
+            variant="outlined"
+          >
+              <MenuItem key={"English"} value={"English"}>
+                English
+              </MenuItem>
+          </TextField>
+
         </TabPanel>
         <TabPanel value={value} index={1}>
           Backup mnemonic phrase
