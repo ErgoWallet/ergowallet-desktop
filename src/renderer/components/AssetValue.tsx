@@ -12,7 +12,7 @@ export default function AssetValue(props: AssetValueProps): React.ReactElement {
   const { amount, decimals, symbol } = props;
   const tokens = new MoneyUnits(amount, decimals).toMainUnits();
   return (
-    <Box component={'div'}>
+    <Box component="div">
       {tokens} {symbol}
     </Box>
   );

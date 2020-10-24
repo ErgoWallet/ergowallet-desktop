@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
   const classes = useStyles();
-  const {onClose, open, tx}  = props;
+  const {onClose, open, tx} = props;
 
   function handleClose(): void {
     onClose();
@@ -42,52 +42,40 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
       <DialogTitle disableTypography={true}>
         <Typography variant="h6">Transaction details</Typography>
         <IconButton className={classes.closeButton} onClick={handleClose}>
-          <CloseIcon />
+          <CloseIcon/>
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
         {/* Tx general information */}
+        <Box display="flex" flexDirection="column">
+          <Box display={"flex"}>
+            <Box flexBasis={0} flexGrow={1}>ID</Box>
+            <Box flexBasis={0} flexGrow={3}><Hex>{tx.id}</Hex></Box>
+          </Box>
+          <Box display={"flex"}>
+            <Box flexBasis={0} flexGrow={1}>Block</Box>
+            <Box flexBasis={0} flexGrow={3}>{tx.inclusionHeight}</Box>
 
-        <Grid container alignItems="center" spacing={1}>
-          <Grid item>
-            ID
-          </Grid>
-          <Grid item>
-            <Hex>{tx.id}</Hex>
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item>
-            Block
-          </Grid>
-          <Grid item>
-            {tx.inclusionHeight}
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item>
-            Confirmations
-          </Grid>
-          <Grid item>
-            {tx.confirmationsCount}
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item>
-            Size
-          </Grid>
-          <Grid item>
-            {tx.size}
-          </Grid>
-        </Grid>
-        <br />
-        <Grid item>
-          <Typography component="div" variant="h6" color="primary" gutterBottom>
-            INPUTS
-          </Typography>
-        </Grid>
+          </Box>
+          <Box display={"flex"}>
+            <Box flexBasis={0} flexGrow={1}>Confirmations</Box>
+            <Box flexBasis={0} flexGrow={3}>{tx.confirmationsCount}</Box>
+          </Box>
+          <Box display={"flex"}>
+            <Box flexBasis={0} flexGrow={1}>Size</Box>
+            <Box flexBasis={0} flexGrow={3}>{tx.size}</Box>
+          </Box>
+        </Box>
+
+        <br/>
+
         {/* Tx Schema - Inputs -> Outputs */}
         <Grid container direction="column" wrap="nowrap">
+          <Grid item>
+            <Typography component="div" variant="h6" color="primary" gutterBottom>
+              INPUTS
+            </Typography>
+          </Grid>
           {/* inputs list */}
           <Grid item>
 
@@ -97,9 +85,9 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
                   <Box key={i.id} display="flex">
                     <Box flexBasis={0} flexGrow={2}>
                       {(i.address.length > 60) ? (
-                        <Address shortened={true} value={i.address} />
+                        <Address shortened={true} value={i.address}/>
                       ) : (
-                        <Address shortened={false} value={i.address} />
+                        <Address shortened={false} value={i.address}/>
                       )}
                     </Box>
                     <Box
@@ -118,7 +106,7 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
             </Grid>
 
           </Grid>
-          <br />
+          <br/>
           <Grid item>
             <Typography component="div" variant="h6" color="primary" gutterBottom>
               OUTPUTS
@@ -130,24 +118,24 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
             <Grid container direction="column">
               {
                 tx.outputs.map((i: WalletBox) => (
-                  <Box key={i.boxId} display="flex">
-                      <Box flexBasis={0} flexGrow={2}>
-                        {(i.address.length > 60) ? (
-                          <Address shortened={true} value={i.address} type={i.addressType} />
-                        ) : (
-                          <Address shortened={false} value={i.address} type={i.addressType} />
-                        )}
-                      </Box>
-                      <Box
-                        flexBasis={0}
-                        flexGrow={1}
-                        display="flex"
-                        justifyContent="flex-end"
-                        alignItems="center"
-                      >
-                        <TokensValues assets={i.assets} />
-                        <AssetValue amount={i.value} decimals={9} symbol="ERG"/>
-                      </Box>
+                  <Box key={i.boxId} display="flex" alignItems="center">
+                    <Box flexBasis={0} flexGrow={2}>
+                      {(i.address.length > 60) ? (
+                        <Address shortened={true} value={i.address} type={i.addressType}/>
+                      ) : (
+                        <Address shortened={false} value={i.address} type={i.addressType}/>
+                      )}
+                    </Box>
+                    <Box
+                      flexBasis={0}
+                      flexGrow={1}
+                      display="flex"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <TokensValues assets={i.assets}/>
+                      <AssetValue amount={i.value} decimals={9} symbol="ERG"/>
+                    </Box>
                   </Box>
                 ))
               }

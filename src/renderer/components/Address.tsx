@@ -31,7 +31,7 @@ function Address(props: AddressProps): React.ReactElement {
         <Box ml={1}>
           <CopyToClipboard TooltipProps={{title: "Address Copied"}}>
             {({ copy }) => (
-              <IconButton style={{padding: "0px"}} onClick={() => copy(value)}>
+              <IconButton size="small" onClick={() => copy(value)}>
                 <FileCopyOutlinedIcon fontSize="small"/>
               </IconButton>
             )}
