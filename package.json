@@ -2,7 +2,7 @@
   "private": true,
   "name": "ergo-wallet",
   "productName": "Ergo Wallet",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Ergo Wallet",
   "license": "GPL-3.0",
   "keywords": [

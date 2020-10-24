@@ -75,7 +75,7 @@ const App = (props: any) => {
     );
   }
 
-  if (app.settings.termsVersion !== constants.termsVersion) {
+  if (app.settings.termsVersion && (app.settings.termsVersion !== constants.termsVersion)) {
     return (
       <Terms
         onAccepted={handleAcceptTerms}

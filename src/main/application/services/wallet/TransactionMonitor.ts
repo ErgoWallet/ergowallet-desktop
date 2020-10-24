@@ -7,16 +7,17 @@ export class TransactionMonitor extends EventEmitter {
   private schedulerService: SchedulerService;
   private connector: Connector;
   private wallet: Wallet;
+  private isLoading: boolean;
 
   constructor(connector: Connector, wallet: Wallet) {
     super();
+    this.isLoading = false;
     this.connector = connector;
     this.wallet = wallet;
     this.schedulerService = new SchedulerService(() => {
       this.loadTransactions();
     }, 30000);
   }
-
 
   public start(): void {
     this.loadTransactions();
@@ -29,9 +30,13 @@ export class TransactionMonitor extends EventEmitter {
     console.log("TransactionMonitor stopped");
   }
 
-
   private async loadTransactions(): Promise<void> {
+    if (this.isLoading)
+      return;
+
+    this.isLoading = true;
     this.emit('LoadingStarted');
+
     for (const addr of this.wallet.getAddresses()) {
       try {
         const result = await this.connector.getAddressSummary(addr.address);
@@ -59,6 +64,8 @@ export class TransactionMonitor extends EventEmitter {
         console.error(e);
       }
     }
+
+    this.isLoading = false;
     this.emit('LoadingFinished');
   }
 
