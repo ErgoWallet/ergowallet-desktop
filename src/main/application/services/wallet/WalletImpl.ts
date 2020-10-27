@@ -56,19 +56,18 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
       const address = box.address;
       // get private key for address
-      const hdKey = this.keyManager3.getKey(address);
-      const privateKey = hdKey.privateKey();
+      const privateKey = this.keyManager3.getSecretKey(address);
       privateKeys.push(privateKey.toString('hex'));
     });
 
-    // sign tx
+    // Sign tx
 
-    console.debug("ergoTx");
-    console.debug(JSON.stringify(tx.ergoTx));
-    console.debug("-------------");
+    // console.debug("ergoTx");
+    // console.debug(JSON.stringify(tx.ergoTx));
+    // console.debug("-------------");
 
     const signed = sign_tx(privateKeys, boxesToSpend, tx.ergoTx);
-    console.log('Signed TX: ' + JSON.stringify(signed));
+    // console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
     return tx;
   }

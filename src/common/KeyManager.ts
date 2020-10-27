@@ -15,19 +15,17 @@ class HdPubKey {
   public state: KeyState;
 
   private readonly publicKey: Buffer;
-  private readonly secretKey?: Buffer;
   public index: number;
 
   /** Internal means it is for change only. */
   public internal: boolean;
 
-  constructor(bip32: BIP32Interface, fullHdPath: string) {
+  constructor(publicKey: Buffer, index: number, fullHdPath: string) {
     const pathIndices = parse_hd_path(fullHdPath);
     this.internal = pathIndices[3] > 0;
 
-    this.publicKey = Buffer.from(bip32.publicKey);
-    this.secretKey = bip32.privateKey ? Buffer.from(bip32.privateKey) : null;
-    this.index = bip32.index;
+    this.publicKey = Buffer.from(publicKey);
+    this.index = index;
 
     this.hdPath = fullHdPath;
     this.address = Address.from_public_key(this.publicKey).get_addr();
@@ -42,16 +40,12 @@ class HdPubKey {
     return this.publicKey;
   }
 
-  public privateKey(): Buffer {
-    return this.secretKey;
-  }
-
 }
 
 export class KeyManager {
-
   static AccountDerivationPath = "m/44'/429'/0'";
-  private accountExtKey: BIP32Interface;
+  private accountExtPubKey: BIP32Interface;
+  private extMasterKey: BIP32Interface;
   private watchOnly: boolean;
 
   hdPubKeys: Array<HdPubKey> = [];
@@ -60,18 +54,19 @@ export class KeyManager {
     const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic);
 
     const masterKey = bip32.fromSeed(seed);
-    const accountExtKey = masterKey.derivePath(KeyManager.AccountDerivationPath);
-
-    const km = new KeyManager(accountExtKey);
+    const km = new KeyManager(masterKey);
 
     km.assertCleanKeys();
-
     return km;
   }
 
-  constructor(accountExtKey: BIP32Interface) {
-    this.accountExtKey = accountExtKey;
-    this.watchOnly = (accountExtKey.privateKey === undefined);
+  constructor(masterKey: BIP32Interface) {
+    this.extMasterKey = masterKey;
+    this.accountExtPubKey = masterKey.derivePath(KeyManager.AccountDerivationPath);
+
+    delete this.accountExtPubKey.privateKey;
+
+    this.watchOnly = (masterKey.privateKey === undefined);
   }
 
   /**
@@ -99,7 +94,7 @@ export class KeyManager {
   /**
    * Make sure there's always clean keys generated.
    */
-  public  assertCleanKeys(): void {
+  public assertCleanKeys(): void {
     while (this.getKeys(KeyState.Clean, false).length < 21) {
       this.generateNewKey(false);
     }
@@ -107,6 +102,15 @@ export class KeyManager {
     while (this.getKeys(KeyState.Clean, true).length < 21) {
       this.generateNewKey(true);
     }
+  }
+
+  public getSecretKey(address: string): Buffer {
+    // find HD Public Key
+    const hdPubKey = this.getKey(address);
+    const hdPath = hdPubKey.hdPath;
+
+    const bip32Interface = this.extMasterKey.derivePath(hdPath);
+    return bip32Interface.privateKey!;
   }
 
   public generateNewKey(internal = false): HdPubKey {
@@ -124,8 +128,11 @@ export class KeyManager {
       path = `${change}/${largestIndex + 1}`;
     }
 
-    const bip32Interface = this.accountExtKey.derivePath(path);
-    const newKey = new HdPubKey(bip32Interface, `${KeyManager.AccountDerivationPath}/${path}`);
+    const bip32Interface = this.accountExtPubKey.derivePath(path);
+    const newKey = new HdPubKey(
+      bip32Interface.publicKey,
+      bip32Interface.index,
+      `${KeyManager.AccountDerivationPath}/${path}`);
     this.hdPubKeys.push(newKey);
     return newKey;
   }

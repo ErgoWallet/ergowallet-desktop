@@ -3,8 +3,6 @@ import {Box, Button, Link} from "@material-ui/core";
 import Address from "../../../components/Address";
 import AssetValue from '../../../components/AssetValue';
 import TokensValues from "../TokensValues";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 interface ConfirmProps {
   tx: any;
@@ -55,7 +53,6 @@ function ConfirmationStep(props: ConfirmProps): React.ReactElement {
           onClick={handleJsonClick}
         >
           {showJson ? "Hide JSON" : "View JSON"}
-          {showJson ? (<KeyboardArrowUpIcon />) : (<KeyboardArrowDownIcon />)}
         </Link>
       </Box>
       {showJson && (
