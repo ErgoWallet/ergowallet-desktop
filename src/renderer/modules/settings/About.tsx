@@ -8,9 +8,6 @@ function About () {
   return (
     <Box>
       <Box>Ergo Wallet v{pkg.version}</Box>
-      <Box>
-        App Icon made by <a href="https://www.flaticon.com/authors/good-ware" rel="noreferrer" target="_blank" title="Good Ware">Good Ware</a> from <a rel="noreferrer" target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-      </Box>
     </Box>
   );
 }

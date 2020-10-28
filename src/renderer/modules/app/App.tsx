@@ -10,7 +10,7 @@ import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
 import withWidth from '@material-ui/core/withWidth';
 import * as backend from '../../Backend';
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import Loading from "./Loading";
 import Terms from "./Terms";
@@ -107,6 +107,7 @@ const App = (props: any) => {
       content = (
         <>
           <LoginScreen
+            backendApi={backend}
             onLogin={handleLogin}
             onCreate={handleCreateWallet}
             onImport={handleImportWallet}
