@@ -1,13 +1,12 @@
 import * as React from 'react';
 import TxDetailsDialog from './TxDetailsDialog';
 import TransactionList from "./TransactionList";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store/root-reducer";
 import {fetchTransactions} from "../wallet-slice";
-import {useAppDispatch} from "../../../store/store";
 
 function Transactions(): React.ReactElement {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const wallet = useSelector((state: RootState) => state.wallet);
   const [detailsTx, setDetailsTx] = React.useState(null);
   const txs = wallet.transactions;
@@ -15,6 +14,7 @@ function Transactions(): React.ReactElement {
   React.useEffect(() => {
     dispatch(fetchTransactions());
   }, []);
+
 
   function handleDetailsClose(): void {
     setDetailsTx(null);

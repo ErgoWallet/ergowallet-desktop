@@ -12,14 +12,19 @@ interface TxListProps {
   onShowDetails?: any;
 }
 
-function extractTime(timestamp: number | string): string {
-  const d = new Date(timestamp);
-  return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+function txsAreEqual(prevProps, nextProps): boolean {
+  if (prevProps.tx.id === nextProps.tx.id && prevProps.tx.confirmationsCount === nextProps.tx.confirmationsCount)
+    return true;
+  return false;
 }
-
 
 function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.ReactElement {
   const {tx, onDetailsClick} = props;
+
+  function extractTime(timestamp: number | string): string {
+    const d = new Date(timestamp);
+    return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
+  }
 
   const TxStatus = () => (tx.confirmationsCount >= 1) ?
     (
@@ -31,13 +36,13 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
     );
 
   const handleRowClick = () => {
-    console.log('Row Click');
+    console.log('Tx Item Click');
   };
 
   return (
     <Box display="flex" alignItems="center" onClick={handleRowClick}>
       <Box flexBasis={0} flexGrow={1} maxWidth={"100px"} minWidth={"100px"}>
-        {extractTime(Number(tx.timestamp || tx.creationTimestamp))}
+        {extractTime(Number(tx.timestamp))}
       </Box>
       <Box flexBasis={0} flexGrow={1} minWidth="2em" maxWidth={"2em"}>
         <TxStatus />
@@ -57,6 +62,7 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
   );
 }
 
+const RowFast = React.memo(Row, txsAreEqual);
 
 export default function TransactionList(props: TxListProps) {
   const {txs, onShowDetails} = props;
@@ -86,10 +92,10 @@ export default function TransactionList(props: TxListProps) {
             </Box>
             <Divider/>
             {txs[date]
-              .slice()
-              .sort((a, b) => Number(b.timestamp||b.creationTimestamp) - Number(a.timestamp||a.creationTimestamp))
+              // .slice()
+              // .sort((a, b) => Number(b.timestamp||b.creationTimestamp) - Number(a.timestamp||a.creationTimestamp))
               .map((tx: any) => (
-              <Row
+              <RowFast
                 key={tx.id}
                 tx={tx}
                 onDetailsClick={() => handleOnDetailsClick(tx)}

@@ -15,6 +15,7 @@ export interface Event {
 
 export enum Events {
   WALLET_UPDATED = 'wallet-updated',
+  WALLET_LOADING_HISTORY = 'wallet-txs-loading',
   APP_READY = 'app-ready',
   APP_LATEST_VERSION = 'app-latest-version',
   SETTINGS_UPDATED = 'settings-updated',

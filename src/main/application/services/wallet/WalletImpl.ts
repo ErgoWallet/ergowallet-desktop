@@ -5,13 +5,14 @@ import {Wallet, WalletBox, WalletTx} from "./Wallet";
 import {KeyManager as KeyManager3, KeyState} from "../../../../common/KeyManager";
 import TransactionBuilder, {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
-import {Output, TokenValue, Transaction} from "../../../ergoplatform/connector/types";
+import {Output, TokenValue, Transaction, UnconfirmedTransaction} from "../../../ergoplatform/connector/types";
 import {EventEmitter} from "events";
 
 const {KeyManager, Address, sign_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export class WalletImpl extends EventEmitter implements Wallet {
   public static UPDATED_EVENT = 'WalletUpdated';
+  public static TXS_LOADING = 'LoadingHistory';
 
   private _keyManager: any;
   private connector: Connector;
@@ -31,11 +32,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
     this.connector = connector;
     this.unspentMonitor = new UnspentMonitor(this, connector);
     this.transMonitor = new TransactionMonitor(connector, this);
+    //TODO: may be on event with true/false ?
     this.transMonitor.on('LoadingStarted', ()  => {
-      console.debug('transMonitor.LoadingStarted');
+      this.emit(WalletImpl.TXS_LOADING, true);
     });
     this.transMonitor.on('LoadingFinished', () => {
-      console.debug('transMonitor.LoadingFinished');
+      this.emit(WalletImpl.TXS_LOADING, false);
     });
 
     this.unspentMonitor.start();
@@ -125,11 +127,13 @@ export class WalletImpl extends EventEmitter implements Wallet {
     }
   }
 
-  public processTransactions(transactions: Array<Transaction>): void {
-    transactions.forEach((tx: Transaction) => {
+  public processTransactions(transactions: Array<Transaction | UnconfirmedTransaction>): void {
+    transactions.forEach((tx: Transaction | UnconfirmedTransaction) => {
 
+      const timestamp = (tx as Transaction).timestamp || (tx as UnconfirmedTransaction).creationTimestamp;
       const walletTx: WalletTx = {
         ...tx,
+        timestamp,
         value: "",
         outputs: []
       };
@@ -212,10 +216,15 @@ export class WalletImpl extends EventEmitter implements Wallet {
     this.unspentMonitor.stop();
     this.transMonitor.stop();
     this.removeAllListeners(WalletImpl.UPDATED_EVENT);
+    this.removeAllListeners(WalletImpl.TXS_LOADING);
   }
 
+  /**
+   * Returns array sorted by Timestamp
+   */
   public getAllTransactions(): Array<WalletTx> {
-    return Array.from(this.transactions.values());
+    const txs = Array.from(this.transactions.values());
+    return txs.sort((a, b) => Number(b.timestamp) - Number(a.timestamp));
   }
 
   public getUnspentBoxes(): Array<WalletBox> {

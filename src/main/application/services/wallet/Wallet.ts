@@ -1,5 +1,5 @@
 import {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
-import {AdditionalRegisters, Output, Transaction} from "../../../ergoplatform/connector/types";
+import {AdditionalRegisters, Output, Transaction, UnconfirmedTransaction} from "../../../ergoplatform/connector/types";
 
 export type WalletTx = Omit<Transaction, 'outputs'> & {
   value: any;
@@ -26,7 +26,7 @@ export interface Wallet {
   getAddresses(): Array<any>;
   getUnspentBoxes(): Array<WalletBox>;
   getConfirmedTransactions(address: string): Array<any>;
-  processTransactions(transactions: Array<Transaction>): void;
+  processTransactions(transactions: Array<Transaction | UnconfirmedTransaction>): void;
   getAllTransactions(): Array<WalletTx>;
   createTransaction(inputs: Array<any>, recipient: string, amount: string, fee: string, tokenId: string, currentHeight: number): UnsignedTransaction;
   signTransaction(tx: UnsignedTransaction): SignedTransaction;

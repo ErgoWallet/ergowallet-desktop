@@ -10,11 +10,12 @@ import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
 import withWidth from '@material-ui/core/withWidth';
 import * as backend from '../../Backend';
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import Loading from "./Loading";
 import Terms from "./Terms";
 import NewVersionNotification from "./NewVersionNotification";
+import { onWalletClosed } from '../wallet/wallet-slice';
 
 let source = createMemorySource("/")
 let history = createHistory(source)
@@ -32,6 +33,7 @@ enum CreationMode {
 
 const App = (props: any) => {
   const app = useSelector((state: RootState) => state.app);
+  const dispatch = useDispatch();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [creationMode, setCreationMode] = React.useState<CreationMode>(CreationMode.Unknown);
 
@@ -46,6 +48,7 @@ const App = (props: any) => {
   async function handleLogout() {
     await backend.closeCurrentWallet();
     setLoggedIn(false);
+    dispatch(onWalletClosed);
     await history.navigate('/');
   }
 
@@ -127,7 +130,7 @@ const App = (props: any) => {
       );
     } else {
       content = (
-        <LocationProvider history={history} >
+        <LocationProvider history={history}>
           <MainScreen onLogout={handleLogout}/>
         </LocationProvider>
       );

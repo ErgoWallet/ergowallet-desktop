@@ -5,7 +5,7 @@ import {Provider} from "react-redux";
 import store from "./store/store";
 import {ipcRenderer, IpcRendererEvent} from "electron";
 import App from './modules/app/App';
-import {fetchAddresses, fetchTransactions, fetchUnspentBoxes} from "./modules/wallet/wallet-slice";
+import {fetchAddresses, fetchTransactions, fetchUnspentBoxes, onHistoryLoading} from "./modules/wallet/wallet-slice";
 import {appLatestVersion, appReady, fetchAppSettings} from "./modules/app/app-slice";
 import {Event, Events} from "../common/backend-types";
 
@@ -21,8 +21,16 @@ ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {
   console.log(e);
 
   switch (e.type) {
+    case Events.WALLET_LOADING_HISTORY:
+      store.dispatch(onHistoryLoading(e.payload));
+
+      if (!e.payload) {
+        // We stopped history loading -> fetch all
+        store.dispatch(fetchTransactions());
+      }
+      break;
+
     case Events.WALLET_UPDATED:
-      store.dispatch(fetchTransactions());
       store.dispatch(fetchUnspentBoxes());
       store.dispatch(fetchAddresses());
       break;
@@ -38,5 +46,6 @@ ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {
 
     case Events.APP_LATEST_VERSION:
       store.dispatch(appLatestVersion(e.payload));
+      break;
   }
 });

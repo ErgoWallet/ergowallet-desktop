@@ -8,26 +8,35 @@ interface WalletState {
   addresses: any;
   boxes: Array<WalletBox>;
   transactions: Record<string, Array<any>>;
+  txsLoading: boolean;
 }
 
 const initialState: WalletState = {
   addresses: [],
   boxes: [],
-  transactions: {}
+  transactions: {},
+  txsLoading: true
 };
 
 const walletSlice = createSlice({
   name: "wallet",
   initialState,
   reducers: {
+    onWalletClosed(state, action: PayloadAction<any>) {
+      return initialState;
+    },
+    onHistoryLoading(state, action: PayloadAction<boolean>) {
+      state.txsLoading = action.payload;
+    },
     getAddressesSuccess(state, action: PayloadAction<any>) {
       state.addresses = action.payload;
     },
     getBoxesSuccess(state, action: PayloadAction<Array<WalletBox>>) {
       state.boxes = action.payload;
     },
-    getTransSuccess(state, action: PayloadAction<any>) {
-      state.transactions = action.payload;
+    getTransSuccess(state, action: PayloadAction<Array<any>>) {
+      const sorted = groupByDay(action.payload);
+      state.transactions = sorted;
     }
   }
 });
@@ -36,7 +45,9 @@ const walletSlice = createSlice({
 export const {
   getAddressesSuccess,
   getBoxesSuccess,
-  getTransSuccess
+  getTransSuccess,
+  onHistoryLoading,
+  onWalletClosed
 } = walletSlice.actions;
 
 
@@ -48,8 +59,7 @@ export const fetchUnspentBoxes = (): AppThunk => async dispatch => {
 
 export const fetchTransactions = (): AppThunk => async dispatch => {
   const result = await backend.getTransactions();
-  const sorted = groupByDay(result);
-  dispatch(getTransSuccess(sorted));
+  dispatch(getTransSuccess(result));
 };
 
 export const fetchAddresses = (): AppThunk => async dispatch => {

@@ -1,9 +1,11 @@
 import * as React from 'react';
-import {Tabs, Tab, Box} from '@material-ui/core';
+import {Tabs, Tab, Box, CircularProgress} from '@material-ui/core';
 import Paper from '../../components/Paper';
 import Outputs from './Boxes/Outputs';
 import Transactions from './Transactions/Transactions';
 import Addresses from "./Addresses/Addresses";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/root-reducer";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -28,6 +30,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function Wallet(props: any) {
+  const wallet = useSelector((state: RootState) => state.wallet);
   const [tab, setTab] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -38,7 +41,12 @@ function Wallet(props: any) {
     <React.Fragment>
       <Tabs value={tab} onChange={handleChange}>
         <Tab label="Unspent"/>
-        <Tab label="History"/>
+        <Tab label={(
+          <Box display="flex" alignItems="center">
+            <Box>History</Box>
+            {wallet.txsLoading && <Box ml={1}><CircularProgress size={20} color="secondary"/></Box>}
+          </Box>)}
+        />
         <Tab label="Addresses"/>
       </Tabs>
       <Paper>

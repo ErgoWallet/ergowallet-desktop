@@ -50,3 +50,13 @@ export interface Transaction {
   inputs: Array<Input>;
   outputs: Array<Output>;
 }
+
+export interface UnconfirmedTransaction {
+  id: string;
+  creationTimestamp: bigint;
+  inclusionHeight: number;
+  size: number;
+  confirmationsCount: number;
+  inputs: Array<Input>;
+  outputs: Array<Output>;
+}

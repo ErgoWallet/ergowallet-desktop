@@ -55,6 +55,13 @@ if (!gotTheLock) {
       mainWindow.webContents.send('events', { type: Events.WALLET_UPDATED });
     });
 
+    application.on('WalletHistoryLoading', (isLoading) => {
+      mainWindow.webContents.send('events', {
+        type: Events.WALLET_LOADING_HISTORY,
+        payload: isLoading
+      });
+    });
+
     application.on(Application.APP_READY_EVENT, () => {
       mainWindow.webContents.send('events', { type: Events.APP_READY });
     });

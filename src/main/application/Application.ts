@@ -26,9 +26,11 @@ export default class Application extends EventEmitter {
   private blockchain: BlockchainService;
   private settings: Settings;
   private updater: UpdateService;
+  private started: boolean;
 
   constructor() {
     super();
+    this.started = false;
     this.connector = new Connector(new ExplorerClient(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
@@ -43,6 +45,9 @@ export default class Application extends EventEmitter {
   }
 
   public start(): void {
+    if (this.started) {
+      return;
+    }
     this.blockchain.start();
     this.updater.start();
     this.setIpcHandlers();
@@ -50,6 +55,7 @@ export default class Application extends EventEmitter {
     // Load settings
     this.settings = new Settings();
     this.emit(Application.APP_READY_EVENT);
+    this.started = true;
   }
 
   public stop(): void {
@@ -94,6 +100,10 @@ export default class Application extends EventEmitter {
     wallet.on(WalletImpl.UPDATED_EVENT, () => {
       this.emit('WalletUpdated');
     });
+    wallet.on(WalletImpl.TXS_LOADING, (isLoading) => {
+      console.log(`Received WalletImpl.TXS_LOADING:${isLoading}`);
+      this.emit('WalletHistoryLoading', isLoading);
+    });
     this.currentWallet = wallet;
     return true;
   }
@@ -120,6 +130,7 @@ export default class Application extends EventEmitter {
   }
 
   public closeCurrentWallet(): void {
+
     this.currentWallet?.close();
     this.currentWallet = null;
   }

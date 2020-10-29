@@ -55,6 +55,40 @@ function LoginScreen(props: LoginScreenProps) {
 
   const canProceed = (wallet && wallet.length > 0);
 
+  if (!canProceed) {
+    // If there are no any wallet in vault we display just two buttons
+    return (
+      <Container component="main" maxWidth="xs" className={classes.container}>
+        <div className={classes.paper}>
+          <Box display="flex" alignItems={"center"} mb={2}>
+            <Box>
+              <LogoImage/>
+            </Box>
+          </Box>
+          <Button
+            onClick={props.onCreate}
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Create new wallet
+          </Button>
+          <Button
+            onClick={props.onImport}
+            type="submit"
+            fullWidth
+            variant="outlined"
+            color="primary"
+            className={classes.submit}
+          >
+            Import existing wallet
+          </Button>
+        </div>
+      </Container>
+    );
+  }
   return (
     <Container component="main" maxWidth="xs" className={classes.container}>
       <div className={classes.paper}>
