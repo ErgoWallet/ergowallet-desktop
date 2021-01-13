@@ -34,6 +34,7 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
   const [page, setPage] = React.useState(Pages.InitWalletParams);
   const [walletParams, setWalletParams] = React.useState<{walletName: string, password: string}>();
   const [mnemonic, setMnemonic] = React.useState('');
+  const [mnemonicPassphrase, setMnemonicPassphrase] = React.useState('');
 
   function handleSetParams(walletName: string, password: string) {
     setWalletParams({walletName, password});
@@ -43,7 +44,7 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
   async function handleMnemonicConfirmed() {
     const { walletName, password } = walletParams;
 
-    await backend.importWallet(walletName, mnemonic, password)
+    await backend.importWallet(walletName, mnemonic, mnemonicPassphrase, password)
 
     props.onFinish();
   }
@@ -54,8 +55,9 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
     }
   }
 
-  function handleNewMnemonic(mnemonic: string) {
+  function showVerifyMnemonic(mnemonic: string, passphrase: string) {
     setMnemonic(mnemonic);
+    setMnemonicPassphrase(passphrase);
     setPage(Pages.VerifyMnemonic);
   }
 
@@ -76,13 +78,15 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
   } else if (page === Pages.CreateMnemonic) {
     content = (
       <NewMnemonic
-        onSubmit={handleNewMnemonic}
+        onCancel={cancelCreation}
+        onSubmit={showVerifyMnemonic}
         backendApi={backend}
       />);
   } else if (page === Pages.VerifyMnemonic) {
     content = (
       <ConfirmMnemonic
         mnemonic={mnemonic}
+        onCancel={cancelCreation}
         onConfirmed={handleMnemonicConfirmed}
       />)
   }

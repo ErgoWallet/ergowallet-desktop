@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Box, Button, Link} from "@material-ui/core";
-import { shell } from 'electron';
+import {Box, Link} from "@material-ui/core";
+import {shell} from 'electron';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const pkg = require( '../../../../package.json');
+const pkg = require('../../../../package.json');
 
-function About () {
+function About() {
   const handleReportClick = () => {
     shell.openExternal('https://github.com/ErgoWallet/ergowallet-desktop/issues/new');
   };

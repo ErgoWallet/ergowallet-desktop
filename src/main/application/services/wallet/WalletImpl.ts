@@ -7,6 +7,7 @@ import TransactionBuilder, {SignedTransaction, UnsignedTransaction} from "./Tran
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {Output, TokenValue, Transaction, UnconfirmedTransaction} from "../../../ergoplatform/connector/types";
 import {EventEmitter} from "events";
+import {BIP39} from "../vault/Vault";
 
 const {KeyManager, Address, sign_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
@@ -24,10 +25,10 @@ export class WalletImpl extends EventEmitter implements Wallet {
   private transactions = new Map<string, WalletTx>();
   private keyManager3: KeyManager3;
 
-  constructor(mnemonic: string, connector: Connector) {
+  constructor(bip32: BIP39, connector: Connector) {
     super();
-    this.keyManager3 = KeyManager3.recover(mnemonic);
-    this._keyManager = KeyManager.recover(mnemonic);
+    this.keyManager3 = KeyManager3.recover(bip32.mnemonic, bip32.passphrase);
+    this._keyManager = KeyManager.recover(bip32.mnemonic);
 
     this.connector = connector;
     this.unspentMonitor = new UnspentMonitor(this, connector);

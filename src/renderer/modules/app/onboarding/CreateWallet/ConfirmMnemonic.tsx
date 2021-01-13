@@ -26,7 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
+interface ConfirmMnemonicProps {
+  mnemonic: string;
+  onConfirmed?: any;
+  onCancel?: any;
+}
+
+function ConfirmMnemonic(props: ConfirmMnemonicProps) {
   const classes = useStyles();
   const original = props.mnemonic.split(' ');
   const words = _.shuffle(original);
@@ -64,15 +70,23 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
   const isValid = (selected.length === original.length) &&
     selected.every((value, index) => value === original[index]);
 
+  const handleCancel = () => {
+    if (props.onCancel) {
+      props.onCancel();
+    }
+  }
+
   return (
     <Card variant="outlined" className={classes.root}>
       <CardHeader title={"Verify recovery phrase"} />
       <CardContent>
         <Box display="flex" flexDirection="column" >
-          <Grid item lg={12} md={12} sm={12} xs={12}>
-            Click the words to put them next to each other in the correct order.
+          <Grid item xs={12}>
+            <Box m={1} ml={0}>
+              Click the words to put them next to each other in the correct order.
+            </Box>
           </Grid>
-          <Grid item lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <div className={classes.verifiedBox}>
               {selected.map((word, index) => (
                 <Chip
@@ -99,6 +113,13 @@ function ConfirmMnemonic(props: {mnemonic: string; onConfirmed?: any}) {
         </Box>
       </CardContent>
       <CardActions>
+        <Button
+          disableElevation
+          variant={"outlined"}
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
         <Button
           disableElevation
           color="primary"

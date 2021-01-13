@@ -12,7 +12,7 @@ interface TxListProps {
   onShowDetails?: any;
 }
 
-function txsAreEqual(prevProps, nextProps): boolean {
+function txsAreEqual(prevProps: any, nextProps: any): boolean {
   if (prevProps.tx.id === nextProps.tx.id && prevProps.tx.confirmationsCount === nextProps.tx.confirmationsCount)
     return true;
   return false;

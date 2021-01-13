@@ -20,16 +20,19 @@ export default class Application extends EventEmitter {
 
   private baseUri = "https://api.ergoplatform.com/api/v0";
 
-  private vault = new Vault();
+  private vault: Vault;
   private currentWallet: Wallet | null = null;
   private readonly connector: Connector;
   private blockchain: BlockchainService;
   private settings: Settings;
   private updater: UpdateService;
   private started: boolean;
+  private userDataDir: string;
 
-  constructor() {
+  constructor(userDataDir: string) {
     super();
+    this.userDataDir = userDataDir;
+    this.vault = new Vault(userDataDir);
     this.started = false;
     this.connector = new Connector(new ExplorerClient(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
@@ -84,17 +87,17 @@ export default class Application extends EventEmitter {
     return !!wallet;
   }
 
-  public importWallet(walletName: string, mnemonic: string, password: string): void {
-    return this.vault.importWallet(walletName, mnemonic, password);
+  public importWallet(walletName: string, mnemonic: string, passphrase: string, walletPassword: string): void {
+    return this.vault.importWallet(walletName, mnemonic, passphrase, walletPassword);
   }
 
-  public loadWallet(walletName: string, walletPwd: string): boolean {
-    const walletData = this.vault.getWalletData(walletName);
+  public loadWallet(walletName: string, walletPassword: string): boolean {
+    const bip39Data = this.vault.getWalletData(walletName);
 
     console.log(`Loading wallet [${walletName}]`);
 
     const wallet = new WalletImpl(
-      walletData.mnemonic,
+      bip39Data,
       this.connector,
     );
     wallet.on(WalletImpl.UPDATED_EVENT, () => {

@@ -50,8 +50,8 @@ export class KeyManager {
 
   hdPubKeys: Array<HdPubKey> = [];
 
-  static recover(mnemonic: string): KeyManager {
-    const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic);
+  static recover(mnemonic: string, passphrase?: string): KeyManager {
+    const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic, passphrase);
 
     const masterKey = bip32.fromSeed(seed);
     const km = new KeyManager(masterKey);

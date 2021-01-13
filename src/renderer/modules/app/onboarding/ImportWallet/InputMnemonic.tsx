@@ -20,7 +20,7 @@ function InputMnemonic(props: {onSubmit?: any; onCancel?: any}) {
   }
 
   function handleInputChange(event: React.ChangeEvent<{ value: string }>) {
-    const val = event.target.value.trim();
+    const val = event.target.value;
     setMnemonic(val);
   }
 
@@ -63,7 +63,6 @@ function InputMnemonic(props: {onSubmit?: any; onCancel?: any}) {
               Import
             </Button>
           </Box>
-
         </Grid>
       </Grid>
     </React.Fragment>

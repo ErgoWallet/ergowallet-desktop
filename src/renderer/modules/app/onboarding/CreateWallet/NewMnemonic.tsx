@@ -1,5 +1,15 @@
 import * as React from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Checkbox, FormControlLabel, Grid} from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Checkbox,
+  FormControlLabel,
+  Grid
+} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
 import {makeStyles} from "@material-ui/core/styles";
 
@@ -18,7 +28,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
-  onSubmit?: (mnemonic: string) => void;
+  onSubmit?: (mnemonic: string, passphrase: string) => void;
+  onCancel? : any;
   backendApi?: any;
 }
 
@@ -33,9 +44,15 @@ function NewMnemonic(props: Props) {
 
   const handleSubmit = () => {
     if (props.onSubmit) {
-      props.onSubmit(mnemonic);
+      props.onSubmit(mnemonic, '');
     }
   };
+
+  const handleCancel = () => {
+    if (props.onCancel) {
+      props.onCancel();
+    }
+  }
 
   React.useEffect(() => {
     const generate = async () => {
@@ -53,11 +70,11 @@ function NewMnemonic(props: Props) {
     <Card variant="outlined" className={classes.root}>
       <CardHeader title={"Your recovery phrase"} />
       <CardContent>
-        <Grid container direction={'column'} spacing={1}>
+        <Grid container direction="column" spacing={1}>
           <Grid item xs={12}>
-            <Alert severity="error" variant={'outlined'}>
-              Write down these words in the right order and save them somewhere safe
-            </Alert>
+            <Box m={1} ml={0}>
+              Write down these words in the right order and save them somewhere safe.
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <Grid container>
@@ -87,6 +104,13 @@ function NewMnemonic(props: Props) {
         </Grid>
       </CardContent>
       <CardActions>
+        <Button
+          disableElevation
+          variant={"outlined"}
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
         <Button
           disabled={!checked}
           disableElevation

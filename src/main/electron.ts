@@ -12,7 +12,7 @@ let mainWindow: BrowserWindow = null;
 const gotTheLock = app.requestSingleInstanceLock();
 
 /** Core application */
-const application = new Application();
+const application = new Application(app.getPath('userData'));
 
 if (!gotTheLock) {
   app.quit();

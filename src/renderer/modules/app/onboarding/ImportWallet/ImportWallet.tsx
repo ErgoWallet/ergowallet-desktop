@@ -1,21 +1,20 @@
-import * as React from 'react';
+import * as React from "react";
 import InitWalletParams from "../InitWalletParams";
 import InputMnemonic from "./InputMnemonic";
 import {Container} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-
-import * as backend from '../../../../Backend';
+import * as backend from "../../../../Backend";
 
 // ****************************************************************************
 // This wizard contains following steps:
 //    - Set wallet name and password;
-//    - Input mnemonic phrase
-//    - Save (mnemonic, password, wallet name)
+//    - Input BIP39 mnemonic phrase and passphrase (optional)
+//    - Save (mnemonic, passphrase, password, wallet name)
 // ****************************************************************************
 
 enum Pages {
   InitWalletParams = 0,
-  InputMnemonic= 1
+  InputMnemonic = 1
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +40,7 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
     const { walletName, password } = walletParams;
     // We have all data here - (wallet name, mnemonic, password)
 
-    await backend.importWallet(walletName, mnemonic, password)
+    await backend.importWallet(walletName, mnemonic, '', password)
 
     props.onFinish();
   }
