@@ -56,7 +56,7 @@
     "typescript": "4.0.3",
     "url-loader": "^4.1.0",
     "webpack": "4.41.2",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "4.3.1"
   },
   "dependencies": {
     "@ergowallet/ergowallet-wasm": "0.1.1",
