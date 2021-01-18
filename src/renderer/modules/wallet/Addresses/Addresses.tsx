@@ -8,6 +8,10 @@ import Hex from "../../../components/Hex";
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from "../../../store/root-reducer";
 import {fetchAddresses} from "../wallet-slice";
+import {Box, Collapse, IconButton} from '@material-ui/core';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import {makeStyles} from "@material-ui/core/styles";
 
 function Addresses (): React.ReactElement {
   const dispatch = useDispatch();
@@ -23,28 +27,64 @@ function Addresses (): React.ReactElement {
         <TableRow>
           <TableCell>Type</TableCell>
           <TableCell>Address</TableCell>
-          <TableCell>Path</TableCell>
           <TableCell align="right">Tx</TableCell>
           <TableCell>Status</TableCell>
+          <TableCell />
         </TableRow>
       </TableHead>
       <TableBody>
         {wallet.addresses.map((item) => (
-          <TableRow key={item.address}>
-            <TableCell style={{backgroundColor: item.internal ? '#f4ebc1': '#a0c1b8'}}>
-              {item.internal ? "change" : "receiving"}
-            </TableCell>
-            <TableCell>
-              <Hex>{item.address}</Hex>
-            </TableCell>
-            <TableCell>{item.path}</TableCell>
-            <TableCell align="right">{item.txCount}</TableCell>
-            <TableCell>{item.state}</TableCell>
-          </TableRow>
+          <Row key={item.address} item={item} />
         ))}
       </TableBody>
     </Table>
   );
 }
+
+const useRowStyles = makeStyles({
+  root: {
+    '& > *': {
+      borderBottom: 'unset',
+    },
+  },
+});
+/**
+ * Collapsable Address Row
+ * @param props
+ */
+const Row = (props: { item: any }) => {
+  const {item} = props;
+  const [open, setOpen] = React.useState(false);
+  const classes = useRowStyles();
+  
+  return (
+    <React.Fragment>
+      <TableRow className={classes.root}>
+        <TableCell style={{backgroundColor: item.internal ? '#f4ebc1': '#a0c1b8'}}>
+          {item.internal ? "change" : "receiving"}
+        </TableCell>
+        <TableCell>
+          <Hex>{item.address}</Hex>
+        </TableCell>
+        <TableCell align="right">{item.txCount}</TableCell>
+        <TableCell>{item.state}</TableCell>
+        <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+          <Collapse in={open} timeout={"auto"} unmountOnExit>
+            <Box m={1}>
+              HD Path is {item.path}
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+};
 
 export default Addresses;

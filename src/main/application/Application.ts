@@ -13,6 +13,7 @@ import {SignedTransaction, UnsignedTransaction} from "./services/wallet/Transact
 import {EventEmitter} from 'events';
 import Settings from "./Settings";
 import _ from "lodash";
+import logger from "./logger";
 
 export default class Application extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
@@ -42,7 +43,7 @@ export default class Application extends EventEmitter {
     this.updater = new UpdateService();
     this.updater.on(UpdateService.CURRENT_VERSION_EVENT, (event) => {
       const latestVer = event.tag_name ? _.trimStart(event.tag_name, "v") : null;
-      console.debug(`Latest version: ${latestVer}`);
+      logger.debug(`Latest version: ${latestVer}`);
       this.emit(Application.APP_LATEST_VERSION, latestVer);
     });
   }
@@ -94,7 +95,7 @@ export default class Application extends EventEmitter {
   public loadWallet(walletName: string, walletPassword: string): boolean {
     const bip39Data = this.vault.getWalletData(walletName);
 
-    console.log(`Loading wallet [${walletName}]`);
+    logger.info(`Loading wallet [${walletName}]`);
 
     const wallet = new WalletImpl(
       bip39Data,
@@ -104,7 +105,7 @@ export default class Application extends EventEmitter {
       this.emit('WalletUpdated');
     });
     wallet.on(WalletImpl.TXS_LOADING, (isLoading) => {
-      console.log(`Received WalletImpl.TXS_LOADING:${isLoading}`);
+      logger.debug(`Received WalletImpl.TXS_LOADING:${isLoading}`);
       this.emit('WalletHistoryLoading', isLoading);
     });
     this.currentWallet = wallet;
@@ -181,10 +182,8 @@ export default class Application extends EventEmitter {
   }
 
   public updateSettings(settings: any) {
-    console.debug('Updating settings: ' + JSON.stringify(settings));
+    logger.debug('Updating settings: ' + JSON.stringify(settings));
     this.settings.update(settings);
     this.emit('SettingsUpdated');
   }
 }
-
-
