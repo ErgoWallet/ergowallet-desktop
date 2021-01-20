@@ -1,48 +1,13 @@
 import * as bip32 from 'bip32';
 import * as bip39 from 'bip39';
 import {BIP32Interface} from "bip32";
+import {IKeyManager} from "./IKeyManager";
+import {HdPubKey, KeyState} from "./HdPubKey";
 
 const {Address, parse_hd_path} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
-export enum KeyState {
-  Clean = 'clean',
-  Used = 'used'
-}
 
-class HdPubKey {
-  public hdPath: string;
-  public address: string;
-  public state: KeyState;
-
-  private readonly publicKey: Buffer;
-  public index: number;
-
-  /** Internal means it is for change only. */
-  public internal: boolean;
-
-  constructor(publicKey: Buffer, index: number, fullHdPath: string) {
-    const pathIndices = parse_hd_path(fullHdPath);
-    this.internal = pathIndices[3] > 0;
-
-    this.publicKey = Buffer.from(publicKey);
-    this.index = index;
-
-    this.hdPath = fullHdPath;
-    this.address = Address.from_public_key(this.publicKey).get_addr();
-    this.state = KeyState.Clean;
-  }
-
-  public setState(state: KeyState): void {
-    this.state = state;
-  }
-
-  public pubKey(): Buffer {
-    return this.publicKey;
-  }
-
-}
-
-export class KeyManager {
+export class KeyManager implements IKeyManager {
   static AccountDerivationPath = "m/44'/429'/0'";
   private accountExtPubKey: BIP32Interface;
   private extMasterKey: BIP32Interface;
@@ -69,6 +34,9 @@ export class KeyManager {
     this.watchOnly = (masterKey.privateKey === undefined);
   }
 
+  public allKeys(): Array<HdPubKey> {
+    return this.hdPubKeys;
+  }
   /**
    * Mark key for address as used
    * @param address
@@ -91,6 +59,13 @@ export class KeyManager {
     return this.hdPubKeys.filter((k) => k.state === state && k.internal === internal);
   }
 
+  /**
+   * Returns next unused key for change
+   */
+  public getNextChangeKey(): HdPubKey {
+    this.assertCleanKeys();
+    return this.getKeys(KeyState.Clean, true)[0];
+  }
   /**
    * Make sure there's always clean keys generated.
    */
@@ -146,5 +121,4 @@ export class KeyManager {
     });
     return max;
   }
-
 }

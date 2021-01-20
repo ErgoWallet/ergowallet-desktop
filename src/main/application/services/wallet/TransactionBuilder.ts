@@ -4,7 +4,7 @@ import {minBoxValue} from "../../../../common/constants";
 import {WalletBox} from "./Wallet";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
 
-const {Address, create_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export interface UnsignedTransaction {
   inputs: Array<{
@@ -102,13 +102,14 @@ export default class TransactionBuilder {
       value: spendingErgAmount.amount
     });
 
-    tx.ergoTx = create_tx(
+    const unsigned = Transaction.create(
       tx.inputs,
       tx.outputs,
       BigInt(feeAmount.amount),
       this.ergoContext.height
     );
 
+    tx.ergoTx = unsigned.to_json();
     return tx;
   }
 
@@ -182,12 +183,12 @@ export default class TransactionBuilder {
       value: recipientErgAmount.amount
     });
 
-    tx.ergoTx = create_tx(
+    tx.ergoTx = Transaction.create(
       tx.inputs,
       tx.outputs,
       BigInt(feeAmount.amount),
       this.ergoContext.height
-    );
+    ).to_json();
 
     return tx;
   }

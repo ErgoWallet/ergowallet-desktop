@@ -26,7 +26,7 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
     return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)}:${("0" + d.getSeconds()).slice(-2)}`;
   }
 
-  const TxStatus = () => (tx.confirmationsCount >= 1) ?
+  const TxStatus = (): JSX.Element => (tx.confirmationsCount >= 1) ?
     (
       <Tooltip title={`${tx.confirmationsCount} confirmations`}>
         <DoneIcon fontSize="small" color="primary"/>

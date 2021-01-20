@@ -4,7 +4,7 @@ import {AdditionalRegisters} from "../../../ergoplatform/connector/types";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {minBoxValue} from "../../../../common/constants";
 
-const {Address, create_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 describe('TransactionBuilder', () => {
   it('should create token transfer tx', () => {
@@ -32,7 +32,7 @@ describe('TransactionBuilder', () => {
       [box1.boxId],
       "9hzP24a2q8KLPVCUk7gdMDXYc7vinmGuxmLp5KU7k9UwptgYBYV",
       "1",
-      "0.000001",
+      "0.001",
       "9gmNsqrqdSppLUBqg2UzREmmivgqh1r3jmNcLAc53hk3YCvAGWE",
       token1
     );
@@ -41,12 +41,12 @@ describe('TransactionBuilder', () => {
     const recipient = tx.outputs.filter((b) => b.address === '9hzP24a2q8KLPVCUk7gdMDXYc7vinmGuxmLp5KU7k9UwptgYBYV')[0];
     expect(recipient.value).toEqual(minBoxValue.toString());
 
-    const ergoTx = create_tx(
+    const ergoTx = Transaction.create(
       tx.inputs,
       tx.outputs,
       BigInt(tx.fee),
       context.height
-    );
+    ).to_json();
 
     const totalOutput = ergoTx.outputs.reduce(
       (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
@@ -77,12 +77,12 @@ describe('TransactionBuilder', () => {
     unspent.set(box1.boxId, box1);
 
     const builder = new TransactionBuilder(unspent, context);
-    const fee = "0.000001";
+    const fee = "0.001";
     const tx = builder.create(
       [box1.boxId],
       "9hzP24a2q8KLPVCUk7gdMDXYc7vinmGuxmLp5KU7k9UwptgYBYV",
       "1",
-      "0.000001",
+      fee,
       "9gmNsqrqdSppLUBqg2UzREmmivgqh1r3jmNcLAc53hk3YCvAGWE",
       "ERG"
     );
@@ -98,14 +98,14 @@ describe('TransactionBuilder', () => {
     ];
     const outputs = [
       {
-        value: "1",
+        value: "1000000",
         address: "9hzP24a2q8KLPVCUk7gdMDXYc7vinmGuxmLp5KU7k9UwptgYBYV",
         assets: []
       }
     ];
-    const fee = "1";
+    const fee = "1000000";
 
-    const result = create_tx(
+    const result = Transaction.create(
       inputs,
       outputs,
       BigInt(fee),

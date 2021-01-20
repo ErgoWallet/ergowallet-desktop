@@ -2,14 +2,17 @@ import {UnspentMonitor} from "./UnspentMonitor";
 import {TransactionMonitor} from "./TransactionMonitor";
 import {Connector} from "../../../ergoplatform/connector/Connector";
 import {Wallet, WalletBox, WalletTx} from "./Wallet";
-import {KeyManager as KeyManager3, KeyState} from "../../../../common/KeyManager";
+import {KeyManager as KeyManager3} from "../../../../common/KeyManager";
+import {SingleKeyManager} from "../../../../common/SingleKeyManager";
 import TransactionBuilder, {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {Output, TokenValue, Transaction, UnconfirmedTransaction} from "../../../ergoplatform/connector/types";
 import {EventEmitter} from "events";
-import {BIP39} from "../vault/Vault";
+import {BIP39, SingleKeyWallet} from "../vault/Vault";
+import {IKeyManager} from "../../../../common/IKeyManager";
+import logger from "../../logger";
 
-const {KeyManager, Address, sign_tx} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export class WalletImpl extends EventEmitter implements Wallet {
   public static UPDATED_EVENT = 'WalletUpdated';
@@ -23,17 +26,22 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
   private unspentBoxes = new Map<string, WalletBox>();
   private transactions = new Map<string, WalletTx>();
-  private keyManager3: KeyManager3;
+  private keyManager3: IKeyManager;
 
-  constructor(bip32: BIP39, connector: Connector) {
+  constructor(bip32: BIP39 | SingleKeyWallet, connector: Connector) {
     super();
-    this.keyManager3 = KeyManager3.recover(bip32.mnemonic, bip32.passphrase);
-    this._keyManager = KeyManager.recover(bip32.mnemonic);
+    if ("mnemonic" in bip32) {
+      this.keyManager3 = KeyManager3.recover(bip32.mnemonic, bip32.passphrase);
+    } else if ((bip32 as SingleKeyWallet).privateKey) {
+      this.keyManager3 = SingleKeyManager.recover(bip32.privateKey);
+    }
+
+    //this._keyManager = KeyManager.recover(bip32.mnemonic);
 
     this.connector = connector;
     this.unspentMonitor = new UnspentMonitor(this, connector);
     this.transMonitor = new TransactionMonitor(connector, this);
-    //TODO: may be on event with true/false ?
+    //TODO: may be one event with true/false ?
     this.transMonitor.on('LoadingStarted', ()  => {
       this.emit(WalletImpl.TXS_LOADING, true);
     });
@@ -65,11 +73,9 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
     // Sign tx
 
-    // console.debug("ergoTx");
-    // console.debug(JSON.stringify(tx.ergoTx));
-    // console.debug("-------------");
-
-    const signed = sign_tx(privateKeys, boxesToSpend, tx.ergoTx);
+    const signed = Transaction
+      .sign(privateKeys, boxesToSpend, tx.ergoTx)
+      .to_json();
     // console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
     return tx;
@@ -84,8 +90,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     currentHeight: number
   ): UnsignedTransaction {
     // get next clean change address
-    this.keyManager3.assertCleanKeys();
-    const changeKey = this.keyManager3.getKeys(KeyState.Clean, true)[0];
+    const changeKey = this.keyManager3.getNextChangeKey();
 
     const context = { height: currentHeight };
     const builder = new TransactionBuilder(this.unspentBoxes, context);
@@ -102,7 +107,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
   public addUnspent(box: Output): void {
     if (!this.unspentBoxes.get(box.id)) {
-      console.log(`Adding ${JSON.stringify(box)}`);
+      logger.debug(`Adding ${JSON.stringify(box)}`);
 
       const foundKey = this.keyManager3.getKey(box.address);
       let addressType = "foreign";
@@ -202,7 +207,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
   }
 
   public getAddresses(): any {
-    return this.keyManager3.hdPubKeys.map((item) => {
+    return this.keyManager3.allKeys().map((item) => {
       return {
         address: item.address,
         publicKey: item.pubKey().toString('hex'),
@@ -233,6 +238,9 @@ export class WalletImpl extends EventEmitter implements Wallet {
   }
 
   public static validateAddress(address: string): string {
-    return Address.validate(address);
+    if (!Address.validate(address)) {
+      return "Invalid address";
+    }
+    return '';
   }
 }

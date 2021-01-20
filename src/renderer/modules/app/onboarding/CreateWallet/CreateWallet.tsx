@@ -44,7 +44,7 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
   async function handleMnemonicConfirmed() {
     const { walletName, password } = walletParams;
 
-    await backend.importWallet(walletName, mnemonic, mnemonicPassphrase, password)
+    await backend.importMnemonic(walletName, mnemonic, mnemonicPassphrase, password)
 
     props.onFinish();
   }

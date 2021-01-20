@@ -44,7 +44,11 @@ function Wallet(props: any) {
         <Tab label={(
           <Box display="flex" alignItems="center">
             <Box>History</Box>
-            {wallet.txsLoading && <Box ml={1}><CircularProgress size={20} color="secondary"/></Box>}
+            {wallet.txsLoading && (
+              <Box ml={1}>
+                <CircularProgress size={20} color="secondary"/>
+              </Box>
+            )}
           </Box>)}
         />
         <Tab label="Addresses"/>

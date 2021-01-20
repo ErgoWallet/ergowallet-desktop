@@ -15,6 +15,10 @@ export function setHandlers(app: Application): void {
     return app.importWallet(walletName, mnemonic, passphrase, password);
   });
 
+  ipcMain.handle(Commands.VAULT_IMPORT_PRIVATE_KEY, (event: any, walletName: string, privateKey: string, password: string) => {
+    return app.importPrivateKey(walletName, privateKey, password);
+  });
+
   ipcMain.handle(Commands.LOAD_WALLET, (event: any, walletName: string, walletPassword: string) => {
     return app.loadWallet(walletName, walletPassword);
   });

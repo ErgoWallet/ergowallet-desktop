@@ -38,7 +38,7 @@ export default class Application extends EventEmitter {
     this.connector = new Connector(new ExplorerClient(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
-      console.log(JSON.stringify(event));
+      logger.debug(JSON.stringify(event));
     });
     this.updater = new UpdateService();
     this.updater.on(UpdateService.CURRENT_VERSION_EVENT, (event) => {
@@ -88,6 +88,10 @@ export default class Application extends EventEmitter {
     return !!wallet;
   }
 
+  public importPrivateKey(walletName: string, privateKey: string, walletPassword: string): void {
+    return this.vault.importPrivateKey(walletName, privateKey, walletPassword);
+  }
+
   public importWallet(walletName: string, mnemonic: string, passphrase: string, walletPassword: string): void {
     return this.vault.importWallet(walletName, mnemonic, passphrase, walletPassword);
   }
@@ -134,7 +138,6 @@ export default class Application extends EventEmitter {
   }
 
   public closeCurrentWallet(): void {
-
     this.currentWallet?.close();
     this.currentWallet = null;
   }

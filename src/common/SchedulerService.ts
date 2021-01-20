@@ -14,7 +14,7 @@ export class SchedulerService extends EventEmitter {
   public start(): void {
     if (!this.timer) {
       this.addListener('run', this.action);
-      this.timer = setInterval(() => this.emit('run'), this.interval);
+      this.timer = global.setInterval(() => this.emit('run'), this.interval);
     }
   }
 

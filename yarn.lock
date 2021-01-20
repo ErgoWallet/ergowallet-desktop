@@ -471,10 +471,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.5.tgz#77211291c1900a700b8a78cfafda3160d76949ed"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
-"@ergowallet/ergowallet-wasm@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@ergowallet/ergowallet-wasm/-/ergowallet-wasm-0.1.1.tgz#b1103d97a5b6dede058e79e4a6793211049cc5dc"
-  integrity sha512-UuInc0TqCA1RJ9CEZMXNkoBAV07dcY+uIlY8c2rEvm/mdQpYoSK0ESZBJu3ZU3y/ZAO8Ao4O2pEDJBCmBB7O8A==
+"@ergowallet/ergowallet-wasm@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@ergowallet/ergowallet-wasm/-/ergowallet-wasm-0.2.1.tgz#985c3d3ac1174ad3a2ca31cf540aecf88f2d3d8f"
+  integrity sha512-WrjMOGc9syNq7jxXYs7nQbw5Yu/986uj40ce67dQJ4EKl98n0zObDDVigAfdun/7gIEnZQOu2L6C38z/7VvB4w==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"

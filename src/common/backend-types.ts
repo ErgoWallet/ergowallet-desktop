@@ -28,6 +28,7 @@ export enum Commands {
 
   VAULT_GET_WALLETS = 'get-all-wallets',
   VAULT_IMPORT_WALLET = 'import-mnemonic',
+  VAULT_IMPORT_PRIVATE_KEY = 'import-private-key',
   VAULT_WALLET_EXISTS = 'check-wallet-name',
 
   LOAD_WALLET = 'load-wallet',
