@@ -112,6 +112,7 @@ function Outputs(): React.ReactElement {
     if (event.target.checked) {
       // We can select only unspent boxes
       const newSelected = wallet.boxes
+        .filter((b) => b.spentTransactionId === null)
         .map((n) => n.boxId);
       setSelected(newSelected);
       return;
