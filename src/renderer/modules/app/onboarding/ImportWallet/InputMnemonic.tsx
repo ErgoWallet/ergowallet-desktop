@@ -46,6 +46,11 @@ function InputMnemonic(props: {onSubmit?: any; onCancel?: any}) {
           />
         </Grid>
         <Grid item xs={12}>
+          <Box>
+            Typically 12 words separated by single spaces
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
           <Box mt={2}>
             <Button
               variant={"outlined"}

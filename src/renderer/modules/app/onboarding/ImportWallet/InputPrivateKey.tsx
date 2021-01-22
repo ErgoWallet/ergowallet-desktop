@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Button, TextField, Grid, Box} from "@material-ui/core";
+import {isHexString} from "../../../../../common/utils";
 
 
 // ****************************************************************************
@@ -24,12 +25,13 @@ function InputPrivateKey(props: {onSubmit?: any; onCancel?: any}) {
   }
 
   function isValidPrivateKey(hex: string): boolean {
-    //TODO: validate hex string format
-    return true;
+    if (hex === '' || hex === undefined)
+      return true;
+    return isHexString(hex);
   }
 
   const canProceed = isValidPrivateKey(privateKey)
-
+  const helpText = !isValidPrivateKey(privateKey) ? "Invalid private key" : "";
   return (
     <React.Fragment>
       <Grid container direction={'column'} spacing={1}>
@@ -41,7 +43,12 @@ function InputPrivateKey(props: {onSubmit?: any; onCancel?: any}) {
             label={'Private Key'}
             fullWidth={true}
             variant="outlined"
+            error={!canProceed}
+            helperText={helpText}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <Box>Typically 64 alphanumeric characters</Box>
         </Grid>
         <Grid item xs={12}>
           <Box mt={2}>
