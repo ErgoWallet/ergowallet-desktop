@@ -1,3 +1,8 @@
+/*
+ * ╔═╗┬─┐┌─┐┌─┐  ╦ ╦┌─┐┬  ┬  ┌─┐┌┬┐
+ * ║╣ ├┬┘│ ┬│ │  ║║║├─┤│  │  ├┤  │
+ * ╚═╝┴└─└─┘└─┘  ╚╩╝┴ ┴┴─┘┴─┘└─┘ ┴
+ */
 import {app, BrowserWindow} from 'electron';
 import * as path from 'path';
 import Application from './application/Application';
@@ -34,7 +39,6 @@ if (!gotTheLock) {
   });
 
   app.on('ready', async () => {
-
 
     // Create and show main window
     mainWindow = createWindow({
