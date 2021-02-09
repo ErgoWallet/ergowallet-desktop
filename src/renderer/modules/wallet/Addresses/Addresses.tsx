@@ -12,6 +12,7 @@ import {Box, Collapse, IconButton} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
+import Address from "../../../components/Address";
 
 function Addresses (): React.ReactElement {
   const dispatch = useDispatch();
@@ -64,7 +65,10 @@ const Row = (props: { item: any }) => {
           {item.internal ? "change" : "receiving"}
         </TableCell>
         <TableCell>
-          <Hex>{item.address}</Hex>
+          <Address
+            copy={true}
+            value={item.address}
+          />
         </TableCell>
         <TableCell align="right">{item.txCount}</TableCell>
         <TableCell>{item.state}</TableCell>
