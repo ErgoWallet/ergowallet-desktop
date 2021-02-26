@@ -4,9 +4,6 @@ import {BIP32Interface} from "bip32";
 import {IKeyManager} from "./IKeyManager";
 import {HdPubKey, KeyState} from "./HdPubKey";
 
-const {Address, parse_hd_path} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
-
-
 export class KeyManager implements IKeyManager {
   static AccountDerivationPath = "m/44'/429'/0'";
   private accountExtPubKey: BIP32Interface;

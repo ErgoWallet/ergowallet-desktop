@@ -4,7 +4,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import Hex from "../../../components/Hex";
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from "../../../store/root-reducer";
 import {fetchAddresses} from "../wallet-slice";
@@ -12,6 +11,7 @@ import {Box, Collapse, IconButton} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
+import {useQRCode} from "react-qrcode";
 import Address from "../../../components/Address";
 
 function Addresses (): React.ReactElement {
@@ -57,7 +57,8 @@ const Row = (props: { item: any }) => {
   const {item} = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-  
+  const dataUrl = useQRCode(item.address);
+
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -81,8 +82,18 @@ const Row = (props: { item: any }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
           <Collapse in={open} timeout={"auto"} unmountOnExit>
-            <Box m={1}>
-              HD Path is {item.path}
+            <Box m={1} display="flex">
+              <Box flexBasis={0} flexGrow={1}>
+                <Box display="flex" flexDirection="column">
+                  <Box display="flex">
+                    <Box flexBasis={0} flexGrow={1}>Derivation Path</Box>
+                    <Box flexBasis={0} flexGrow={1}>{item.path}</Box>
+                  </Box>
+                </Box>
+              </Box>
+               <Box flexBasis={0} flexGrow={1}>
+                 <img src={dataUrl} />
+               </Box>
             </Box>
           </Collapse>
         </TableCell>
