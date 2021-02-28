@@ -28,12 +28,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
   private transactions = new Map<string, WalletTx>();
   private keyManager3: IKeyManager;
 
-  constructor(bip32: BIP39 | SingleKeyWallet, connector: Connector) {
+  constructor(bip39: BIP39 | SingleKeyWallet, connector: Connector) {
     super();
-    if ("mnemonic" in bip32) {
-      this.keyManager3 = KeyManager3.recover(bip32.mnemonic, bip32.passphrase);
-    } else if ((bip32 as SingleKeyWallet).privateKey) {
-      this.keyManager3 = SingleKeyManager.recover(bip32.privateKey);
+    if ("mnemonic" in bip39) {
+      this.keyManager3 = KeyManager3.recover(bip39.mnemonic, bip39.passphrase);
+    } else if ((bip39 as SingleKeyWallet).privateKey) {
+      this.keyManager3 = SingleKeyManager.recover(bip39.privateKey);
     }
 
     //this._keyManager = KeyManager.recover(bip32.mnemonic);

@@ -24,7 +24,7 @@ export function generateMnemonic(): Promise<string> {
 }
 
 export function importMnemonic(walletName: string, mnemonic: string, passphrase: string, password: string): Promise<void> {
-  return ipcRenderer.invoke(Commands.VAULT_IMPORT_WALLET, walletName, mnemonic, password);
+  return ipcRenderer.invoke(Commands.VAULT_IMPORT_WALLET, walletName, mnemonic, passphrase, password);
 }
 
 export function importPrivateKey(walletName: string, privateKey: string, password: string): Promise<void> {

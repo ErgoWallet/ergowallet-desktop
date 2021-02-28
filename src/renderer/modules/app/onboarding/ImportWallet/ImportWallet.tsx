@@ -52,11 +52,11 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
     }
   }
 
-  async function handleImportMnemonic(mnemonic: string) {
+  async function handleImportMnemonic(mnemonic: string, bip39Passphrase: string) {
     const { walletName, password } = walletParams;
     // We have all data here - (wallet name, mnemonic, password)
 
-    await backend.importMnemonic(walletName, mnemonic, '', password)
+    await backend.importMnemonic(walletName, mnemonic, bip39Passphrase, password)
     props.onFinish();
   }
 
