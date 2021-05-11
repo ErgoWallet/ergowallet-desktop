@@ -71,7 +71,7 @@
     "bip39": "^3.0.2",
     "clipboard-copy": "3.1.0",
     "electron-store": "6.0.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "node-fetch": "2.6.1",
     "qrcode": "1.4.4",
     "react": "16.11.0",
