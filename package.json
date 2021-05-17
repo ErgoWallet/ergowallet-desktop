@@ -55,8 +55,8 @@
     "ts-loader": "^6.2.2",
     "typescript": "4.0.3",
     "url-loader": "^4.1.0",
-    "webpack": "4.41.2",
-    "webpack-cli": "4.3.1"
+    "webpack": "4.46.0",
+    "webpack-cli": "4.4.0"
   },
   "dependencies": {
     "@ergowallet/ergowallet-wasm": "0.2.1",
@@ -67,11 +67,11 @@
     "@reduxjs/toolkit": "1.5.0",
     "@types/react-redux": "^7.1.9",
     "bignumber.js": "^9.0.0",
-    "bip32": "^2.0.5",
+    "bip32": "2.0.6",
     "bip39": "^3.0.2",
     "clipboard-copy": "3.1.0",
     "electron-store": "6.0.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "node-fetch": "2.6.1",
     "qrcode": "1.4.4",
     "react": "16.11.0",
