@@ -61,9 +61,14 @@ module.exports = [
       new HtmlWebpackPlugin({
         template: './src/renderer/index.html'
       }),
-      new CopyWebpackPlugin([
-        {from: path.join(__dirname, 'resources/icons/16x16.png'), to: './icons/'}
-      ], {copyUnmodified: true}),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: path.join(__dirname, 'resources/icons/16x16.png'), to: './icons/' }
+        ],
+        options: {
+          // copyUnmodified: true
+        }
+      }),
     ],
     resolve: {
       extensions: ['.js', '.tsx', '.ts']
