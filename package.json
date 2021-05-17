@@ -43,7 +43,7 @@
     "cross-env": "7.0.2",
     "css-loader": "5.2.4",
     "electron": "11.2.1",
-    "electron-builder": "22.9.1",
+    "electron-builder": "22.10.5",
     "eslint": "7.26.0",
     "eslint-plugin-react": "^7.20.0",
     "file-loader": "^6.0.0",
