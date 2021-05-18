@@ -16,7 +16,7 @@ export class TransactionMonitor extends EventEmitter {
     this.wallet = wallet;
     this.schedulerService = new SchedulerService(() => {
       this.loadTransactions();
-    }, 60000);
+    }, 90000);
   }
 
   public start(): void {

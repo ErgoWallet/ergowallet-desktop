@@ -66,6 +66,13 @@ if (!gotTheLock) {
       });
     });
 
+    application.on('WalletUnspentLoading', (isLoading: boolean) => {
+      mainWindow.webContents.send('events', {
+        type: Events.WALLET_LOADING_UNSPENT,
+        payload: isLoading
+      });
+    });
+
     application.on(Application.APP_READY_EVENT, () => {
       mainWindow.webContents.send('events', { type: Events.APP_READY });
     });

@@ -17,6 +17,7 @@ const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/
 export class WalletImpl extends EventEmitter implements Wallet {
   public static UPDATED_EVENT = 'WalletUpdated';
   public static TXS_LOADING = 'LoadingHistory';
+  public static UNSPENT_LOADING = 'LoadingUnspent';
 
   private _keyManager: any;
   private connector: Connector;
@@ -39,7 +40,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     //this._keyManager = KeyManager.recover(bip32.mnemonic);
 
     this.connector = connector;
-    this.unspentMonitor = new UnspentMonitor(this, connector);
+    this.unspentMonitor = new UnspentMonitor(connector, this);
     this.transMonitor = new TransactionMonitor(connector, this);
     //TODO: may be one event with true/false ?
     this.transMonitor.on('LoadingStarted', ()  => {
@@ -47,6 +48,13 @@ export class WalletImpl extends EventEmitter implements Wallet {
     });
     this.transMonitor.on('LoadingFinished', () => {
       this.emit(WalletImpl.TXS_LOADING, false);
+    });
+
+    this.unspentMonitor.on('LoadingStarted', ()  => {
+      this.emit(WalletImpl.UNSPENT_LOADING, true);
+    });
+    this.unspentMonitor.on('LoadingFinished', () => {
+      this.emit(WalletImpl.UNSPENT_LOADING, false);
     });
 
     this.unspentMonitor.start();

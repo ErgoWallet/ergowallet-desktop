@@ -4,18 +4,20 @@ import {AppThunk} from "../../store/store";
 import {groupByDay} from "./utils";
 import {WalletBox} from "../../../main/application/services/wallet/Wallet";
 
-interface WalletState {
+export interface WalletState {
   addresses: any;
   boxes: Array<WalletBox>;
   transactions: Record<string, Array<any>>;
   txsLoading: boolean;
+  unspentLoading: boolean;
 }
 
 const initialState: WalletState = {
   addresses: [],
   boxes: [],
   transactions: {},
-  txsLoading: true
+  txsLoading: true,
+  unspentLoading: true,
 };
 
 const walletSlice = createSlice({
@@ -27,6 +29,9 @@ const walletSlice = createSlice({
     },
     onHistoryLoading(state, action: PayloadAction<boolean>) {
       state.txsLoading = action.payload;
+    },
+    onUnspentLoading(state, action: PayloadAction<boolean>) {
+      state.unspentLoading = action.payload;
     },
     getAddressesSuccess(state, action: PayloadAction<any>) {
       state.addresses = action.payload;
@@ -47,6 +52,7 @@ export const {
   getBoxesSuccess,
   getTransSuccess,
   onHistoryLoading,
+  onUnspentLoading,
   onWalletClosed
 } = walletSlice.actions;
 

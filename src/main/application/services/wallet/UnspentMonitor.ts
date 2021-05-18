@@ -2,19 +2,22 @@ import {SchedulerService} from '../../../../common/SchedulerService';
 import {Connector} from '../../../ergoplatform/connector/Connector';
 import {Wallet} from './Wallet';
 import {Output} from "../../../ergoplatform/connector/types";
+import {EventEmitter} from "events";
 
-export class UnspentMonitor {
+export class UnspentMonitor extends EventEmitter {
   private schedulerService: SchedulerService;
   private connector: Connector;
   private wallet: Wallet;
+  private isLoading: boolean;
 
-  constructor(wallet, connector) {
+  constructor(connector: Connector, wallet: Wallet) {
+    super();
     this.connector = connector;
     this.wallet = wallet;
 
     this.schedulerService = new SchedulerService(() => {
       this.checkUnspentBoxes();
-    }, 10000);
+    }, 30000);
   }
 
 
@@ -26,8 +29,9 @@ export class UnspentMonitor {
   }
 
   private async checkUnspentBoxes(): Promise<void> {
+    this.isLoading = true;
+    this.emit('LoadingStarted');
     try {
-
       const outputs: Array<Output[]> = await Promise.all(
         this.wallet.getAddresses().map((addr) => {
           return this.connector.getUnspentOutputs(addr.address);
@@ -41,6 +45,9 @@ export class UnspentMonitor {
     } catch (e) {
       console.error(e);
     }
+
+    this.isLoading = false;
+    this.emit('LoadingFinished');
   }
 
   public stop(): void {

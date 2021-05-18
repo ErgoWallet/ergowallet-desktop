@@ -40,7 +40,16 @@ function Wallet(props: any) {
   return (
     <React.Fragment>
       <Tabs value={tab} onChange={handleChange}>
-        <Tab label="Unspent"/>
+        <Tab label={(
+            <Box display="flex" alignItems="center">
+              <Box>Unspent</Box>
+              {wallet.unspentLoading && (
+                <Box ml={1}>
+                  <CircularProgress size={20} color="secondary"/>
+                </Box>
+              )}
+            </Box>)}
+        />
         <Tab label={(
           <Box display="flex" alignItems="center">
             <Box>History</Box>

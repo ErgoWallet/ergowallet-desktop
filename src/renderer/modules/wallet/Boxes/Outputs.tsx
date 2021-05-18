@@ -1,9 +1,10 @@
 import * as React from 'react';
+import {shell} from 'electron';
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import {Box, Checkbox, Collapse, IconButton, Table} from "@material-ui/core";
+import {Box, Checkbox, Collapse, IconButton, Link, Table} from "@material-ui/core";
 import Hex from "../../../components/Hex";
 import Send from "./Send";
 import Chip from "@material-ui/core/Chip";
@@ -11,12 +12,13 @@ import AssetValue from "../../../components/AssetValue";
 import Address from "../../../components/Address";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store/root-reducer";
-import {fetchUnspentBoxes} from "../wallet-slice";
+import {fetchUnspentBoxes, WalletState} from "../wallet-slice";
 import TokensValues from "../TokensValues";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
 import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import {explorerBaseUri} from "../../../config";
 
 const useRowStyles = makeStyles({
   root: {
@@ -30,7 +32,9 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
   const { box, selected, onSelect } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-
+  const handleBoxIdClick = () => {
+    shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
+  };
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -45,7 +49,9 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
           <Address shortened={true} value={box.address}/>
         </TableCell>
         <TableCell style={{textTransform: "uppercase"}}>
-          <Hex>{box.boxId.substr(0, 16)+'...'}</Hex>
+          <Link onClick={handleBoxIdClick} href="#" variant="body2" title="Open in explorer">
+            <Hex>{box.boxId.substr(0, 16)+'...'}</Hex>
+          </Link>
         </TableCell>
         <TableCell align="right">
           <Box display="flex">
@@ -77,7 +83,7 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
 
 function Outputs(): React.ReactElement {
   const dispatch = useDispatch();
-  const wallet = useSelector((state: RootState) => state.wallet);
+  const wallet: WalletState = useSelector<RootState, WalletState>((state: RootState) => state.wallet);
   const [selected, setSelected] = React.useState<string[]>([]);
 
   React.useEffect(() => {

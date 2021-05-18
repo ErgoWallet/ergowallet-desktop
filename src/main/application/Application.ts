@@ -112,6 +112,9 @@ export default class Application extends EventEmitter {
       logger.debug(`Received WalletImpl.TXS_LOADING:${isLoading}`);
       this.emit('WalletHistoryLoading', isLoading);
     });
+    wallet.on(WalletImpl.UNSPENT_LOADING, (isLoading) => {
+      this.emit('WalletUnspentLoading', isLoading);
+    });
     this.currentWallet = wallet;
     return true;
   }
