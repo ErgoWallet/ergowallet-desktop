@@ -33,7 +33,7 @@ function Wallet(props: any) {
   const wallet = useSelector((state: RootState) => state.wallet);
   const [tab, setTab] = React.useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
     setTab(newValue);
   };
 
