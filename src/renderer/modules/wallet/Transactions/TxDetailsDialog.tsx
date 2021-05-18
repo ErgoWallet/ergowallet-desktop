@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography} from "@material-ui/core";
+import {shell} from 'electron';
+import {Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Link, Typography} from "@material-ui/core";
 import Address from "../../../components/Address";
 import CloseIcon from '@material-ui/icons/Close';
 import {makeStyles} from "@material-ui/core/styles";
@@ -9,6 +10,9 @@ import TokensValues from "../TokensValues";
 import {WalletTx} from "../../../../common/backend-types";
 import {Input} from "../../../../main/ergoplatform/connector/types";
 import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import CopyToClipboard from "../../../components/CopyToClipboard";
+import {explorerBaseUri} from "../../../config";
 
 interface TxDetailsProps {
   open: boolean;
@@ -32,6 +36,10 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
     onClose();
   }
 
+  const handleTxIdClick = () => {
+    shell.openExternal(`${explorerBaseUri}/tx/${tx.id}`);
+  };
+
   return (
     <Dialog
       fullWidth={true}
@@ -50,7 +58,19 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
         <Box display="flex" flexDirection="column">
           <Box display={"flex"}>
             <Box flexBasis={0} flexGrow={1}>ID</Box>
-            <Box flexBasis={0} flexGrow={3}><Hex>{tx.id}</Hex></Box>
+            <Box flexBasis={0} flexGrow={3}>
+              <Link onClick={handleTxIdClick} href="#" variant="body2" title="Open in explorer">
+                <Hex>{tx.id}</Hex>
+              </Link>
+
+              <CopyToClipboard TooltipProps={{title: "Tx ID Copied"}}>
+                {({ copy }) => (
+                  <IconButton size="small" onClick={() => copy(tx.id)}>
+                    <FileCopyOutlinedIcon fontSize="small"/>
+                  </IconButton>
+                )}
+              </CopyToClipboard>
+            </Box>
           </Box>
           <Box display={"flex"}>
             <Box flexBasis={0} flexGrow={1}>Block</Box>
