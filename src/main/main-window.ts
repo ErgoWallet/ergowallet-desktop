@@ -8,9 +8,10 @@ export function createWindow(options): BrowserWindow {
     height: 650,
     icon: options.appIconPath,
     webPreferences: {
-      enableRemoteModule: false,
+      // enableRemoteModule: false,
       spellcheck: false,
       nodeIntegration: true,
+      contextIsolation: false,
     }
   });
 }
