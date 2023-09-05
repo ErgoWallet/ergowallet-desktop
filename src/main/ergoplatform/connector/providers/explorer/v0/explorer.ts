@@ -1,7 +1,7 @@
-import {Provider} from "../../Provider";
+import {Provider} from "../../../Provider";
 import {default as fetch} from 'node-fetch';
 import {AddressSummaryResponse, TransactionsResponse, TransItem} from "./responses";
-import {AddressSummary, Block, Output} from "../../types";
+import {AddressSummary, Block, Output, Transaction} from "../../../types";
 
 export class ExplorerClient implements Provider {
   private readonly baseUri: string;
@@ -58,14 +58,14 @@ export class ExplorerClient implements Provider {
     };
   }
 
-  public async getAddressTransactions(address: string, offset = 0, limit = 20): Promise<TransactionsResponse> {
+  public async getAddressTransactions(address: string, offset = 0, limit = 20): Promise<{ items: Array<Transaction>; total: number }> {
     const url = `${this.baseUri}/addresses/${address}/transactions?offset=${offset}&limit=${limit}`;
-    return ExplorerClient.api<TransactionsResponse>(url);
+    return ExplorerClient.api(url);
   }
 
-  public async getUnconfirmedTransactions(address: string, offset = 0, limit = 20): Promise<TransactionsResponse> {
+  public async getUnconfirmedTransactions(address: string, offset = 0, limit = 20): Promise<{ items: Array<Transaction>; total: number }> {
     const url = `${this.baseUri}/transactions/unconfirmed/byAddress/${address}?offset=${offset}&limit=${limit}`;
-    return ExplorerClient.api<TransactionsResponse>(url);
+    return ExplorerClient.api(url);
   }
 
   public async getUnconfirmed(txId: string) {
@@ -77,6 +77,7 @@ export class ExplorerClient implements Provider {
     const response = await fetch(url, options);
     if (!response.ok) {
       const body = await response.json();
+      console.error(url);
       console.error(body);
       throw new Error(`${response.status}: ${response.statusText}`);
     }

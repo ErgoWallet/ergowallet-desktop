@@ -2,7 +2,9 @@ import * as vault from './ipc-handlers/vault';
 import * as wallet from './ipc-handlers/wallet';
 import * as app from './ipc-handlers/app';
 import {Connector} from '../ergoplatform/connector/Connector';
-import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/explorer';
+import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/explorer';
+import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
+
 import {Vault} from "./services/vault/Vault";
 import {Wallet, WalletBox} from './services/wallet/Wallet';
 import {WalletImpl} from "./services/wallet/WalletImpl";
@@ -20,10 +22,12 @@ export default class Application extends EventEmitter {
   public static APP_LATEST_VERSION = 'LatestVersion';
 
   private baseUri = "https://api.ergoplatform.com/api/v0";
+  private baseUriV1 = "https://api.ergoplatform.com/api/v1";
 
   private vault: Vault;
   private currentWallet: Wallet | null = null;
   private readonly connector: Connector;
+  private readonly connectorV0: Connector;
   private blockchain: BlockchainService;
   private settings: Settings;
   private updater: UpdateService;
@@ -35,7 +39,8 @@ export default class Application extends EventEmitter {
     this.userDataDir = userDataDir;
     this.vault = new Vault(userDataDir);
     this.started = false;
-    this.connector = new Connector(new ExplorerClient(this.baseUri));
+    this.connector = new Connector(new ExplorerClient(this.baseUriV1));
+    this.connectorV0 = new Connector(new ExplorerClientV0(this.baseUri));
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
       logger.debug(JSON.stringify(event));
@@ -173,7 +178,7 @@ export default class Application extends EventEmitter {
     if (this.currentWallet != null) {
       // get tx from mempool
       try {
-        const unconfirmedTx = await this.connector.getUnconfirmed(txId);
+        const unconfirmedTx = await this.connectorV0.getUnconfirmed(txId);
         this.currentWallet.processTransactions([unconfirmedTx]);
       } catch (e) {
         // this is not critical error, tx will be obtained later

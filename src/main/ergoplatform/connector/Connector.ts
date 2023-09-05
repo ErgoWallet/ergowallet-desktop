@@ -1,5 +1,5 @@
 import {Provider} from "./Provider";
-import {AddressSummary, Block, Output} from "./types";
+import {AddressSummary, Block, Output, Transaction} from "./types";
 
 /*
   Connector to Ergo blockchain.
@@ -24,7 +24,7 @@ export class Connector {
     return this.provider.getAddressSummary(address);
   }
 
-  public getAddressTransactions(address: string, offset = 0, limit = 100): Promise<{ items: Array<any>; total: number }> {
+  public getAddressTransactions(address: string, offset = 0, limit = 100): Promise<{ items: Array<Transaction>; total: number }> {
     return this.provider.getAddressTransactions(address, offset, limit);
   }
 
@@ -36,7 +36,7 @@ export class Connector {
     return this.provider.getUnconfirmed(txId);
   }
 
-  public getUnconfirmedTransactions(address: string, offset = 0, limit = 100): Promise<{ items: Array<any>; total: number }> {
+  public getUnconfirmedTransactions(address: string, offset = 0, limit = 100): Promise<{ items: Array<Transaction>; total: number }> {
     return this.provider.getUnconfirmedTransactions(address, offset, limit);
   }
 

@@ -37,7 +37,7 @@ export interface Input {
 }
 
 export interface AddressSummary {
-  id: string;
+  id: string; // address itself
   confirmedTransactions: number;
 }
 

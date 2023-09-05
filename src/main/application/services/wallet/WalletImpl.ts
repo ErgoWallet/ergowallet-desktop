@@ -80,7 +80,6 @@ export class WalletImpl extends EventEmitter implements Wallet {
     });
 
     // Sign tx
-
     const signed = Transaction
       .sign(privateKeys, boxesToSpend, tx.ergoTx)
       .to_json();

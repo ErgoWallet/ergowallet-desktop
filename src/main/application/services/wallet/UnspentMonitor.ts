@@ -17,7 +17,7 @@ export class UnspentMonitor extends EventEmitter {
 
     this.schedulerService = new SchedulerService(() => {
       this.checkUnspentBoxes();
-    }, 30000);
+    }, 90000);
   }
 
 
