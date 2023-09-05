@@ -79,7 +79,7 @@
     "react-qrcode": "0.2.5",
     "react-redux": "^7.2.1",
     "recharts": "2.0.9",
-    "semver": "7.3.2",
+    "semver": "7.5.2",
     "styled-components": "5.2.3",
     "typeface-roboto": "^0.0.75",
     "typeface-roboto-mono": "^0.0.75",
