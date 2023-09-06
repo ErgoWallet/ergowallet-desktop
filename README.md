@@ -17,6 +17,12 @@ Start application
 $ yarn start
 ```
 
+### How to build
+```
+$ yarn build
+$ yarn dist
+```
+
 ### How to verify checksums of release
 
 MacOS, Linux, or Windows with gitbash: `shasum -a 256 <filename>`

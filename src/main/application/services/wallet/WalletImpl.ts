@@ -19,7 +19,6 @@ export class WalletImpl extends EventEmitter implements Wallet {
   public static TXS_LOADING = 'LoadingHistory';
   public static UNSPENT_LOADING = 'LoadingUnspent';
 
-  private _keyManager: any;
   private connector: Connector;
 
   private unspentMonitor: UnspentMonitor;
@@ -211,6 +210,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
       this.emit(WalletImpl.UPDATED_EVENT, {});
 
     });
+    logger.debug(`Wallet processed ${transactions.length} txs. Current hold ${this.transactions.size} txs.`);
   }
 
   public getAddresses(): any {

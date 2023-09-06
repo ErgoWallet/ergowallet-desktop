@@ -46,7 +46,7 @@ export class ExplorerClient implements Provider {
   }
 
   /**
-   * It loads all unspent boxes for address my portion of 100.
+   * It loads all unspent boxes for address by portion of 100.
    * @param address
    * @returns 
    */
