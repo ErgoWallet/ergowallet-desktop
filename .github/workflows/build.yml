@@ -11,13 +11,13 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    name: Build ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ 'windows-latest', 'macos-latest', 'ubuntu-latest' ]
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
