@@ -12,6 +12,7 @@ import {BIP39, SingleKeyWallet} from "../vault/Vault";
 import {IKeyManager} from "../../../../common/IKeyManager";
 import logger from "../../logger";
 
+// @ts-ignore
 const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export class WalletImpl extends EventEmitter implements Wallet {
