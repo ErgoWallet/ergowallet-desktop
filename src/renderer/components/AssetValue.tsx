@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {Box} from "@mui/material";
 import {MoneyUnits} from "../../common/MoneyUnits";
-import {Box} from "@material-ui/core";
 
 interface AssetValueProps {
   amount: string;

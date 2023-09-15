@@ -1,6 +1,15 @@
 import * as React from 'react';
-import {Box, Button, Container, Link, MenuItem, OutlinedInput, Select, TextField} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import {
+  Box,
+  Button,
+  Container,
+  Link,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+  TextField
+} from "@mui/material";
 import LogoImage from "./LogoImage";
 
 interface LoginScreenProps {
@@ -10,29 +19,28 @@ interface LoginScreenProps {
   backendApi?: any;
 }
 
-const useStyles = makeStyles((theme) => ({
-  container: {},
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-}));
+const submitStyle = (theme: any) => ({
+  margin: theme.spacing(3, 0, 2),
+})
+
+const paperStyle = (theme: any) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  // backgroundColor: theme.palette.background.paper
+})
 
 /**
  * Allow user select wallet and input password
  *
  */
 function LoginScreen(props: LoginScreenProps) {
-  const classes = useStyles();
-  const [wallet, setWallet] = React.useState('');
+  // const classes = useStyles();
+  const [wallet, setWallet] = React.useState<string>('');
   const [wallets, setWallets] = React.useState<Array<string>>([]);
-  const {backendApi} = props;
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const { backendApi } = props;
+  const handleChange = (event: SelectChangeEvent<string>) => {
     setWallet(event.target.value as string);
   };
 
@@ -58,11 +66,11 @@ function LoginScreen(props: LoginScreenProps) {
   if (!canProceed) {
     // If there are no any wallet in vault we display just two buttons
     return (
-      <Container component="main" maxWidth="xs" className={classes.container}>
-        <div className={classes.paper}>
+      <Container component="main" maxWidth="xs">
+        <Box sx={paperStyle}>
           <Box display="flex" alignItems={"center"} mb={2}>
             <Box>
-              <LogoImage/>
+              <LogoImage />
             </Box>
           </Box>
           <Button
@@ -71,7 +79,7 @@ function LoginScreen(props: LoginScreenProps) {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            sx={submitStyle}
           >
             Create new wallet
           </Button>
@@ -81,25 +89,25 @@ function LoginScreen(props: LoginScreenProps) {
             fullWidth
             variant="outlined"
             color="primary"
-            className={classes.submit}
+            sx={submitStyle}
           >
             Import existing wallet
           </Button>
-        </div>
+        </Box>
       </Container>
     );
   }
   return (
-    <Container component="main" maxWidth="xs" className={classes.container}>
-      <div className={classes.paper}>
+    <Container component="main" maxWidth="xs">
+      <Box sx={paperStyle}>
         <Box display="flex" alignItems={"center"} mb={2}>
-          <Box><LogoImage/></Box>
+          <Box><LogoImage /></Box>
         </Box>
         <Select
           disabled={wallets.length === 0}
           onChange={handleChange}
           value={wallet}
-          input={<OutlinedInput fullWidth={true}/>}
+          input={<OutlinedInput fullWidth={true} />}
         >
           {
             wallets.map((item: string) => (
@@ -126,7 +134,7 @@ function LoginScreen(props: LoginScreenProps) {
           fullWidth
           variant="contained"
           color="primary"
-          className={classes.submit}
+          sx={submitStyle}
         >
           Open
         </Button>
@@ -136,7 +144,7 @@ function LoginScreen(props: LoginScreenProps) {
         <Link onClick={props.onImport} href="#" variant="body2">
           Import existing wallet
         </Link>
-      </div>
+      </Box>
     </Container>
   );
 }

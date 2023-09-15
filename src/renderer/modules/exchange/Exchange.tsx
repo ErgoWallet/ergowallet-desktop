@@ -3,7 +3,7 @@ import Orders from './Orders';
 import OrderBook from './OrderBook';
 import BuySell from './BuySell';
 import Chart from './Chart';
-import {Grid} from "@material-ui/core";
+import {Grid} from "@mui/material";
 import Pairs from "./Pairs";
 import TradeHistory from "./TradeHistory";
 

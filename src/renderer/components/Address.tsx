@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Box, IconButton} from "@material-ui/core";
+import {Box, IconButton} from "@mui/material";
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import Hex from "./Hex";
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import CopyToClipboard from "./CopyToClipboard";
 
 interface AddressProps {
@@ -14,7 +14,7 @@ interface AddressProps {
 function Address(props: AddressProps): React.ReactElement {
   const { value, shortened, copy, type } = props;
   const val = shortened && value.length > 8 ?
-    value.substr(0, 8) + '...' + value.slice(-8) :
+    value.substring(0, 8) + '...' + value.slice(-8) :
     value;
   let addressBgColor = 'inherit';
   if (type === 'change')

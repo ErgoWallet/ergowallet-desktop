@@ -1,4 +1,4 @@
-import {Box, Button, CssBaseline, ThemeProvider} from "@material-ui/core";
+import {Box, Button, CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "../../ui/theme";
 import * as React from "react";
 

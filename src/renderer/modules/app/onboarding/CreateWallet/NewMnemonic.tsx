@@ -8,15 +8,16 @@ import {
   CardHeader,
   Checkbox,
   FormControlLabel,
-  Grid
-} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
-import {makeStyles} from "@material-ui/core/styles";
+  Grid,
+  Alert
+} from "@mui/material";
+import {makeStyles} from "@mui/material/styles";
 
+// ****************************************************************************
 // Generate new mnemonic phrase
 // Show Warning message
-
-const useStyles = makeStyles(() => ({
+// ****************************************************************************
+const classes = {
   root: {
     border: 'none',
     backgroundColor: 'inherit'
@@ -25,7 +26,7 @@ const useStyles = makeStyles(() => ({
     fontSize: 18,
     fontWeight: "bold"
   }
-}));
+};
 
 interface Props {
   onSubmit?: (mnemonic: string, passphrase: string) => void;
@@ -34,7 +35,7 @@ interface Props {
 }
 
 function NewMnemonic(props: Props) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
   const [mnemonic, setMnemonic] = React.useState('');
 
@@ -67,7 +68,7 @@ function NewMnemonic(props: Props) {
   const words = mnemonic.split(' ');
   const wordsInColumn = words.length / 3;
   return (
-    <Card variant="outlined" className={classes.root}>
+    <Card variant="outlined" sx={classes.root}>
       <CardHeader title={"Your recovery phrase"} />
       <CardContent>
         <Grid container direction="column" spacing={1}>
@@ -83,7 +84,7 @@ function NewMnemonic(props: Props) {
                 [0, 1, 2].map((i) => (
                   <Grid key={i} item lg={4} md={4} sm={4} container direction={'column'}>
                     { words.slice(i * wordsInColumn, (i + 1) * wordsInColumn).map((word: string, index: number) =>
-                      (<div>{index+(i * wordsInColumn + 1)}. <span className={classes.phrase}>{word}</span></div>))
+                      (<div>{index+(i * wordsInColumn + 1)}. <span style={classes.phrase}>{word}</span></div>))
                     }
                   </Grid>
                 ))

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Button} from "@material-ui/core";
+import {Box, Button} from "../../../mui";
 import Hex from "../../../components/Hex";
 
 interface FinalProps {

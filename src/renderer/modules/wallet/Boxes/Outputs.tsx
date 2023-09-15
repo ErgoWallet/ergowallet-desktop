@@ -1,43 +1,39 @@
 import * as React from 'react';
-import {shell} from 'electron';
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import {Box, Checkbox, Collapse, IconButton, Link, Table} from "@material-ui/core";
+import { shell } from 'electron';
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import { Box, Checkbox, Collapse, IconButton, Link, Table } from "@mui/material";
 import Hex from "../../../components/Hex";
 import Send from "./Send";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import AssetValue from "../../../components/AssetValue";
 import Address from "../../../components/Address";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../store/root-reducer";
-import {fetchUnspentBoxes, WalletState} from "../wallet-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store/root-reducer";
+import { fetchUnspentBoxes, WalletState } from "../wallet-slice";
 import TokensValues from "../TokensValues";
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {makeStyles} from "@material-ui/core/styles";
-import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
-import {explorerBaseUri} from "../../../config";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
+import { explorerBaseUri } from "../../../config";
 
-const useRowStyles = makeStyles({
-  root: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
+const useRowStyles = {
+  '& > *': {
+    borderBottom: 'unset',
   },
-});
+};
 
-function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.ReactElement {
+function Row(props: { box: WalletBox; selected: boolean; onSelect: any }): React.ReactElement {
   const { box, selected, onSelect } = props;
   const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
   const handleBoxIdClick = () => {
     shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
   };
   return (
     <React.Fragment>
-      <TableRow className={classes.root}>
+      <TableRow sx={useRowStyles}>
         <TableCell padding="checkbox">
           <Checkbox
             disabled={box.spentTransactionId !== null}
@@ -46,19 +42,20 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
           />
         </TableCell>
         <TableCell>
-          <Address shortened={true} value={box.address}/>
+          <Address shortened={true} value={box.address} />
         </TableCell>
-        <TableCell style={{textTransform: "uppercase"}}>
-          <Link onClick={handleBoxIdClick} href="#" variant="body2" title="Open in explorer">
-            <Hex>{box.boxId.substr(0, 16)+'...'}</Hex>
-          </Link>
+        <TableCell style={{ textTransform: "uppercase" }}>
+          <Chip
+            label={(<AssetValue amount={box.value.toString()} decimals={9} symbol="ERG" />)}
+            variant="outlined"
+          />
         </TableCell>
         <TableCell align="right">
           <Box display="flex">
-            <Chip
+            {/* <Chip
               label={(<AssetValue amount={box.value.toString()} decimals={9} symbol="ERG"/>)}
               variant="outlined"
-            />
+            /> */}
             <TokensValues assets={box.assets} />
           </Box>
         </TableCell>
@@ -71,6 +68,11 @@ function Row(props: {box: WalletBox; selected: boolean; onSelect: any}): React.R
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ mt: 1 }}>
+              Box ID <Link sx={{ textTransform: "uppercase" }} onClick={handleBoxIdClick} href="#" variant="body2" title="Open in explorer">
+                <Hex>{box.boxId}</Hex>
+              </Link>
+            </Box>
             <Box component={"pre"} overflow={"auto"} border={1} borderColor={"grey.200"}>
               {JSON.stringify(box, null, 2)}
             </Box>
@@ -143,8 +145,8 @@ function Outputs(): React.ReactElement {
               />
             </TableCell>
             <TableCell>Address</TableCell>
-            <TableCell>Box</TableCell>
-            <TableCell align="right">Assets</TableCell>
+            <TableCell>ERG</TableCell>
+            <TableCell align="left">Assets</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>

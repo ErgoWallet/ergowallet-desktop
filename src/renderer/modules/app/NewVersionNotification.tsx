@@ -1,8 +1,7 @@
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import * as React from "react";
-import {Button, Snackbar} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import {Button, Snackbar, Alert} from "@mui/material";
 import {shell} from 'electron';
 import * as semver from 'semver';
 

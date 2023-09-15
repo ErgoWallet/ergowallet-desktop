@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, MenuItem, Tab, Tabs, TextField} from '@material-ui/core';
+import {Box, MenuItem, Tab, Tabs, TextField} from '@mui/material';
 import Paper from '../../components/Paper';
 import About from './About';
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Button, Grid} from "@material-ui/core";
+import {Box, Button, Grid} from "@mui/material";
 import Input from '../../../components/Input';
 
 // ****************************************************************************
@@ -60,7 +60,7 @@ function InitWalletParams (props: InitWalletProps) {
   const canProceed = isValidForm();
   return (
     <Box>
-      <Grid container alignItems={'center'}>
+      <Grid container spacing={2} alignItems={'center'}>
         <Grid item lg={3} md={3} sm={3}>
           Wallet name
         </Grid>
@@ -74,24 +74,18 @@ function InitWalletParams (props: InitWalletProps) {
             required={true}
           />
         </Grid>
-      </Grid>
-      <Grid container alignItems={'center'}>
         <Grid item lg={3} md={3} sm={3}>
           Wallet password
         </Grid>
         <Grid item lg={9} md={9} sm={9}>
           <Input value={password} onChange={handlePasswordChange} fullWidth={true} type='password' required={true} />
         </Grid>
-      </Grid>
-      <Grid container alignItems={'center'}>
         <Grid item lg={3} md={3} sm={3}>
           Confirm password
         </Grid>
         <Grid item lg={9} md={9} sm={9}>
           <Input fullWidth={true} type='password' required={true} />
         </Grid>
-      </Grid>
-      <Grid container alignItems={'center'}>
         <Grid item lg={3} md={3} sm={3}>
         </Grid>
         <Grid item lg={9} md={9} sm={9}>

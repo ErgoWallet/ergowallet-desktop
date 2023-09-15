@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Paper from "../../components/Paper";
-import {Button, Grid, TextField} from "@material-ui/core";
+import {Button, Grid, TextField} from "@mui/material";
 
 function BuySell () {
   return (

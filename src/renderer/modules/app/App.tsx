@@ -1,15 +1,14 @@
 import * as React from 'react';
 import * as constants from '../../../common/constants';
-import {Container, CssBaseline, ThemeProvider} from '@material-ui/core';
+import {Container, CssBaseline, ThemeProvider} from '@mui/material';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
 import {createHistory, createMemorySource, LocationProvider,} from "@reach/router"
 import theme from "../../ui/theme";
 import CreateWallet from "./onboarding/CreateWallet/CreateWallet";
 import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
-import withWidth from '@material-ui/core/withWidth';
 import * as backend from '../../Backend';
-import {Alert, AlertTitle} from "@material-ui/lab";
+import {Alert, AlertTitle} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import Loading from "./Loading";
@@ -87,7 +86,7 @@ const App = (props: any) => {
 
   // Application is READY - display wizard or login screen
 
-  let content = null;
+  let content: any = null;
 
   // Check whether we creating or importing wallet
   if (creationMode === CreationMode.Create) {
@@ -147,4 +146,4 @@ const App = (props: any) => {
   );
 };
 
-export default withWidth()(App);
+export default App;

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Button, TextField, Grid, Box, FormControlLabel, Checkbox, InputAdornment, IconButton} from "@material-ui/core";
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import {Button, TextField, Grid, Box, FormControlLabel, Checkbox, InputAdornment, IconButton} from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Mnemonic from "../../../../../common/Mnemonic";
 
 

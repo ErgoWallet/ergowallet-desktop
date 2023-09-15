@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Link} from "@material-ui/core";
+import {Box, Link} from "@mui/material";
 import {shell} from 'electron';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

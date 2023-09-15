@@ -1,8 +1,7 @@
 import * as React from "react";
 import InitWalletParams from "../InitWalletParams";
 import InputMnemonic from "./InputMnemonic";
-import {Container} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import {Box, Container} from "@mui/material";
 import * as backend from "../../../../Backend";
 import SelectWalletType, {WalletType} from "./SelectWalletType";
 import InputPrivateKey from "./InputPrivateKey";
@@ -23,17 +22,14 @@ enum Pages {
   InputPrivateKey = 3
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-}));
+const paperStyle = (theme: any) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
 
 function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
-  const classes = useStyles();
   const [page, setPage] = React.useState(Pages.InitWalletParams);
   const [walletParams, setWalletParams] = React.useState<{walletName: string, password: string}>();
   const [walletType, setWalletType] = React.useState('mnemonic');
@@ -53,7 +49,7 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
   }
 
   async function handleImportMnemonic(mnemonic: string, bip39Passphrase: string) {
-    const { walletName, password } = walletParams;
+    const { walletName, password } = walletParams!;
     // We have all data here - (wallet name, mnemonic, password)
 
     await backend.importMnemonic(walletName, mnemonic, bip39Passphrase, password)
@@ -61,7 +57,7 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
   }
 
   async function handleImportPrivateKey(privateKey: string) {
-    const { walletName, password } = walletParams;
+    const { walletName, password } = walletParams!;
     // We have all data here - (wallet name, mnemonic, password)
 
     await backend.importPrivateKey(walletName, privateKey, password)
@@ -79,7 +75,7 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
     return !exists;
   }
 
-  let content = null;
+  let content: any = null;
   if (page === Pages.InitWalletParams) {
     content = (
       <InitWalletParams
@@ -111,9 +107,9 @@ function ImportWallet (props: {onFinish?: any, onCancel?: any}) {
 
   return (
     <Container component="main" maxWidth="sm">
-      <div className={classes.paper}>
+      <Box sx={paperStyle}>
         {content}
-      </div>
+      </Box>
     </Container>
   );
 }

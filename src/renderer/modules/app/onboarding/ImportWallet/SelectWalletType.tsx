@@ -8,7 +8,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio
-} from "@material-ui/core";
+} from "@mui/material";
 
 
 export enum WalletType {

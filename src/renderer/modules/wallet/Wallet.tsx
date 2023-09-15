@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Tabs, Tab, Box, CircularProgress} from '@material-ui/core';
+import { Box } from '../../mui'
+import {Tabs, Tab, CircularProgress} from '@mui/material';
 import Paper from '../../components/Paper';
 import Outputs from './Boxes/Outputs';
 import Transactions from './Transactions/Transactions';

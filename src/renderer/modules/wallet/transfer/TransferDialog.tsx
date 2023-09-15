@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {Dialog, DialogContent, DialogTitle, IconButton, Typography} from "@material-ui/core";
-import CloseIcon from '@material-ui/icons/Close';
-import {makeStyles} from "@material-ui/core/styles";
+import {Dialog, DialogContent, DialogTitle, IconButton, Typography} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import * as backend from '../../../Backend';
 import InitialStep from "./InitialStep";
 import ConfirmationStep from "./ConfirmationStep";
@@ -22,22 +21,19 @@ interface TransferProps {
   fromBoxes: Array<WalletBox>;
 }
 
-const useStyles = makeStyles((theme) => ({
-  closeButton: {
+const useStyles = ((theme) => ({
     position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-  },
 }));
 
 function TransferDialog(props: TransferProps): React.ReactElement {
-  const classes = useStyles();
   const {onClose, open, fromBoxes, assetId} = props;
 
   const [page, setPage] = React.useState<Page>(Page.INITIAL);
-  const [unsignedTx, setUnsignedTx] = React.useState(null);
+  const [unsignedTx, setUnsignedTx] = React.useState<UnsignedTransaction|null>(null);
   const [sendingError, setSendingError] = React.useState(null);
-  const [resultTxId, setResultTxId] = React.useState<string>();
+  const [resultTxId, setResultTxId] = React.useState<string>('');
 
   function handleClose(): void {
     onClose();
@@ -100,9 +96,9 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       onClose={handleClose}
       open={open}
     >
-      <DialogTitle disableTypography={true}>
-        <Typography variant="h6">Transfer {assetId.substr(0, 5)}</Typography>
-        <IconButton className={classes.closeButton} onClick={handleClose}>
+      <DialogTitle>
+        <Typography variant="h6">Transfer {assetId.substring(0, 5)}</Typography>
+        <IconButton sx={useStyles} onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>

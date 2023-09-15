@@ -1,30 +1,46 @@
 import * as React from 'react';
-import {Container, Button, Chip, Grid, Box, Card, CardActions, CardContent, CardHeader} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { Container, Button, Chip, Grid, Box, Card, CardActions, CardContent, CardHeader } from "@mui/material";
 import * as _ from "lodash";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    border: 'none',
-    backgroundColor: 'inherit'
-  },
-  verifiedBox: {
-    border: "1px solid ".concat(theme.palette.divider),
-    minHeight: '200px',
-    paddingTop: theme.spacing(0.5),
-    '& > *': {
-      margin: theme.spacing(0.5),
-    }
-  },
-  unselectedChips: {
-    paddingTop: theme.spacing(0.5),
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
-    minHeight: '100px'
-  }
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     border: 'none',
+//     backgroundColor: 'inherit'
+//   },
+//   verifiedBox: {
+//     border: "1px solid ".concat(theme.palette.divider),
+//     minHeight: '200px',
+//     paddingTop: theme.spacing(0.5),
+//     '& > *': {
+//       margin: theme.spacing(0.5),
+//     }
+//   },
+//   unselectedChips: {
+//     paddingTop: theme.spacing(0.5),
+//     '& > *': {
+//       margin: theme.spacing(0.5),
+//     },
+//     minHeight: '100px'
+//   }
+// }));
 
+
+const unselectedChipsStyle = (theme: any) => ({
+  paddingTop: theme.spacing(0.5),
+  '& > *': {
+    margin: theme.spacing(0.5),
+  },
+  minHeight: '100px'
+})
+
+const verifiedBoxStyle = (theme: any) => ({
+  border: "1px solid ".concat(theme.palette.divider),
+  minHeight: '200px',
+  paddingTop: theme.spacing(0.5),
+  '& > *': {
+    margin: theme.spacing(0.5),
+  }
+})
 
 interface ConfirmMnemonicProps {
   mnemonic: string;
@@ -33,7 +49,7 @@ interface ConfirmMnemonicProps {
 }
 
 function ConfirmMnemonic(props: ConfirmMnemonicProps) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const original = props.mnemonic.split(' ');
   const words = _.shuffle(original);
   const [state, setState] = React.useState({
@@ -42,7 +58,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
   })
 
   function addWord(word: string) {
-    const {selected, unselected} = state;
+    const { selected, unselected } = state;
 
     const newSelected = selected.concat([word]);
     _.remove(unselected, (w: string) => w === word);
@@ -53,7 +69,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
   }
 
   function removeWord(word: string) {
-    const {selected, unselected} = state;
+    const { selected, unselected } = state;
     // const newSelected = remove<string>(selected, word);
     _.remove(selected, (w: string) => w === word);
     const newUnselected = unselected.concat([word]);
@@ -64,7 +80,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
     });
   }
 
-  const {selected, unselected} = state;
+  const { selected, unselected } = state;
 
   // Compare original phrase with confirmed one
   const isValid = (selected.length === original.length) &&
@@ -77,7 +93,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
   }
 
   return (
-    <Card variant="outlined" className={classes.root}>
+    <Card variant="outlined" sx={{ border: 'none', backgroundColor: 'inherit' }}>
       <CardHeader title={"Verify recovery phrase"} />
       <CardContent>
         <Box display="flex" flexDirection="column" >
@@ -87,7 +103,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <div className={classes.verifiedBox}>
+            <Box sx={verifiedBoxStyle}>
               {selected.map((word, index) => (
                 <Chip
                   onDelete={() => removeWord(word)}
@@ -97,10 +113,10 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
                   label={`${index + 1}. ${word}`}
                 />))
               }
-            </div>
+            </Box>
           </Grid>
           <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Container className={classes.unselectedChips}>
+            <Container sx={unselectedChipsStyle}>
               {unselected.map((word) => (
                 <Chip
                   key={word}

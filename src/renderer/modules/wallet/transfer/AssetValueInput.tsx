@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {InputAdornment, TextField} from "@material-ui/core";
+import {InputAdornment, TextField} from "@mui/material";
 
 export interface AssetValueInputState {
   value: string;

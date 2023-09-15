@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, CircularProgress, Container} from '@material-ui/core';
+import {Box, CircularProgress, Container} from '@mui/material';
 
 const Loading = () => {
   return (

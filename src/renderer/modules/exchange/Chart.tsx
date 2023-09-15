@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {useTheme} from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import {LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer} from 'recharts';
-import {Typography} from "@material-ui/core";
+import {Typography} from "@mui/material";
 import Paper from '../../components/Paper';
 
 function createData(time: any, amount: any) {

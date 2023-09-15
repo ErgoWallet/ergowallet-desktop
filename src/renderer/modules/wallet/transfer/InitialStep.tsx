@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Button, Grid} from "@material-ui/core";
+import {Box, Button, Grid} from "@mui/material";
 import Input from "../../../components/Input";
 import AssetValueInput, {AssetValueInputState} from "./AssetValueInput";
 import AssetValue from "../../../components/AssetValue";

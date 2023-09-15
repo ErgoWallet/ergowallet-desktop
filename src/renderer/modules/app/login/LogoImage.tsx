@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SvgIcon} from "@material-ui/core";
+import {SvgIcon} from "@mui/material";
 
 const LogoImage = () => {
   return (

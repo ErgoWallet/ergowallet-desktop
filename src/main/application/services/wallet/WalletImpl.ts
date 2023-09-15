@@ -238,7 +238,8 @@ export class WalletImpl extends EventEmitter implements Wallet {
    */
   public getAllTransactions(): Array<WalletTx> {
     const txs = Array.from(this.transactions.values());
-    return txs.sort((a, b) => Number(b.timestamp) - Number(a.timestamp));
+    // return txs.sort((a, b) => Number(b.timestamp) - Number(a.timestamp));
+    return txs;
   }
 
   public getUnspentBoxes(): Array<WalletBox> {

@@ -7,27 +7,26 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  SelectChangeEvent,
   TextField
-} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+} from "@mui/material";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
-import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import TransferDialog from "../transfer/TransferDialog";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
 import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: '15px'
-  },
-  assetInput: {
+const container = {
+  marginTop: '15px'
+}
+const assetInput = {
+  input: {
     padding: '10.5px'
   }
-}));
+}
 
 function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
   const { fromBoxes } = props;
-  const classes = useStyles();
   const [asset, setAsset] = React.useState('ERG');
   const [transferDlgOpen, setTransferDlgOpen ] = React.useState(false);
 
@@ -35,8 +34,8 @@ function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
   const decimals = asset === 'ERG' ? 9 : 0;
   const total = new MoneyUnits(boxSet.balance(asset), decimals);
 
-  function handleChange(event: React.ChangeEvent<{ value: string }>): void {
-    setAsset(event.target.value);
+  function handleChange(event: SelectChangeEvent): void {
+    setAsset(event.target.value as string);
   }
 
   const handleTransferClose = () => {
@@ -49,7 +48,7 @@ function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
 
   const canSend = fromBoxes.length > 0;
   return (
-    <Container className={classes.container}>
+    <Container sx={container}>
       <Grid container spacing={1}>
         <Grid alignItems="center"  spacing={1} container item lg={12} md={12} sm={12} xs={12}>
           <Grid item lg={1} md={1} sm={1}>
@@ -66,7 +65,7 @@ function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
             <FormControl>
               <Select
                 value={asset}
-                input={<OutlinedInput classes={{ input: classes.assetInput }} />}
+                input={<OutlinedInput sx={ assetInput } />}
                 onChange={handleChange}
               >
                 {boxSet.assetsIds().map((id: string) => (

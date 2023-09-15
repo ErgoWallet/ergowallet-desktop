@@ -1,20 +1,19 @@
 import * as React from 'react';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState} from "../../../store/root-reducer";
-import {fetchAddresses} from "../wallet-slice";
-import {Box, Collapse, IconButton} from '@material-ui/core';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {makeStyles} from "@material-ui/core/styles";
-import {useQRCode} from "react-qrcode";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../../../store/root-reducer";
+import { fetchAddresses } from "../wallet-slice";
+import { Box, Collapse, IconButton } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useQRCode } from "react-qrcode";
 import Address from "../../../components/Address";
 
-function Addresses (): React.ReactElement {
+function Addresses(): React.ReactElement {
   const dispatch = useDispatch();
   const wallet = useSelector((state: RootState) => state.wallet);
 
@@ -42,27 +41,26 @@ function Addresses (): React.ReactElement {
   );
 }
 
-const useRowStyles = makeStyles({
+const useRowStyles = {
   root: {
     '& > *': {
       borderBottom: 'unset',
     },
   },
-});
+};
 /**
  * Collapsable Address Row
  * @param props
  */
 const Row = (props: { item: any }) => {
-  const {item} = props;
+  const { item } = props;
   const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
   const dataUrl = useQRCode(item.address);
 
   return (
     <React.Fragment>
-      <TableRow className={classes.root}>
-        <TableCell style={{backgroundColor: item.internal ? '#f4ebc1': '#a0c1b8'}}>
+      <TableRow sx={useRowStyles.root}>
+        <TableCell style={{ backgroundColor: item.internal ? '#f4ebc1' : '#a0c1b8' }}>
           {item.internal ? "change" : "receiving"}
         </TableCell>
         <TableCell>
@@ -91,9 +89,9 @@ const Row = (props: { item: any }) => {
                   </Box>
                 </Box>
               </Box>
-               <Box flexBasis={0} flexGrow={1}>
-                 <img src={dataUrl} />
-               </Box>
+              <Box flexBasis={0} flexGrow={1}>
+                <img src={dataUrl} />
+              </Box>
             </Box>
           </Collapse>
         </TableCell>

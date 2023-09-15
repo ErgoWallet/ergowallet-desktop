@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {Container} from '@material-ui/core';
+import {Box, Container} from '@mui/material';
 import ConfirmMnemonic from "./ConfirmMnemonic";
 import InitWalletParams from "../InitWalletParams";
 import NewMnemonic from "./NewMnemonic";
-import {makeStyles} from "@material-ui/core/styles";
 import * as backend from "../../../../Backend";
 
 // ****************************************************************************
@@ -20,17 +19,14 @@ enum Pages {
   VerifyMnemonic = 2
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
+const paperStyle = ((theme: any) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 }));
 
 function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
-  const classes = useStyles();
   const [page, setPage] = React.useState(Pages.InitWalletParams);
   const [walletParams, setWalletParams] = React.useState<{walletName: string, password: string}>();
   const [mnemonic, setMnemonic] = React.useState('');
@@ -42,7 +38,7 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
   }
 
   async function handleMnemonicConfirmed() {
-    const { walletName, password } = walletParams;
+    const { walletName, password } = walletParams!;
 
     await backend.importMnemonic(walletName, mnemonic, mnemonicPassphrase, password)
 
@@ -66,7 +62,7 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
     return !exists;
   }
 
-  let content = null;
+  let content: any = null;
   if (page === Pages.InitWalletParams) {
     content = (
       <InitWalletParams
@@ -93,9 +89,9 @@ function CreateWallet (props: {onFinish?: any; onCancel?: any}) {
 
   return (
     <Container component="main" maxWidth="sm">
-      <div className={classes.paper}>
+      <Box sx={paperStyle}>
         {content}
-      </div>
+      </Box>
     </Container>
   );
 

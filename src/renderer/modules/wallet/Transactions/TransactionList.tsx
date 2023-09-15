@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Box, Divider, IconButton, Typography} from "@material-ui/core";
+import {Box, Divider, IconButton, Typography} from "@mui/material";
 import AssetValue from "../../../components/AssetValue";
 import Hex from "../../../components/Hex";
-import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
-import DoneIcon from '@material-ui/icons/Done';
-import HourglassEmptyOutlinedIcon from '@material-ui/icons/HourglassEmptyOutlined';
-import Tooltip from '@material-ui/core/Tooltip';
+import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
+import DoneIcon from '@mui/icons-material/Done';
+import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 interface TxListProps {
   txs: Record<string, Array<any>>;

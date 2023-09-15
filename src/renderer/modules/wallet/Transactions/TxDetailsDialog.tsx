@@ -1,18 +1,18 @@
 import * as React from 'react';
 import {shell} from 'electron';
-import {Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Link, Typography} from "@material-ui/core";
+import {Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Link, Typography} from "@mui/material";
 import Address from "../../../components/Address";
-import CloseIcon from '@material-ui/icons/Close';
-import {makeStyles} from "@material-ui/core/styles";
+import CloseIcon from '@mui/icons-material/Close';
 import AssetValue from "../../../components/AssetValue";
 import Hex from "../../../components/Hex";
 import TokensValues from "../TokensValues";
 import {WalletTx} from "../../../../common/backend-types";
 import {Input} from "../../../../main/ergoplatform/connector/types";
 import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import CopyToClipboard from "../../../components/CopyToClipboard";
 import {explorerBaseUri} from "../../../config";
+import {useTheme} from '@mui/material/styles';
 
 interface TxDetailsProps {
   open: boolean;
@@ -20,16 +20,13 @@ interface TxDetailsProps {
   onClose: () => void;
 }
 
-const useStyles = makeStyles((theme) => ({
-  closeButton: {
+function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
+  const theme = useTheme();
+  const closeButtonStyle = {
     position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-  },
-}));
-
-function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
-  const classes = useStyles();
+  }
   const {onClose, open, tx} = props;
 
   function handleClose(): void {
@@ -47,9 +44,9 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
       onClose={handleClose}
       open={open}
     >
-      <DialogTitle disableTypography={true}>
+      <DialogTitle>
         <Typography variant="h6">Transaction details</Typography>
-        <IconButton className={classes.closeButton} onClick={handleClose}>
+        <IconButton sx={closeButtonStyle} onClick={handleClose}>
           <CloseIcon/>
         </IconButton>
       </DialogTitle>

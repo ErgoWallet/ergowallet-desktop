@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Button, Link} from "@material-ui/core";
+import {Box, Button, Link} from "@mui/material";
 import Address from "../../../components/Address";
 import AssetValue from '../../../components/AssetValue';
 import TokensValues from "../TokensValues";

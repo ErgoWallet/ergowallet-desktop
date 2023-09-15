@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Paper from "../../components/Paper";
-import {Typography} from "@material-ui/core";
+import {Typography} from "@mui/material";
 
 function TradeHistory () {
   return (
