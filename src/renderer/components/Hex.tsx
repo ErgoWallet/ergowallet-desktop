@@ -1,12 +1,19 @@
-import styled from "styled-components";
+import { Box } from '@mui/material';
+import * as React from 'react';
+import { PropsWithChildren } from 'react';
 
 interface HexProps {
   backgroundColor?: any;
+  
 }
 
-const Hex = styled.span<HexProps>`
-  font-family: "Roboto Mono", monospace;
-  background-color: ${props => props.backgroundColor};
-`;
+function Hex(props: PropsWithChildren<HexProps>): React.ReactElement {
+  const { children, backgroundColor } = props;
+  return (
+    <Box component={"span"} sx={{backgroundColor: backgroundColor, fontFamily: '"Roboto Mono", monospace'}}>
+      {children}
+    </Box>
+    )
+}
 
 export default Hex;
