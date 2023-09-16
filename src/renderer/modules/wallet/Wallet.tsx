@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '../../mui'
+import { Box } from '../../mui';
 import {Tabs, Tab, CircularProgress} from '@mui/material';
 import Paper from '../../components/Paper';
 import Outputs from './Boxes/Outputs';

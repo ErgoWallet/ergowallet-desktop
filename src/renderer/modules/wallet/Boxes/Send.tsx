@@ -18,12 +18,13 @@ import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
 
 const container = {
   marginTop: '15px'
-}
+};
+
 const assetInput = {
   input: {
     padding: '10.5px'
   }
-}
+};
 
 function Send (props: {fromBoxes: Array<WalletBox>}): React.ReactElement {
   const { fromBoxes } = props;

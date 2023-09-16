@@ -58,8 +58,8 @@ export class ExplorerClient implements Provider {
 
     do {
       const url = `${this.baseUri}/boxes/unspent/byAddress/${address}?offset=${offset}&limit=${limit}`;
-      const resp = await ExplorerClient.api<{ items: Array<any>, total: number }>(url)
-      total = max([total, resp.total])
+      const resp = await ExplorerClient.api<{ items: Array<any>, total: number }>(url);
+      total = max([total, resp.total]);
       const dto = resp.items.map(i => <Output>{
         id: i.boxId,
         txId: i.transactionId,
@@ -74,7 +74,7 @@ export class ExplorerClient implements Provider {
       });
       result.push(...dto);
       offset += limit;
-    } while (result.length < total && total > 0)
+    } while (result.length < total && total > 0);
     return result;
   }
 
@@ -103,7 +103,7 @@ export class ExplorerClient implements Provider {
         outputs: i.outputs.map(x => <Output>{id: x.boxId, txId: x.transactionId, ...x}),
         size: i.size
       })
-    }
+    };
   }
 
   public async getUnconfirmedTransactions(address: string, offset = 0, limit = 20): Promise<TransactionsResponse> {
@@ -122,7 +122,7 @@ export class ExplorerClient implements Provider {
         outputs: i.outputs.map(x => <Output>{id: x.boxId, txId: x.transactionId, ...x}),
         size: i.size
       })
-    }
+    };
   }
 
   public async getUnconfirmed(txId: string) {

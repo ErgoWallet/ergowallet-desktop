@@ -26,7 +26,7 @@ function TxDetailsDialog(props: TxDetailsProps): React.ReactElement {
     position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-  }
+  };
   const {onClose, open, tx} = props;
 
   function handleClose(): void {

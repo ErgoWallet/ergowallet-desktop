@@ -8,7 +8,7 @@ function Paper (props: any) {
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-  }
+  };
   const { children } = props;
   return (
     <MuiPaper

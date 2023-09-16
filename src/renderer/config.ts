@@ -1,1 +1,1 @@
-export const explorerBaseUri = "https://ergoscan.io"
+export const explorerBaseUri = "https://ergoscan.io";

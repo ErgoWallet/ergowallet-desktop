@@ -13,7 +13,7 @@ function Hex(props: PropsWithChildren<HexProps>): React.ReactElement {
     <Box component={"span"} sx={{backgroundColor: backgroundColor, fontFamily: '"Roboto Mono", monospace'}}>
       {children}
     </Box>
-    )
+    );
 }
 
 export default Hex;

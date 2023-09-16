@@ -2,7 +2,7 @@ import {
     Box,
     Button,
     Chip
-} from "@mui/material"
+} from "@mui/material";
 
 export  { 
     Button,
