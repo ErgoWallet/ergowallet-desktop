@@ -4,7 +4,6 @@ import * as app from './ipc-handlers/app';
 import {Connector} from '../ergoplatform/connector/Connector';
 import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/explorer';
 import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
-
 import {Vault} from "./services/vault/Vault";
 import {Wallet, WalletBox} from './services/wallet/Wallet';
 import {WalletImpl} from "./services/wallet/WalletImpl";
