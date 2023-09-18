@@ -29,3 +29,8 @@ jobs:
     - run: yarn
     - run: yarn build
     - run: yarn test
+    - run: yarn dist
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ runner.OS }}
+        path: dist
