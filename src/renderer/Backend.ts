@@ -1,5 +1,5 @@
 import {ipcRenderer} from "electron";
-import {Commands} from "../common/backend-types";
+import {Commands, WalletTx} from "../common/backend-types";
 import {AddressInfo} from "../common/backend-types";
 import {WalletBox} from "../main/application/services/wallet/Wallet";
 
@@ -53,6 +53,10 @@ export function getUnspent(): Promise<Array<WalletBox>> {
 
 export function getTransactions(): Promise<Array<any>> {
   return ipcRenderer.invoke(Commands.WALLET_GET_TRANSACTIONS);
+}
+
+export function getTransaction(txId: string): Promise<WalletTx> {
+  return ipcRenderer.invoke(Commands.WALLET_GET_TX, txId);
 }
 
 export function createTransaction(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string): Promise<any> {

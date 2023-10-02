@@ -5,7 +5,7 @@ import {Connector} from '../ergoplatform/connector/Connector';
 import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/explorer';
 import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
 import {Vault} from "./services/vault/Vault";
-import {Wallet, WalletBox} from './services/wallet/Wallet';
+import {Wallet, WalletBox, WalletTx} from './services/wallet/Wallet';
 import {WalletImpl} from "./services/wallet/WalletImpl";
 import {BlockchainService} from './services/blockchain/BlockchainService';
 import {UpdateService} from "./services/updater/UpdateService";
@@ -125,7 +125,28 @@ export default class Application extends EventEmitter {
 
   public getAddresses(): Array<any> {
     if (this.currentWallet != null) {
-      return this.currentWallet.getAddresses();
+      const addresses = this.currentWallet.getAddresses();
+      const txs = this.currentWallet.getAllTransactions();
+      // ===============================
+      // Calculate tx counts per address
+      const addrMap = addresses.reduce((m, addr) => {
+        m[addr.address] = addr;
+        return m;
+      }, {});
+
+      txs.forEach((tx) => {
+        const uniq = {};
+        tx.inputs.forEach((i) => uniq[i.address] = true);
+        tx.outputs.forEach((o) => uniq[o.address] = true);
+        Object.keys(uniq).forEach((a) => {
+          if (addrMap[a]) {
+            addrMap[a].txCount = (addrMap[a].txCount || 0) + 1;
+          }
+        });
+      });
+      return Object.values(addrMap);
+      // ===============================
+
     }
     return [];
   }
@@ -139,9 +160,18 @@ export default class Application extends EventEmitter {
 
   public getTransactions(): Array<any> {
     if (this.currentWallet != null) {
-      return this.currentWallet.getAllTransactions();
+      return this.currentWallet
+        .getAllTransactions()
+        .map((tx) => ({...tx, inputs: [], outputs: [], }));
     }
     return [];
+  }
+
+  public getTransaction(txId: string): WalletTx {
+    if (this.currentWallet != null) {
+      return this.currentWallet.getTransaction(txId);
+    }
+    return null;
   }
 
   public closeCurrentWallet(): void {

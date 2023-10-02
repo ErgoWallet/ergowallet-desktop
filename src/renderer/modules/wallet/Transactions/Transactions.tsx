@@ -8,7 +8,7 @@ import {fetchTransactions} from "../wallet-slice";
 function Transactions(): React.ReactElement {
   const dispatch = useDispatch();
   const wallet = useSelector((state: RootState) => state.wallet);
-  const [detailsTx, setDetailsTx] = React.useState(null);
+  const [detailsTx, setDetailsTx] = React.useState<any>(null);
   const txs = wallet.transactions;
 
   React.useEffect(() => {
@@ -28,7 +28,8 @@ function Transactions(): React.ReactElement {
         detailsTx && (
           <TxDetailsDialog
             open={true}
-            tx={detailsTx}
+            // tx={detailsTx}
+            txId={detailsTx.id}
             onClose={handleDetailsClose}
           />
         )

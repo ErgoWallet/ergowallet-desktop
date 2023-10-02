@@ -38,6 +38,8 @@ export enum Commands {
   WALLET_GET_ADDRESSES = 'wallet-get-addresses',
   WALLET_GET_UNSPENT = 'wallet-get-unspent-boxes',
   WALLET_GET_TRANSACTIONS = 'wallet-get-txs',
+  WALLET_GET_TX = 'wallet-get-tx',
+
 
   WALLET_CREATE_TX = 'wallet-create-tx',
   WALLET_SIGN_TX = 'wallet-sign-tx',

@@ -11,7 +11,6 @@ import {
   Grid,
   Alert
 } from "@mui/material";
-import {makeStyles} from "@mui/material/styles";
 
 // ****************************************************************************
 // Generate new mnemonic phrase

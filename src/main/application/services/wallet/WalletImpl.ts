@@ -60,6 +60,9 @@ export class WalletImpl extends EventEmitter implements Wallet {
     this.unspentMonitor.start();
     this.transMonitor.start();
   }
+  getTransaction(txId: string): WalletTx {
+    return this.transactions.get(txId);
+  }
 
   public signTransaction(tx: UnsignedTransaction): SignedTransaction {
     const boxesToSpend = [];

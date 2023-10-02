@@ -28,6 +28,7 @@ export interface Wallet {
   getConfirmedTransactions(address: string): Array<any>;
   processTransactions(transactions: Array<Transaction | UnconfirmedTransaction>): void;
   getAllTransactions(): Array<WalletTx>;
+  getTransaction(txId: string): WalletTx|null;
   createTransaction(inputs: Array<any>, recipient: string, amount: string, fee: string, tokenId: string, currentHeight: number): UnsignedTransaction;
   signTransaction(tx: UnsignedTransaction): SignedTransaction;
   close(): void;

@@ -70,26 +70,7 @@ export const fetchTransactions = (): AppThunk => async dispatch => {
 
 export const fetchAddresses = (): AppThunk => async dispatch => {
   const addresses = await backend.getAddresses();
-  const txs: Array<any> = await backend.getTransactions();
-
-  // calculate tx counts per address
-  const addrMap = addresses.reduce((m, addr) => {
-    m[addr.address] = addr;
-    return m;
-  }, {});
-
-  txs.forEach((tx) => {
-    const uniq = {};
-    tx.inputs.forEach((i) => uniq[i.address] = true);
-    tx.outputs.forEach((o) => uniq[o.address] = true);
-    Object.keys(uniq).forEach((a) => {
-      if (addrMap[a]) {
-        addrMap[a].txCount = (addrMap[a].txCount || 0) + 1;
-      }
-    });
-  });
-
-  dispatch(getAddressesSuccess(Object.values(addrMap)));
+  dispatch(getAddressesSuccess(addresses));
 };
 // -----------------------------
 

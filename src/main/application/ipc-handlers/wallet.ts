@@ -16,6 +16,10 @@ export function setHandlers(app: Application): void {
     return app.getTransactions();
   });
 
+  ipcMain.handle(Commands.WALLET_GET_TX, (event: any, txId: string) => {
+    return app.getTransaction(txId);
+  });
+
   ipcMain.handle(Commands.CLOSE_WALLET, () => {
     return app.closeCurrentWallet();
   });
