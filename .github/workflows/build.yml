@@ -32,10 +32,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn
-    - run: yarn build
-    - run: yarn test
-    - run: yarn dist
+    - run: npm install -g pnpm
+    - run: pnpm install
+    - run: pnpm run build
+    - run: pnpm run test
+    - run: pnpm run dist
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ runner.OS }}

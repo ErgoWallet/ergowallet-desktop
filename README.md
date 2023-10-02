@@ -7,20 +7,25 @@ Non-custodial desktop wallet for [Ergo Platform](https://ergoplatform.org) block
 
 ### How to run application
 
+Use `pnpm` please:
+```
+npm install -g pnpm
+```
+
 Install dependencies
 ```
-$ yarn
+$ pnpm install
 ```
 
 Start application
 ```
-$ yarn start
+$ pnpm run start
 ```
 
 ### How to build
 ```
-$ yarn build
-$ yarn dist
+$ pnpm run build
+$ pnpm run dist
 ```
 
 ### How to verify checksums of release

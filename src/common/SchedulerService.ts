@@ -2,7 +2,7 @@ import {EventEmitter} from 'events';
 
 export class SchedulerService extends EventEmitter {
   private readonly action: () => void;
-  private timer: NodeJS.Timer;
+  private timer: NodeJS.Timeout;
   private readonly interval: number;
 
   constructor(action: () => void, ms: number) {
