@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppThunk} from "../../store/store";
-import * as backend from "../../Backend";
+import * as backend from "../../backend";
 
 const pkg = require('../../../../package.json');
 

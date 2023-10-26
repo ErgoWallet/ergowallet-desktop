@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shell } from 'electron';
+// import { shell } from 'electron';
 import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Link, Typography } from "@mui/material";
 import Address from "../../../components/Address";
 import CloseIcon from '@mui/icons-material/Close';
@@ -13,7 +13,7 @@ import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import CopyToClipboard from "../../../components/CopyToClipboard";
 import { explorerBaseUri } from "../../../config";
 import { useTheme } from '@mui/material/styles';
-import { getTransaction } from '../../../Backend';
+import { getTransaction } from '../../../backend';
 
 interface TxDetailsProps {
   open: boolean;
@@ -48,7 +48,7 @@ function TxDetailsDialog(props: TxDetailsProps) {
   }
 
   const handleTxIdClick = () => {
-    shell.openExternal(`${explorerBaseUri}/tx/${tx.id}`);
+    // shell.openExternal(`${explorerBaseUri}/tx/${tx.id}`);
   };
 
   return (

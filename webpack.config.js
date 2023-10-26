@@ -25,8 +25,15 @@ module.exports = [
   {
     mode: 'development',
     entry: './src/renderer/index.tsx',
-    target: 'electron-renderer',
+    target: 'web',
     devtool: 'source-map',
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'app'),
+      },
+      compress: true,
+      port: 9000,
+    },
     module: {
       rules: [
         {

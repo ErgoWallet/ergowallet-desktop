@@ -7,7 +7,7 @@ import {createHistory, createMemorySource, LocationProvider,} from "@reach/route
 import theme from "../../ui/theme";
 import CreateWallet from "./onboarding/CreateWallet/CreateWallet";
 import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
-import * as backend from '../../Backend';
+import * as backend from '../../TauriBackend';
 import {Alert, AlertTitle} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Dialog, DialogContent, DialogTitle, IconButton, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import * as backend from '../../../Backend';
+import * as backend from '../../../backend';
 import InitialStep from "./InitialStep";
 import ConfirmationStep from "./ConfirmationStep";
 import {UnsignedTransaction} from "../../../../main/application/services/wallet/TransactionBuilder";

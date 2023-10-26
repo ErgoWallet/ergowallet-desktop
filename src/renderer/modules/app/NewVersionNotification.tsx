@@ -2,7 +2,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
 import * as React from "react";
 import {Button, Snackbar, Alert} from "@mui/material";
-import {shell} from 'electron';
+// import {shell} from 'electron';
 import * as semver from 'semver';
 
 const NewVersionNotification = () => {
@@ -15,7 +15,7 @@ const NewVersionNotification = () => {
   }
 
   const openDownloadPage = () => {
-    shell.openExternal('https://ergowallet.io');
+    //shell.openExternal('https://ergowallet.io');
   };
 
   return (

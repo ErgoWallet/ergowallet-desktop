@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {Box, Link} from "@mui/material";
-import {shell} from 'electron';
+// import {shell} from 'electron';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require('../../../../package.json');
 
 function About() {
   const handleReportClick = () => {
-    shell.openExternal('https://github.com/ErgoWallet/ergowallet-desktop/issues/new');
+    //shell.openExternal('https://github.com/ErgoWallet/ergowallet-desktop/issues/new');
   };
 
   return (
