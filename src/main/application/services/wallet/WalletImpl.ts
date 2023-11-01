@@ -11,9 +11,11 @@ import {EventEmitter} from "events";
 import {BIP39, SingleKeyWallet} from "../vault/Vault";
 import {IKeyManager} from "../../../../common/IKeyManager";
 import logger from "../../logger";
+import Signer from "./Signer";
+import { toHexString } from "../../../../common/utils";
 
 // @ts-ignore
-const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+// const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export class WalletImpl extends EventEmitter implements Wallet {
   public static UPDATED_EVENT = 'WalletUpdated';
@@ -24,12 +26,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
   private unspentMonitor: UnspentMonitor;
   private transMonitor: TransactionMonitor;
-
+  private signer: Signer;
   private unspentBoxes = new Map<string, WalletBox>();
   private transactions = new Map<string, WalletTx>();
   private keyManager3: IKeyManager;
 
-  constructor(bip39: BIP39 | SingleKeyWallet, connector: Connector) {
+  constructor(bip39: BIP39 | SingleKeyWallet, connector: Connector, signer: Signer) {
     super();
     if ("mnemonic" in bip39) {
       this.keyManager3 = KeyManager3.recover(bip39.mnemonic, bip39.passphrase);
@@ -38,7 +40,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     }
 
     //this._keyManager = KeyManager.recover(bip32.mnemonic);
-
+    this.signer = signer;
     this.connector = connector;
     this.unspentMonitor = new UnspentMonitor(connector, this);
     this.transMonitor = new TransactionMonitor(connector, this);
@@ -79,13 +81,11 @@ export class WalletImpl extends EventEmitter implements Wallet {
       const address = box.address;
       // get private key for address
       const privateKey = this.keyManager3.getSecretKey(address);
-      privateKeys.push(privateKey.toString('hex'));
+      privateKeys.push(toHexString(privateKey));
     });
 
     // Sign tx
-    const signed = Transaction
-      .sign(privateKeys, boxesToSpend, tx.ergoTx)
-      .to_json();
+    const signed = this.signer.signTx(privateKeys, boxesToSpend, tx.ergoTx)
     // console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
     return tx;
@@ -221,7 +221,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     return this.keyManager3.allKeys().map((item) => {
       return {
         address: item.address,
-        publicKey: item.pubKey().toString('hex'),
+        publicKey: toHexString(item.pubKey()),
         path: item.hdPath,
         state: item.state.toString(),
         internal: item.internal
@@ -249,8 +249,8 @@ export class WalletImpl extends EventEmitter implements Wallet {
     return Array.from(this.unspentBoxes.values());
   }
 
-  public static validateAddress(address: string): string {
-    if (!Address.validate(address)) {
+  public validateAddress(address: string): string {
+    if (!this.signer.validateAddress(address)) {
       return "Invalid address";
     }
     return '';

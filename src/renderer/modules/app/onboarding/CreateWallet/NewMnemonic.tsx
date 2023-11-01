@@ -34,7 +34,6 @@ interface Props {
 }
 
 function NewMnemonic(props: Props) {
-  // const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
   const [mnemonic, setMnemonic] = React.useState('');
 

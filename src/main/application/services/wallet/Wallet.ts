@@ -22,6 +22,7 @@ export interface WalletBox {
 }
 
 export interface Wallet {
+  validateAddress(address: string): string
   addUnspent(box: Output): void;
   getAddresses(): Array<any>;
   getUnspentBoxes(): Array<WalletBox>;

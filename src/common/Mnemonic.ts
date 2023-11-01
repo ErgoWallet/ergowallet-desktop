@@ -1,4 +1,6 @@
-import * as bip39 from 'bip39';
+// import * as bip39 from '@scure/bip39';
+// import { wordlist } from '@scure/bip39/wordlists/english';
+import * as bip39 from './bip39';
 
 class Mnemonic {
   static isValid(mnemonic: string): boolean {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+// import * as ReactDOM from 'react-dom';
 import 'typeface-roboto/index.css';
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -15,15 +15,17 @@ import {
 import { appLatestVersion, appReady, fetchAppSettings } from "./modules/app/app-slice";
 import { Event, Events } from "../common/backend-types";
 
-// depricated in react 18
-// ReactDOM.render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>,
-//   document.getElementById('app')
-// );
+
 
 import { createRoot } from 'react-dom/client';
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM loaded. Is backend ready ?")
+  //TODO: Ask tauri is it ready
+  //FIXME: we should get latest version from backend
+  store.dispatch(appReady(true))
+});
+
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
@@ -31,6 +33,7 @@ root.render(
     <App />
   </Provider>
 );
+
 
 // Listen to Electron IPC events
 // ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {

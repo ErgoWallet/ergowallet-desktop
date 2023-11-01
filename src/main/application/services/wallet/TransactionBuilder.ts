@@ -4,7 +4,7 @@ import {minBoxValue} from "../../../../common/constants";
 import {WalletBox} from "./Wallet";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
 
-const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+// const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export interface UnsignedTransaction {
   inputs: Array<{
@@ -102,14 +102,14 @@ export default class TransactionBuilder {
       value: spendingErgAmount.amount
     });
 
-    const unsigned = Transaction.create(
-      tx.inputs,
-      tx.outputs,
-      BigInt(feeAmount.amount),
-      this.ergoContext.height
-    );
+    // const unsigned = Transaction.create(
+    //   tx.inputs,
+    //   tx.outputs,
+    //   BigInt(feeAmount.amount),
+    //   this.ergoContext.height
+    // );
 
-    tx.ergoTx = unsigned.to_json();
+    // tx.ergoTx = unsigned.to_json();
     return tx;
   }
 
@@ -183,12 +183,12 @@ export default class TransactionBuilder {
       value: recipientErgAmount.amount
     });
 
-    tx.ergoTx = Transaction.create(
-      tx.inputs,
-      tx.outputs,
-      BigInt(feeAmount.amount),
-      this.ergoContext.height
-    ).to_json();
+    // tx.ergoTx = Transaction.create(
+    //   tx.inputs,
+    //   tx.outputs,
+    //   BigInt(feeAmount.amount),
+    //   this.ergoContext.height
+    // ).to_json();
 
     return tx;
   }
@@ -221,8 +221,9 @@ export default class TransactionBuilder {
   }
 
   private assertAddress(address: string, errorMessage: string) {
-    if (Address.validate(address).length > 0) {
-      throw new Error(errorMessage);
-    }
+    // if (Address.validate(address).length > 0) {
+    //   throw new Error(errorMessage);
+    // }
+    throw new Error('Unimplemented')
   }
 }

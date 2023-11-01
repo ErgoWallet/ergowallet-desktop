@@ -1,32 +1,33 @@
-import * as bip32 from 'bip32';
-import * as bip39 from 'bip39';
-import {BIP32Interface} from "bip32";
+import * as bip39 from './bip39';
 import {IKeyManager} from "./IKeyManager";
 import {HdPubKey, KeyState} from "./HdPubKey";
+import { HDKey } from '@scure/bip32';
+
 
 export class KeyManager implements IKeyManager {
   static AccountDerivationPath = "m/44'/429'/0'";
-  private accountExtPubKey: BIP32Interface;
-  private extMasterKey: BIP32Interface;
+  private accountExtPubKey: HDKey;
+  private extMasterKey: HDKey;
   private watchOnly: boolean;
 
   hdPubKeys: Array<HdPubKey> = [];
 
   static recover(mnemonic: string, passphrase?: string): KeyManager {
-    const seed: Buffer = bip39.mnemonicToSeedSync(mnemonic, passphrase);
+    const seed = bip39.mnemonicToSeedSync(mnemonic, passphrase);
 
-    const masterKey = bip32.fromSeed(seed);
+    const masterKey = HDKey.fromMasterSeed(seed);
+    //const masterKey = //bip32.fromSeed(seed);
     const km = new KeyManager(masterKey);
 
     km.assertCleanKeys();
     return km;
   }
 
-  constructor(masterKey: BIP32Interface) {
+  constructor(masterKey: HDKey) {
     this.extMasterKey = masterKey;
-    this.accountExtPubKey = masterKey.derivePath(KeyManager.AccountDerivationPath);
-
-    delete this.accountExtPubKey.privateKey;
+    this.accountExtPubKey = masterKey
+      .derive(KeyManager.AccountDerivationPath)
+      .wipePrivateData();
 
     this.watchOnly = (masterKey.privateKey === undefined);
   }
@@ -76,12 +77,12 @@ export class KeyManager implements IKeyManager {
     }
   }
 
-  public getSecretKey(address: string): Buffer {
+  public getSecretKey(address: string): Uint8Array {
     // find HD Public Key
     const hdPubKey = this.getKey(address);
     const hdPath = hdPubKey.hdPath;
 
-    const bip32Interface = this.extMasterKey.derivePath(hdPath);
+    const bip32Interface = this.extMasterKey.derive(hdPath);
     return bip32Interface.privateKey!;
   }
 
@@ -93,18 +94,21 @@ export class KeyManager implements IKeyManager {
     let path = `${change}/0`; // path part for first key
 
     const relevantKeys = this.hdPubKeys.filter((key) => key.internal === internal);
+    let index = 0;
     if (relevantKeys.length > 0) {
       // there is keys -> should calculate correct path for next one
       const largestIndex = this.maxKeyIndex(relevantKeys);
       // TODO: detect gaps by finding smallest indexes and etc
-      path = `${change}/${largestIndex + 1}`;
+      index = largestIndex + 1;
     }
+    path = `${change}/${index}`;
 
-    const bip32Interface = this.accountExtPubKey.derivePath(path);
+    const bip32Interface = this.accountExtPubKey.deriveChild(change).deriveChild(index);
     const newKey = new HdPubKey(
       bip32Interface.publicKey,
       bip32Interface.index,
-      `${KeyManager.AccountDerivationPath}/${path}`);
+      `${KeyManager.AccountDerivationPath}/${path}`,
+      internal);
     this.hdPubKeys.push(newKey);
     return newKey;
   }

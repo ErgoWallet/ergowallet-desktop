@@ -1,6 +1,6 @@
-import * as vault from './ipc-handlers/vault';
-import * as wallet from './ipc-handlers/wallet';
-import * as app from './ipc-handlers/app';
+// import * as vault from './ipc-handlers/vault';
+// import * as wallet from './ipc-handlers/wallet';
+// import * as app from './ipc-handlers/app';
 import {Connector} from '../ergoplatform/connector/Connector';
 import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/explorer';
 import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
@@ -12,12 +12,15 @@ import {UpdateService} from "./services/updater/UpdateService";
 // import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
 import {EventEmitter} from 'events';
-import Settings from "./ElectronSettings";
+// import Settings from "./ElectronSettings";
 import _ from "lodash";
 import logger from "./logger";
-import WasmSigner from './services/wallet/WasmSigner';
+import TauriSigner from './services/wallet/TauriSigner';
 
-export default class Application extends EventEmitter {
+import * as bip39 from '../../common/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english';
+
+export default class Application2 extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
   public static APP_LATEST_VERSION = 'LatestVersion';
 
@@ -29,7 +32,7 @@ export default class Application extends EventEmitter {
   private readonly connector: Connector;
   private readonly connectorV0: Connector;
   private blockchain: BlockchainService;
-  private settings: Settings;
+  //FIXME: private settings: Settings;
   private updater: UpdateService;
   private started: boolean;
   private userDataDir: string;
@@ -49,7 +52,7 @@ export default class Application extends EventEmitter {
     this.updater.on(UpdateService.CURRENT_VERSION_EVENT, (event) => {
       const latestVer = event.tag_name ? _.trimStart(event.tag_name, "v") : null;
       logger.debug(`Latest version: ${latestVer}`);
-      this.emit(Application.APP_LATEST_VERSION, latestVer);
+      this.emit(Application2.APP_LATEST_VERSION, latestVer);
     });
   }
 
@@ -62,8 +65,8 @@ export default class Application extends EventEmitter {
     this.setIpcHandlers();
 
     // Load settings
-    this.settings = new Settings();
-    this.emit(Application.APP_READY_EVENT);
+    // this.settings = new Settings();
+    this.emit(Application2.APP_READY_EVENT);
     this.started = true;
   }
 
@@ -75,14 +78,13 @@ export default class Application extends EventEmitter {
   }
 
   private setIpcHandlers(): void {
-    vault.setHandlers(this);
-    wallet.setHandlers(this);
-    app.setHandlers(this);
+    // vault.setHandlers(this);
+    // wallet.setHandlers(this);
+    // app.setHandlers(this);
   }
 
   public generateMnemonic(): string {
-    return '';
-    // return bip39.generateMnemonic(128);
+    return bip39.generateMnemonic();
   }
 
   public getWallets(): Array<any> {
@@ -110,7 +112,7 @@ export default class Application extends EventEmitter {
     const wallet = new WalletImpl(
       bip39Data,
       this.connector,
-      new WasmSigner()
+      new TauriSigner()
     );
     wallet.on(WalletImpl.UPDATED_EVENT, () => {
       this.emit('WalletUpdated');
@@ -224,12 +226,12 @@ export default class Application extends EventEmitter {
   }
 
   public getSettings(): any {
-    return this.settings.data();
+    //return this.settings.data();
   }
 
   public updateSettings(settings: any) {
     logger.debug('Updating settings: ' + JSON.stringify(settings));
-    this.settings.update(settings);
+    //this.settings.update(settings);
     this.emit('SettingsUpdated');
   }
 }

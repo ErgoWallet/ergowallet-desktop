@@ -1,7 +1,7 @@
 import {IKeyManager} from "./IKeyManager";
 import {HdPubKey, KeyState} from "./HdPubKey";
 
-const {Address, publicFromSecret} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+//const {Address, publicFromSecret} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export class SingleKeyManager implements IKeyManager {
   private secretKey: string;
@@ -17,8 +17,8 @@ export class SingleKeyManager implements IKeyManager {
 
   constructor(secretKey: string) {
     this.secretKey = secretKey;
-    const publicKey = publicFromSecret(this.secretKey);
-    this.hdPubKey = new HdPubKey(Buffer.from(publicKey), 0, "m/44'/429'/0'/0/0");
+    const publicKey: Uint8Array = new Uint8Array([]);//publicFromSecret(this.secretKey);
+    this.hdPubKey = new HdPubKey(publicKey, 0, "m/44'/429'/0'/0/0", false);
   }
 
   public allKeys(): HdPubKey[] {
