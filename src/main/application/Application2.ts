@@ -20,7 +20,7 @@ import TauriSigner from './services/wallet/TauriSigner';
 import * as bip39 from '../../common/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 
-export default class Application2 extends EventEmitter {
+export class Application2 extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
   public static APP_LATEST_VERSION = 'LatestVersion';
 
@@ -191,7 +191,7 @@ export default class Application2 extends EventEmitter {
     return Promise.resolve(null);
   }
 
-  public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
+  public async createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
     if (this.currentWallet != null) {
       const height = this.blockchain.currentHeight;
       if (!height) {
@@ -235,3 +235,7 @@ export default class Application2 extends EventEmitter {
     this.emit('SettingsUpdated');
   }
 }
+
+/** Core application */
+const app = new Application2('FIXME');
+export { app };

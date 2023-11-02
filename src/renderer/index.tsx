@@ -18,12 +18,14 @@ import { Event, Events } from "../common/backend-types";
 
 
 import { createRoot } from 'react-dom/client';
+import { app } from '../main/application/Application2';
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded. Is backend ready ?")
   //TODO: Ask tauri is it ready
   //FIXME: we should get latest version from backend
   store.dispatch(appReady(true))
+  app.start();
 });
 
 const container = document.getElementById('app');

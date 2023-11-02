@@ -1,11 +1,10 @@
 // import {ipcRenderer} from "electron";
 import {Commands, WalletTx} from "../common/backend-types";
 import {AddressInfo} from "../common/backend-types";
-import Application2 from "../main/application/Application2";
+import {app} from "../main/application/Application2";
 import {WalletBox} from "../main/application/services/wallet/Wallet";
 
-/** Core application */
-const app = new Application2('FIXME');
+
 
 export function getSettings(): Promise<any> {
   return Promise.resolve({})
@@ -83,7 +82,7 @@ export function createTransaction(
   spendingBoxes: Array<string>,
   recipient: string, amount: string, fee: string, tokenId: string
   ): Promise<any> {
-    return Promise.resolve('')
+    return app.createTx(spendingBoxes, recipient, amount, fee, tokenId)
   // return ipcRenderer.invoke(Commands.WALLET_CREATE_TX, spendingBoxes, recipient, amount, fee, tokenId);
 }
 

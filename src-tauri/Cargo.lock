@@ -1249,6 +1249,7 @@ dependencies = [
  "ergo-lib",
  "hex",
  "serde",
+ "serde_derive",
  "serde_json",
  "tauri",
  "tauri-build",
