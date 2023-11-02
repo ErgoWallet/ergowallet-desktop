@@ -23,7 +23,7 @@ export function isWalletExists(walletName: string): Promise<boolean> {
 }
 
 export function validateAddress(address: string): Promise<string> {
-  return Promise.resolve(app.validateAddress(address))
+  return app.validateAddress(address)
   // return ipcRenderer.invoke(Commands.VALIDATE_ADDRESS, address);
 }
 
@@ -49,7 +49,7 @@ export function getWallets(): Promise<Array<string>> {
 
 export function loadWallet(walletName: string): Promise<boolean> {
   //FIXME: use password
-  return Promise.resolve(app.loadWallet(walletName, ''))
+  return app.loadWallet(walletName, '')
   // return ipcRenderer.invoke(Commands.LOAD_WALLET, walletName);
 }
 

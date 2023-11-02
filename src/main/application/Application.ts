@@ -6,7 +6,7 @@ import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/ex
 import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
 import {Vault} from "./services/vault/Vault";
 import {Wallet, WalletBox, WalletTx} from './services/wallet/Wallet';
-import {WalletImpl} from "./services/wallet/WalletImpl";
+import {WalletImpl, buildWallet} from "./services/wallet/WalletImpl";
 import {BlockchainService} from './services/blockchain/BlockchainService';
 import {UpdateService} from "./services/updater/UpdateService";
 // import * as bip39 from 'bip39';
@@ -102,16 +102,16 @@ export default class Application extends EventEmitter {
     return this.vault.importWallet(walletName, mnemonic, passphrase, walletPassword);
   }
 
-  public loadWallet(walletName: string, walletPassword: string): boolean {
+  public async loadWallet(walletName: string, walletPassword: string): Promise<boolean> {
     const bip39Data = this.vault.getWalletData(walletName);
 
     logger.info(`Loading wallet [${walletName}]`);
 
-    const wallet = new WalletImpl(
+    const wallet = await buildWallet(
       bip39Data,
       this.connector,
       new WasmSigner()
-    );
+    ) as WalletImpl;
     wallet.on(WalletImpl.UPDATED_EVENT, () => {
       this.emit('WalletUpdated');
     });
@@ -182,11 +182,11 @@ export default class Application extends EventEmitter {
     this.currentWallet = null;
   }
 
-  public validateAddress(address: string): string {
+  public validateAddress(address: string): Promise<string> {
     if (this.currentWallet != null) {
       return this.currentWallet.validateAddress(address);
     }
-    return null;
+    return Promise.resolve(null);
   }
 
   public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {

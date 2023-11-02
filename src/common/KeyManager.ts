@@ -1,8 +1,9 @@
 import * as bip39 from './bip39';
-import {IKeyManager} from "./IKeyManager";
-import {HdPubKey, KeyState} from "./HdPubKey";
+import { IKeyManager } from "./IKeyManager";
+import { HdPubKey, KeyState } from "./HdPubKey";
 import { HDKey } from '@scure/bip32';
-
+import { invoke } from "@tauri-apps/api/primitives";
+import { toHexString } from './utils';
 
 export class KeyManager implements IKeyManager {
   static AccountDerivationPath = "m/44'/429'/0'";
@@ -12,14 +13,14 @@ export class KeyManager implements IKeyManager {
 
   hdPubKeys: Array<HdPubKey> = [];
 
-  static recover(mnemonic: string, passphrase?: string): KeyManager {
+  static async recover(mnemonic: string, passphrase?: string): Promise<KeyManager> {
     const seed = bip39.mnemonicToSeedSync(mnemonic, passphrase);
 
     const masterKey = HDKey.fromMasterSeed(seed);
     //const masterKey = //bip32.fromSeed(seed);
     const km = new KeyManager(masterKey);
 
-    km.assertCleanKeys();
+    await km.assertCleanKeys();
     return km;
   }
 
@@ -60,20 +61,20 @@ export class KeyManager implements IKeyManager {
   /**
    * Returns next unused key for change
    */
-  public getNextChangeKey(): HdPubKey {
-    this.assertCleanKeys();
+  public async getNextChangeKey(): Promise<HdPubKey> {
+    await this.assertCleanKeys();
     return this.getKeys(KeyState.Clean, true)[0];
   }
   /**
    * Make sure there's always clean keys generated.
    */
-  public assertCleanKeys(): void {
+  public async assertCleanKeys(): Promise<void> {
     while (this.getKeys(KeyState.Clean, false).length < 21) {
-      this.generateNewKey(false);
+      await this.generateNewKey(false);
     }
 
     while (this.getKeys(KeyState.Clean, true).length < 21) {
-      this.generateNewKey(true);
+      await this.generateNewKey(true);
     }
   }
 
@@ -86,7 +87,7 @@ export class KeyManager implements IKeyManager {
     return bip32Interface.privateKey!;
   }
 
-  public generateNewKey(internal = false): HdPubKey {
+  public async generateNewKey(internal = false): Promise<HdPubKey> {
     // BIP44 derivation scheme
     // m / purpose' / coin_type' / account' / change / address_index
 
@@ -103,12 +104,15 @@ export class KeyManager implements IKeyManager {
     }
     path = `${change}/${index}`;
 
-    const bip32Interface = this.accountExtPubKey.deriveChild(change).deriveChild(index);
+    const hdKey = this.accountExtPubKey.deriveChild(change).deriveChild(index);
+
+    const addr: string = await invoke('pk2address', { pubKey: toHexString(hdKey.publicKey) })
     const newKey = new HdPubKey(
-      bip32Interface.publicKey,
-      bip32Interface.index,
+      hdKey.publicKey,
+      hdKey.index,
       `${KeyManager.AccountDerivationPath}/${path}`,
-      internal);
+      internal,
+      addr);
     this.hdPubKeys.push(newKey);
     return newKey;
   }

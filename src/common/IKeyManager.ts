@@ -4,6 +4,6 @@ export interface IKeyManager {
   markUsed(address: string): void;
   getSecretKey(address: string): Uint8Array;
   getKey(address: string): HdPubKey;
-  getNextChangeKey(): HdPubKey;
+  getNextChangeKey(): Promise<HdPubKey>;
   allKeys(): Array<HdPubKey>;
 }

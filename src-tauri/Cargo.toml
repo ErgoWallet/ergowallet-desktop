@@ -19,6 +19,8 @@ tauri-plugin-window = "2.0.0-alpha"
 tauri-plugin-shell = "2.0.0-alpha"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+ergo-lib = "0.26.0"
+hex = "0.4.3"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

@@ -15,7 +15,7 @@ export class HdPubKey {
 
   private readonly publicKey: Uint8Array;
 
-  constructor(publicKey: Uint8Array, index: number, fullHdPath: string, internal: boolean) {
+  constructor(publicKey: Uint8Array, index: number, fullHdPath: string, internal: boolean, address: string) {
     //FIXME parseHdPath(fullHdPath);
     // const pathIndices = []; 
     // this.internal = pathIndices[3] > 0;
@@ -25,8 +25,8 @@ export class HdPubKey {
     this.index = index;
 
     this.hdPath = fullHdPath;
-    this.address = '' // FIXME: Address.from_public_key(this.publicKey).get_addr();
     this.state = KeyState.Clean;
+    this.address = address;
   }
 
   public setState(state: KeyState): void {

@@ -22,7 +22,7 @@ export interface WalletBox {
 }
 
 export interface Wallet {
-  validateAddress(address: string): string
+  validateAddress(address: string): Promise<string>
   addUnspent(box: Output): void;
   getAddresses(): Array<any>;
   getUnspentBoxes(): Array<WalletBox>;
@@ -30,7 +30,9 @@ export interface Wallet {
   processTransactions(transactions: Array<Transaction | UnconfirmedTransaction>): void;
   getAllTransactions(): Array<WalletTx>;
   getTransaction(txId: string): WalletTx|null;
-  createTransaction(inputs: Array<any>, recipient: string, amount: string, fee: string, tokenId: string, currentHeight: number): UnsignedTransaction;
+  createTransaction(
+    inputs: Array<any>, recipient: string,
+    amount: string, fee: string, tokenId: string, currentHeight: number): Promise<UnsignedTransaction>;
   signTransaction(tx: UnsignedTransaction): SignedTransaction;
   close(): void;
 }

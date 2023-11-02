@@ -7,18 +7,19 @@ export class SingleKeyManager implements IKeyManager {
   private secretKey: string;
   private hdPubKey: HdPubKey;
 
-  static recover(privateKey: string): IKeyManager {
+  static async recover(privateKey: string): Promise<IKeyManager> {
 
     const km = new SingleKeyManager(privateKey);
 
-    km.assertCleanKeys();
+    await km.assertCleanKeys();
     return km;
   }
 
   constructor(secretKey: string) {
     this.secretKey = secretKey;
     const publicKey: Uint8Array = new Uint8Array([]);//publicFromSecret(this.secretKey);
-    this.hdPubKey = new HdPubKey(publicKey, 0, "m/44'/429'/0'/0/0", false);
+    throw Error("Not implemented")
+    //this.hdPubKey = new HdPubKey(publicKey, 0, "m/44'/429'/0'/0/0", false);
   }
 
   public allKeys(): HdPubKey[] {
@@ -46,8 +47,8 @@ export class SingleKeyManager implements IKeyManager {
   /**
    * Returns next unused key for change
    */
-  public getNextChangeKey(): HdPubKey {
-    this.assertCleanKeys();
+  public async getNextChangeKey(): Promise<HdPubKey> {
+    await this.assertCleanKeys();
     return this.getKeys(KeyState.Clean, true)[0];
   }
   /**

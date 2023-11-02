@@ -13,9 +13,22 @@ import {IKeyManager} from "../../../../common/IKeyManager";
 import logger from "../../logger";
 import Signer from "./Signer";
 import { toHexString } from "../../../../common/utils";
+import { invoke } from "@tauri-apps/api/primitives";
 
 // @ts-ignore
 // const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+
+export async function buildWallet(
+  bip39: BIP39 | SingleKeyWallet, connector: Connector, signer: Signer
+): Promise<Wallet> {
+  let km: IKeyManager;
+  if ("mnemonic" in bip39) {
+    km = await KeyManager3.recover(bip39.mnemonic, bip39.passphrase);
+  } else if ((bip39 as SingleKeyWallet).privateKey) {
+    km = await SingleKeyManager.recover(bip39.privateKey);
+  }
+  return Promise.resolve(new WalletImpl(km, connector, signer));
+}
 
 export class WalletImpl extends EventEmitter implements Wallet {
   public static UPDATED_EVENT = 'WalletUpdated';
@@ -31,14 +44,10 @@ export class WalletImpl extends EventEmitter implements Wallet {
   private transactions = new Map<string, WalletTx>();
   private keyManager3: IKeyManager;
 
-  constructor(bip39: BIP39 | SingleKeyWallet, connector: Connector, signer: Signer) {
+  constructor(km: IKeyManager, connector: Connector, signer: Signer) {
     super();
-    if ("mnemonic" in bip39) {
-      this.keyManager3 = KeyManager3.recover(bip39.mnemonic, bip39.passphrase);
-    } else if ((bip39 as SingleKeyWallet).privateKey) {
-      this.keyManager3 = SingleKeyManager.recover(bip39.privateKey);
-    }
 
+    this.keyManager3 = km;
     //this._keyManager = KeyManager.recover(bip32.mnemonic);
     this.signer = signer;
     this.connector = connector;
@@ -91,16 +100,16 @@ export class WalletImpl extends EventEmitter implements Wallet {
     return tx;
   }
 
-  public createTransaction(
+  public async createTransaction(
     spendingBoxes: Array<string>,
     recipient: string,
     amount: string,
     fee: string,
     tokenId: string,
     currentHeight: number
-  ): UnsignedTransaction {
+  ): Promise<UnsignedTransaction> {
     // get next clean change address
-    const changeKey = this.keyManager3.getNextChangeKey();
+    const changeKey = await this.keyManager3.getNextChangeKey();
 
     const context = { height: currentHeight };
     const builder = new TransactionBuilder(this.unspentBoxes, context);
@@ -249,10 +258,11 @@ export class WalletImpl extends EventEmitter implements Wallet {
     return Array.from(this.unspentBoxes.values());
   }
 
-  public validateAddress(address: string): string {
-    if (!this.signer.validateAddress(address)) {
-      return "Invalid address";
+  public async validateAddress(address: string): Promise<string> {
+    const result = await invoke("validate_address", { address });
+    if (!result) {
+      return Promise.resolve("Invalid address");
     }
-    return '';
+    return Promise.resolve('');
   }
 }
