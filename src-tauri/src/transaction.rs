@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use ergo_lib::{
     chain::{
@@ -54,16 +53,6 @@ impl Transaction {
         fee_amount: u64,
         height: u32,
     ) -> Result<UnsignedTransaction, String> {
-        // let inputs_from_js: Vec<TxInput> = inputs
-        //     .into_iter()
-        //     .map(|x| TxInput { ..*x })
-        //     .collect();
-
-        // let outputs_from_js: Vec<TxOutput> = outputs
-        //     .into_iter()
-        //     .map(|x| TxOutput { ..*x })
-        //     .collect();
-
         let encoder = AddressEncoder::new(NetworkPrefix::Mainnet);
 
         // construct inputs without proofs
