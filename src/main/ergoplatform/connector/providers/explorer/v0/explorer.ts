@@ -9,6 +9,9 @@ export class ExplorerClient implements Provider {
   constructor(baseUri: string) {
     this.baseUri = baseUri;
   }
+  getLatestBlockHeaders(num: number): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
 
   public async sendTransaction(tx: any): Promise<string> {
     const broadcastingTx = {

@@ -1,3 +1,4 @@
+use ergo_lib::{ergotree_ir::chain::ergo_box::ErgoBox, chain::ergo_state_context::Headers};
 use tauri::App;
 
 #[cfg(mobile)]
@@ -11,7 +12,7 @@ mod address;
 mod transaction;
 
 use hex;
-use transaction::{UnsignedTransaction, TxInput, TxOutput};
+use transaction::{UnsignedTransaction, TxInput, TxOutput, Transaction};
 
 #[tauri::command]
 fn pk2address(pub_key: String) -> String {
@@ -33,6 +34,17 @@ fn create_tx(
 ) -> Result<UnsignedTransaction, String> {
     let fee = fee_amount.parse::<u64>().unwrap();
     transaction::Transaction::create(inputs.as_slice(), outputs.as_slice(), fee, height)
+}
+
+#[tauri::command]
+fn sign_tx(
+  secret_keys: Vec<String>,
+  boxes_to_spend: Vec<ErgoBox>,
+  tx: UnsignedTransaction,
+  headers: Headers,
+) -> Result<Transaction, String> {
+
+  transaction::Transaction::sign(secret_keys.as_slice(), boxes_to_spend, &tx, headers)
 }
 
 #[derive(Default)]
@@ -62,7 +74,8 @@ impl AppBuilder {
       .invoke_handler(tauri::generate_handler![
         pk2address,
         validate_address,
-        create_tx
+        create_tx,
+        sign_tx
         ])
       .setup(move |app| {
         if let Some(setup) = setup {

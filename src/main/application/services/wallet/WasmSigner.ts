@@ -5,7 +5,7 @@ const { KeyManager, Address, Transaction } = require("@ergowallet/ergowallet-was
 
 
 export default class WasmSigner implements Signer {
-  signTx(privateKeys: any, boxesToSpend: any, ergoTx: any) {
+  signTx(privateKeys: any, boxesToSpend: any, ergoTx: any, headers: any = null) {
     const signed = Transaction
       .sign(privateKeys, boxesToSpend, ergoTx)
       .to_json();

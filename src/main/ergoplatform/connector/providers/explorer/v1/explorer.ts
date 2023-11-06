@@ -11,6 +11,12 @@ export class ExplorerClient implements Provider {
     this.baseUri = baseUri;
   }
 
+  async getLatestBlockHeaders(num: number): Promise<any> {
+    const url = `${this.baseUri}/blocks/headers?limit=${num}`;
+    const response = await ExplorerClient.api<any>(url);
+    return response;
+  }
+
   public async sendTransaction(tx: any): Promise<string> {
     const broadcastingTx = {
       inputs: tx.inputs,

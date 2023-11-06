@@ -87,11 +87,11 @@ export function createTransaction(
 }
 
 export function signTransaction(tx: any): Promise<any> {
-  return Promise.resolve()
+  return app.signTx(tx)
   // return ipcRenderer.invoke(Commands.WALLET_SIGN_TX, tx);
 }
 
 export function sendTransaction(ergoTx: any): Promise<string> {
-  return Promise.resolve('')
+  return app.sendTx(ergoTx)
   // return ipcRenderer.invoke(Commands.WALLET_SEND_TX, ergoTx);
 }

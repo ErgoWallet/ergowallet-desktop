@@ -189,7 +189,8 @@ export default class Application extends EventEmitter {
     return Promise.resolve(null);
   }
 
-  public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
+  public createTx(
+    spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
     if (this.currentWallet != null) {
       const height = this.blockchain.currentHeight;
       if (!height) {
@@ -201,9 +202,9 @@ export default class Application extends EventEmitter {
     throw new Error('There is no loaded wallet');
   }
 
-  public signTx(tx: UnsignedTransaction): SignedTransaction {
+  public signTx(tx: UnsignedTransaction): Promise<SignedTransaction> {
     if (this.currentWallet != null) {
-      return this.currentWallet.signTransaction(tx);
+      return this.currentWallet.signTransaction(tx, []);
     }
     throw new Error('There is no loaded wallet');
   }

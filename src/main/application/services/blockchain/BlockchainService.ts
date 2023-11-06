@@ -6,6 +6,7 @@ export class BlockchainService extends EventEmitter {
 
   private schedulerService: SchedulerService;
   public currentHeight: number | null = null;
+  public lastHeaders: any;
   private connector: any;
 
   constructor(connector) {
@@ -34,12 +35,17 @@ export class BlockchainService extends EventEmitter {
       const prevHeight = this.currentHeight;
       this.currentHeight = newHeight;
 
+      // Retrieve last 10 blocks headers
+      const headers  = await this.connector.getLatestBlockHeaders(10);
+      this.lastHeaders = headers.items;
+
       if (prevHeight != newHeight) {
         // Height changed notification
         this.emit(BlockchainService.HEIGHT_CHANGED_EVENT, {
           height: newHeight
         });
       }
+      console.debug("Last Block " + this.lastHeaders[0].id)
     } catch (e) {
       console.error(e);
     }

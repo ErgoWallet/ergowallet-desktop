@@ -203,9 +203,10 @@ export class Application2 extends EventEmitter {
     throw new Error('There is no loaded wallet');
   }
 
-  public signTx(tx: UnsignedTransaction): SignedTransaction {
+  public async signTx(tx: UnsignedTransaction): Promise<SignedTransaction> {
     if (this.currentWallet != null) {
-      return this.currentWallet.signTransaction(tx);
+      const lastHeaders = this.blockchain.lastHeaders;
+      return this.currentWallet.signTransaction(tx, lastHeaders);
     }
     throw new Error('There is no loaded wallet');
   }

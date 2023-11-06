@@ -33,7 +33,7 @@ export interface Wallet {
   createTransaction(
     inputs: Array<any>, recipient: string,
     amount: string, fee: string, tokenId: string, currentHeight: number): Promise<UnsignedTransaction>;
-  signTransaction(tx: UnsignedTransaction): SignedTransaction;
+  signTransaction(tx: UnsignedTransaction, headers: any): Promise<SignedTransaction>;
   close(): void;
 }
 

@@ -52,6 +52,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
 
       if (txId != signedTx.ergoTx.id) {
         console.warn(`Got tx id ${txId} != ${signedTx.ergoTx.id}`);
+        console.debug(JSON.stringify(signedTx.ergoTx))
       }
       setResultTxId(txId);
       setPage(Page.DONE);
@@ -97,7 +98,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       open={open}
     >
       <DialogTitle>
-        <Typography variant="h6">Transfer {assetId.substring(0, 5)}</Typography>
+        <Typography>Transfer {assetId.substring(0, 5)}</Typography>
         <IconButton sx={useStyles} onClick={handleClose}>
           <CloseIcon />
         </IconButton>

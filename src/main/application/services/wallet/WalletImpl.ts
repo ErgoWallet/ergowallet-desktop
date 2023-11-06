@@ -75,7 +75,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     return this.transactions.get(txId);
   }
 
-  public signTransaction(tx: UnsignedTransaction): SignedTransaction {
+  public async signTransaction(tx: UnsignedTransaction, headers: any): Promise<SignedTransaction> {
     const boxesToSpend = [];
     const privateKeys = [];
     tx.ergoTx.inputs.forEach((input) => {
@@ -94,10 +94,16 @@ export class WalletImpl extends EventEmitter implements Wallet {
     });
 
     // Sign tx
-    const signed = this.signer.signTx(privateKeys, boxesToSpend, tx.ergoTx)
+    const signed = await invoke('sign_tx', 
+    { 
+      secretKeys: privateKeys,
+      boxesToSpend,
+      tx: tx.ergoTx,
+      headers
+    });
     // console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
-    return tx;
+    return Promise.resolve(tx);
   }
 
   public async createTransaction(

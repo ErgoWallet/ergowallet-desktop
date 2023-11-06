@@ -3,17 +3,17 @@ use ergo_lib::{
     chain::{
         self,
         contract::Contract,
-        transaction::{TxIoVec, UnsignedInput},
+        transaction::{TxIoVec, UnsignedInput}, ergo_state_context::{ErgoStateContext, Headers},
     },
-    ergo_chain_types::{Base16DecodedBytes, Digest32},
-    ergotree_interpreter::sigma_protocol::prover::ContextExtension,
+    ergo_chain_types::{Base16DecodedBytes, Digest32, Header, PreHeader},
+    ergotree_interpreter::sigma_protocol::{prover::{ContextExtension, TestProver}, private_input::{PrivateInput, DlogProverInput}},
     ergotree_ir::chain::{
         address::{AddressEncoder, NetworkPrefix},
         ergo_box::{
-            box_value::BoxValue, BoxId, BoxTokens, ErgoBoxCandidate, NonMandatoryRegisters,
+            box_value::BoxValue, BoxId, BoxTokens, ErgoBoxCandidate, NonMandatoryRegisters, ErgoBox,
         },
         token::{Token, TokenAmount, TokenId},
-    },
+    }, wallet::{tx_context::TransactionContext, signing::sign_transaction},
 };
 use serde::{Deserialize, Serialize};
 
@@ -44,6 +44,7 @@ pub struct TxOutput {
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct UnsignedTransaction(chain::transaction::unsigned::UnsignedTransaction);
 
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction(chain::transaction::Transaction);
 
 impl Transaction {
@@ -121,6 +122,56 @@ impl Transaction {
         Ok(UnsignedTransaction(tx))
     }
 
+    pub fn sign(
+        secret_keys: &[String],
+        boxes_to_spend: Vec<ErgoBox>,
+        tx: &UnsignedTransaction,
+        headers: Headers,
+    ) -> Result<Transaction, String> {
+        // let secrets: Vec<String> = secret_keys
+        //     .into_iter()
+        //     .map(|x| x.into_serde().unwrap())
+        //     .collect();
+
+        // let boxes_to_spend: Vec<ErgoBox> = boxes_to_spend
+        //     .into_iter()
+        //     .map(|x| x.into_serde().unwrap())
+        //     .collect();
+
+        // 1. Construct prover from secret keys
+        let prover = TestProver {
+            secrets: secret_keys
+                .into_iter()
+                .map(|s: &String| {
+                    let scalar_bytes = Base16DecodedBytes::try_from(s.as_str()).unwrap();
+                    let bytes: &[u8; 32] = scalar_bytes.0.as_slice().try_into().unwrap();
+                    PrivateInput::DlogProverInput(DlogProverInput::from_bytes(bytes).unwrap())
+                })
+                .collect(),
+        };
+
+        // 2. Construct unsigned transaction
+        // let unsigned: chain::transaction::unsigned::UnsignedTransaction = tx.0;
+        let tx_context = TransactionContext::new(tx.clone().0, boxes_to_spend, vec![]).unwrap();
+
+        //     spending_tx: tx.0,
+        //     TxIoVec::from_vec(boxes_to_spend).unwrap(),
+        //     data_boxes: None
+        // };
+
+        let pre_header = PreHeader::from(headers[0].clone());
+        let res = sign_transaction(
+            &prover,
+            tx_context,
+            &ErgoStateContext::new(pre_header, headers.try_into().unwrap()),
+            None
+        ).unwrap();
+        // .map_err(|e| JsValue::from_str(&format!("{}", e)))
+        // .map(Transaction::from);
+
+        Ok(Transaction(res))
+    }
+    
     fn fee_box_candidate(fee_amount: u64, creation_height: u32) -> ErgoBoxCandidate {
         let address_encoder = AddressEncoder::new(NetworkPrefix::Mainnet);
         let miner_fee_address = address_encoder

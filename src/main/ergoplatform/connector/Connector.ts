@@ -16,6 +16,10 @@ export class Connector {
     return this.provider.getBlocks();
   }
 
+  public getLatestBlockHeaders(num: number): Promise<any> {
+    return this.provider.getLatestBlockHeaders(num);
+  }
+
   public getUnspentOutputs(address: string): Promise<Array<Output>> {
     return this.provider.getUnspentOutputs(address);
   }
