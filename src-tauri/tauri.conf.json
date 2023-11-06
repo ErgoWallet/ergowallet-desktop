@@ -11,6 +11,18 @@
     "version": "../package.json"
   },
   "plugins": {
+    "cli": {
+      "description": "ErgoWallet CLI",
+      "args": [
+        {
+          "short": "n",
+          "name": "network",
+          "takesValue": true,
+          "description": "Network type",
+          "possibleValues": ["mainnet", "testnet"]
+        }
+      ]
+    },
     "http": {
       "scope": [
         "https://api.ergoplatform.com/api/*"
