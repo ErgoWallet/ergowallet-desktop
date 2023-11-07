@@ -1,5 +1,5 @@
 import {AppBar, Button, Container, IconButton, Toolbar, Tooltip} from '@mui/material';
-import {RouteComponentProps, Router, useNavigate} from '@reach/router';
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import * as React from 'react';
 import Exchange from '../exchange/Exchange';
 import Wallet from '../wallet/Wallet';
@@ -10,19 +10,19 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import {ScrollToTop} from "../../components/ScrollToTop";
 
-const ExchangeRoute = (props: RouteComponentProps) => (
+const ExchangeRoute = (props: any) => (
   <>
     <ScrollToTop location={props.location} />
     <Exchange />
   </>
   );
-const WalletRoute = (props: RouteComponentProps) => (
+const WalletRoute = (props: any) => (
   <>
     <ScrollToTop location={props.location} />
     <Wallet />
   </>
   );
-const SettingsRoute = (props: RouteComponentProps) => (<Settings />);
+const SettingsRoute = (props: any) => (<Settings />);
 
 const drawerWidth = 240;
 
@@ -112,7 +112,7 @@ const container = (theme: any) => ({
 const MainScreen = (props: MainScreenProps) => {
   // const classes = useStyles();
   const navigate = useNavigate();
-
+  const location = useLocation();
   return (
     <React.Fragment>
       <AppBar position='static'>
@@ -150,12 +150,12 @@ const MainScreen = (props: MainScreenProps) => {
       {/*<div className={classes.appBarSpacer} />*/}
       <main style={{flexGrow: 1}}>
         <Container sx={container}>
-          <Router>
-            {/*<ScrollUp path='/' />*/}
-            <ExchangeRoute path='exchange/*' />
-            <WalletRoute path='wallet/*' />
-            <SettingsRoute path='settings' />
-          </Router>
+          <Routes>
+            <Route path="/" element={<WalletRoute location={location} />}/>
+            <Route path="/exchange/*" element={<ExchangeRoute location={location}/>} />
+            <Route path="/wallet/*" element={<WalletRoute location={location} />} />
+            <Route path="/settings" element={<SettingsRoute location={location} />} />
+          </Routes>
         </Container>
       </main>
 

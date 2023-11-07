@@ -3,7 +3,7 @@ import * as constants from '../../../common/constants';
 import {Container, CssBaseline, ThemeProvider} from '@mui/material';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
-import {createHistory, createMemorySource, LocationProvider,} from "@reach/router"
+import { BrowserRouter } from "react-router-dom";
 import theme from "../../ui/theme";
 import CreateWallet from "./onboarding/CreateWallet/CreateWallet";
 import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
@@ -16,8 +16,8 @@ import Terms from "./Terms";
 import NewVersionNotification from "./NewVersionNotification";
 import { onWalletClosed } from '../wallet/wallet-slice';
 
-let source = createMemorySource("/")
-let history = createHistory(source)
+// let source = createMemorySource("/")
+// let history = createHistory(source)
 
 // ****************************************************************************
 // Here we show login screen
@@ -36,6 +36,7 @@ import { Events } from '../../../common/backend-types';
 const App = (props: any) => {
   const app = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [creationMode, setCreationMode] = React.useState<CreationMode>(CreationMode.Unknown);
 
@@ -43,7 +44,7 @@ const App = (props: any) => {
     const success = await backend.loadWallet(walletName);
     if (success) {
       setLoggedIn(true);
-      await history.navigate('wallet');
+      // navigate('wallet');
     }
   }
 
@@ -51,7 +52,7 @@ const App = (props: any) => {
     await backend.closeCurrentWallet();
     setLoggedIn(false);
     dispatch(onWalletClosed);
-    await history.navigate('/');
+    // navigate('/');
   }
 
   function handleCreateWallet() {
@@ -132,9 +133,9 @@ const App = (props: any) => {
       );
     } else {
       content = (
-        <LocationProvider history={history}>
+        <BrowserRouter>
           <MainScreen onLogout={handleLogout}/>
-        </LocationProvider>
+        </BrowserRouter>
       );
     }
   }
