@@ -11,7 +11,6 @@ import { Input } from "../../../../main/ergoplatform/connector/types";
 import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import CopyToClipboard from "../../../components/CopyToClipboard";
-import { explorerBaseUri } from "../../../config";
 import { useTheme } from '@mui/material/styles';
 import { getTransaction } from '../../../backend';
 

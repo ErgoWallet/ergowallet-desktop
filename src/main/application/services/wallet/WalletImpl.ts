@@ -232,7 +232,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
     logger.debug(`Wallet processed ${transactions.length} txs. Current hold ${this.transactions.size} txs.`);
   }
 
-  public getAddresses(): any {
+  public getAddresses(): Array<any> {
     return this.keyManager3.allKeys().map((item) => {
       return {
         address: item.address,

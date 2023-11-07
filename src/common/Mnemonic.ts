@@ -6,7 +6,7 @@ class Mnemonic {
   static isValid(mnemonic: string): boolean {
     const words = mnemonic.split(' ');
     const wordCount = words.length;
-    return (wordCount === 24 || wordCount === 12) &&
+    return (wordCount === 24 || wordCount === 12 || wordCount == 15) &&
       bip39.validateMnemonic(mnemonic);
   }
 }

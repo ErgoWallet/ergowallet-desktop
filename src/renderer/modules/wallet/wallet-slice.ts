@@ -5,7 +5,7 @@ import {groupByDay} from "./utils";
 import {WalletBox} from "../../../main/application/services/wallet/Wallet";
 
 export interface WalletState {
-  addresses: any;
+  addresses: Array<any>;
   boxes: Array<WalletBox>;
   transactions: Record<string, Array<any>>;
   txsLoading: boolean;

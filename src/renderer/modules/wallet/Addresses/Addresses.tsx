@@ -87,6 +87,10 @@ const Row = (props: { item: any }) => {
                     <Box flexBasis={0} flexGrow={1}>Derivation Path</Box>
                     <Box flexBasis={0} flexGrow={1}>{item.path}</Box>
                   </Box>
+                  <Box display="flex">
+                    <Box flexBasis={0} flexGrow={1}>Public key</Box>
+                    <Box m={1} flexBasis={0} flexGrow={1}>{`0x${item.publicKey}`}</Box>
+                  </Box>
                 </Box>
               </Box>
               <Box flexBasis={0} flexGrow={1}>

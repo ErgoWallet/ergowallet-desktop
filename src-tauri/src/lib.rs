@@ -24,14 +24,14 @@ struct AppState {
 }
 
 #[tauri::command]
-fn pk2address(pub_key: String) -> String {
+fn pk2address(pub_key: String, state: tauri::State<AppState>) -> String {
     let bytes = hex::decode(pub_key).unwrap();
-    address::from_pub_key(bytes.as_slice())
+    address::from_pub_key(bytes.as_slice(), state.network)
 }
 
 #[tauri::command]
-fn validate_address(address: &str) -> bool {
-    address::validate(address)
+fn validate_address(address: &str, state: tauri::State<AppState>) -> bool {
+    address::validate(address, state.network)
 }
 
 #[tauri::command]
@@ -86,6 +86,9 @@ impl AppBuilder {
                 sign_tx
             ])
             .setup(move |app| {
+                println!("App config dir: {}", app.path().app_config_dir().unwrap().to_str().unwrap());
+                println!("App data dir: {}", app.path().app_data_dir().unwrap().to_str().unwrap());
+
                 let mut network_prefix = NetworkPrefix::Mainnet;
 
                 #[cfg(desktop)]

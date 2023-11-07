@@ -1,29 +1,6 @@
 import * as React from 'react';
-import { Container, Button, Chip, Grid, Box, Card, CardActions, CardContent, CardHeader } from "@mui/material";
+import { Container, Chip, Button, Grid, Box, Card, CardActions, CardContent, CardHeader } from "@mui/material";
 import * as _ from "lodash";
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     border: 'none',
-//     backgroundColor: 'inherit'
-//   },
-//   verifiedBox: {
-//     border: "1px solid ".concat(theme.palette.divider),
-//     minHeight: '200px',
-//     paddingTop: theme.spacing(0.5),
-//     '& > *': {
-//       margin: theme.spacing(0.5),
-//     }
-//   },
-//   unselectedChips: {
-//     paddingTop: theme.spacing(0.5),
-//     '& > *': {
-//       margin: theme.spacing(0.5),
-//     },
-//     minHeight: '100px'
-//   }
-// }));
-
 
 const unselectedChipsStyle = (theme: any) => ({
   paddingTop: theme.spacing(0.5),

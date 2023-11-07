@@ -29,15 +29,14 @@ export class BlockchainService extends EventEmitter {
 
   private async retrieveState(): Promise<void> {
     try {
-      const response = await this.connector.getBlocks();
-
-      const newHeight = response.total;
-      const prevHeight = this.currentHeight;
-      this.currentHeight = newHeight;
-
       // Retrieve last 10 blocks headers
       const headers  = await this.connector.getLatestBlockHeaders(10);
       this.lastHeaders = headers.items;
+      console.debug("Last Block " + this.lastHeaders[0].id + " at " + this.lastHeaders[0].height)
+
+      const newHeight = this.lastHeaders[0].height;
+      const prevHeight = this.currentHeight;
+      this.currentHeight = newHeight;
 
       if (prevHeight != newHeight) {
         // Height changed notification
@@ -45,7 +44,6 @@ export class BlockchainService extends EventEmitter {
           height: newHeight
         });
       }
-      console.debug("Last Block " + this.lastHeaders[0].id)
     } catch (e) {
       console.error(e);
     }

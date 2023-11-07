@@ -98,7 +98,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       open={open}
     >
       <DialogTitle>
-        <Typography>Transfer {assetId.substring(0, 5)}</Typography>
+        <Typography variant="h6">Transfer {assetId.substring(0, 5)}</Typography>
         <IconButton sx={useStyles} onClick={handleClose}>
           <CloseIcon />
         </IconButton>

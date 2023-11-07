@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import * as ReactDOM from 'react-dom';
 import 'typeface-roboto/index.css';
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -14,11 +13,8 @@ import {
 } from "./modules/wallet/wallet-slice";
 import { appLatestVersion, appReady, fetchAppSettings } from "./modules/app/app-slice";
 import { Event, Events } from "../common/backend-types";
-
-
-
 import { createRoot } from 'react-dom/client';
-import { app } from '../main/application/Application2';
+import { Application2, app } from '../main/application/Application2';
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded. Is backend ready ?")
@@ -36,6 +32,27 @@ root.render(
   </Provider>
 );
 
+// Listen to Application events
+app.on(Application2.TXS_LOADING, (payload) => {
+  store.dispatch(onHistoryLoading(payload));
+  if (!payload) {
+    // We stopped history loading -> fetch all
+    store.dispatch(fetchTransactions());
+  }
+});
+
+app.on(Application2.UNSPENT_LOADING, (payload) => {
+  store.dispatch(onUnspentLoading(payload));
+  if (!payload) {
+    // We stopped unspent boxes loading -> fetch all
+    store.dispatch(fetchUnspentBoxes());
+  }
+});
+
+app.on(Application2.WALLET_UPDATED, () => {
+  store.dispatch(fetchUnspentBoxes());
+  store.dispatch(fetchAddresses());
+});
 
 // Listen to Electron IPC events
 // ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {

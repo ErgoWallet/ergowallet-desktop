@@ -82,7 +82,9 @@ function NewMnemonic(props: Props) {
                 [0, 1, 2].map((i) => (
                   <Grid key={i} item lg={4} md={4} sm={4} container direction={'column'}>
                     { words.slice(i * wordsInColumn, (i + 1) * wordsInColumn).map((word: string, index: number) =>
-                      (<div>{index+(i * wordsInColumn + 1)}. <span style={classes.phrase}>{word}</span></div>))
+                      (<div key={index+(i * wordsInColumn + 1)}>
+                          {index+(i * wordsInColumn + 1)}. <span style={classes.phrase}>{word}</span>
+                      </div>))
                     }
                   </Grid>
                 ))

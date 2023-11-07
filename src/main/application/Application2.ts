@@ -16,13 +16,14 @@ import {EventEmitter} from 'events';
 import _ from "lodash";
 import logger from "./logger";
 import TauriSigner from './services/wallet/TauriSigner';
-
 import * as bip39 from '../../common/bip39';
-import { wordlist } from '@scure/bip39/wordlists/english';
 
 export class Application2 extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
   public static APP_LATEST_VERSION = 'LatestVersion';
+  public static WALLET_UPDATED = 'WalletUpdated';
+  public static UNSPENT_LOADING = 'WalletUnspentLoading';
+  public static TXS_LOADING = 'WalletHistoryLoading';
 
   private baseUri = "https://api.ergoplatform.com/api/v0";
   private baseUriV1 = "https://api.ergoplatform.com/api/v1";
@@ -115,14 +116,14 @@ export class Application2 extends EventEmitter {
       new TauriSigner()
     ) as WalletImpl;
     wallet.on(WalletImpl.UPDATED_EVENT, () => {
-      this.emit('WalletUpdated');
+      this.emit(Application2.WALLET_UPDATED);
     });
     wallet.on(WalletImpl.TXS_LOADING, (isLoading) => {
       logger.debug(`Received WalletImpl.TXS_LOADING:${isLoading}`);
-      this.emit('WalletHistoryLoading', isLoading);
+      this.emit(Application2.TXS_LOADING, isLoading);
     });
     wallet.on(WalletImpl.UNSPENT_LOADING, (isLoading) => {
-      this.emit('WalletUnspentLoading', isLoading);
+      this.emit(Application2.UNSPENT_LOADING, isLoading);
     });
     this.currentWallet = wallet;
     return true;
