@@ -144,6 +144,6 @@ export class ExplorerClient implements Provider {
       console.error(body);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    return response.json<T>();
+    return response.json() as Promise<T>;
   }
 }

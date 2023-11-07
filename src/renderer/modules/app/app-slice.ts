@@ -44,6 +44,7 @@ export const {
 
 export const fetchAppSettings = (): AppThunk => async dispatch => {
   const result = await backend.getSettings();
+  console.debug("Settings from backend: " + JSON.stringify(result));
   dispatch(getSettingsSuccess(result));
 };
 

@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM loaded. Is backend ready ?")
   //TODO: Ask tauri is it ready
   //FIXME: we should get latest version from backend
-  store.dispatch(appReady(true))
   app.start();
+
+  store.dispatch(fetchAppSettings());
+  store.dispatch(appReady(true))
 });
 
 const container = document.getElementById('app');
@@ -53,6 +55,10 @@ app.on(Application2.WALLET_UPDATED, () => {
   store.dispatch(fetchUnspentBoxes());
   store.dispatch(fetchAddresses());
 });
+
+app.on(Application2.SETTINGS_UPDATED, () => {
+  store.dispatch(fetchAppSettings());
+})
 
 // Listen to Electron IPC events
 // ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {

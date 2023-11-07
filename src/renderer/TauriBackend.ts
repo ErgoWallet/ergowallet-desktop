@@ -7,7 +7,7 @@ import {WalletBox} from "../main/application/services/wallet/Wallet";
 
 
 export function getSettings(): Promise<any> {
-  return Promise.resolve({})
+  return app.getSettings();
   // return ipcRenderer.invoke(Commands.APP_GET_SETTINGS);
 }
 

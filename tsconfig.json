@@ -16,6 +16,7 @@
   ],
   "exclude": [
     "src/**/*.spec.ts",
+    "src/stories/*.*",
     "node_modules"
   ]
 }

@@ -12,7 +12,7 @@ import {UpdateService} from "./services/updater/UpdateService";
 // import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
 import {EventEmitter} from 'events';
-// import Settings from "./ElectronSettings";
+import Settings from "./TauriSettings";
 import _ from "lodash";
 import logger from "./logger";
 import TauriSigner from './services/wallet/TauriSigner';
@@ -24,6 +24,7 @@ export class Application2 extends EventEmitter {
   public static WALLET_UPDATED = 'WalletUpdated';
   public static UNSPENT_LOADING = 'WalletUnspentLoading';
   public static TXS_LOADING = 'WalletHistoryLoading';
+  public static SETTINGS_UPDATED = "SettingsUpdated";
 
   private baseUri = "https://api.ergoplatform.com/api/v0";
   private baseUriV1 = "https://api.ergoplatform.com/api/v1";
@@ -33,7 +34,7 @@ export class Application2 extends EventEmitter {
   private readonly connector: Connector;
   private readonly connectorV0: Connector;
   private blockchain: BlockchainService;
-  //FIXME: private settings: Settings;
+  private settings: Settings;
   private updater: UpdateService;
   private started: boolean;
   private userDataDir: string;
@@ -66,7 +67,7 @@ export class Application2 extends EventEmitter {
     this.setIpcHandlers();
 
     // Load settings
-    // this.settings = new Settings();
+    this.settings = new Settings();
     this.emit(Application2.APP_READY_EVENT);
     this.started = true;
   }
@@ -227,14 +228,13 @@ export class Application2 extends EventEmitter {
     return txId;
   }
 
-  public getSettings(): any {
-    //return this.settings.data();
+  public async getSettings(): Promise<any> {
+    return this.settings.data();
   }
 
-  public updateSettings(settings: any) {
-    logger.debug('Updating settings: ' + JSON.stringify(settings));
-    //this.settings.update(settings);
-    this.emit('SettingsUpdated');
+  public async updateSettings(settings: any) {
+    await this.settings.update(settings);
+    this.emit(Application2.SETTINGS_UPDATED);
   }
 }
 

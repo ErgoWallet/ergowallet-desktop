@@ -3,8 +3,8 @@ import { KeyManager } from "./KeyManager";
 import * as bip39 from "./bip39";
 
 describe("KeyManager", () => {
-  it("works", () => {
-    const km = KeyManager.recover(bip39.generateMnemonic());
+  it("works", async () => {
+    const km = await KeyManager.recover(bip39.generateMnemonic());
     expect(km.hdPubKeys[0].index).toEqual(0);
 
     km.generateNewKey();
