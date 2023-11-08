@@ -92,8 +92,6 @@ export default function TransactionList(props: TxListProps) {
             </Box>
             <Divider/>
             {txs[date]
-              // .slice()
-              // .sort((a, b) => Number(b.timestamp||b.creationTimestamp) - Number(a.timestamp||a.creationTimestamp))
               .map((tx: any) => (
               <RowFast
                 key={tx.id}
