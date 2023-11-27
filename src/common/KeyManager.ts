@@ -105,7 +105,6 @@ export class KeyManager implements IKeyManager {
     path = `${change}/${index}`;
 
     const hdKey = this.accountExtPubKey.deriveChild(change).deriveChild(index);
-
     const addr: string = await invoke('pk2address', { pubKey: toHexString(hdKey.publicKey) })
     const newKey = new HdPubKey(
       hdKey.publicKey,

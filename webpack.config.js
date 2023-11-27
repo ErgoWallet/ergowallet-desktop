@@ -32,7 +32,7 @@ module.exports = [
         directory: path.join(__dirname, 'app'),
       },
       compress: true,
-      host: 'local-ipv4',
+      host: 'localhost',
       port: 9000,
     },
     module: {

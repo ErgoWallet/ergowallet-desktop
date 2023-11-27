@@ -26,6 +26,8 @@ serde_json = "1.0"
 serde_derive = "1.0.190"
 ergo-lib = "0.26.0"
 hex = "0.4.3"
+# specta = "2.0.0-rc"
+# tauri-specta = { version = "2.0.0-rc", features = ["typescript"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

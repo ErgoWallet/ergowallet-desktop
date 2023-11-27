@@ -1,7 +1,7 @@
-import {Provider} from "../../../Provider";
-import {default as fetch} from '../node-fetch';
-import {AddressTransactionsResponse, TransactionsResponse, TransItem} from "./responses";
-import {AddressSummary, Block, Output, Input, Transaction} from "../../../types";
+import { Provider } from "../../../Provider";
+import { default as fetch } from "../node-fetch";
+import { AddressTransactionsResponse, TransactionsResponse, TransItem } from "./responses";
+import { AddressSummary, Block, Output, Input, Transaction } from "../../../types";
 import { max } from "lodash";
 
 export class ExplorerClient implements Provider {

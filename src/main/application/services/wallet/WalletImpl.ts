@@ -1,15 +1,15 @@
-import {UnspentMonitor} from "./UnspentMonitor";
-import {TransactionMonitor} from "./TransactionMonitor";
-import {Connector} from "../../../ergoplatform/connector/Connector";
-import {Wallet, WalletBox, WalletTx} from "./Wallet";
-import {KeyManager as KeyManager3} from "../../../../common/KeyManager";
-import {SingleKeyManager} from "../../../../common/SingleKeyManager";
-import TransactionBuilder, {SignedTransaction, UnsignedTransaction} from "./TransactionBuilder";
-import {MoneyUnits} from "../../../../common/MoneyUnits";
-import {Output, TokenValue, Transaction, UnconfirmedTransaction} from "../../../ergoplatform/connector/types";
-import {EventEmitter} from "events";
-import {BIP39, SingleKeyWallet} from "../vault/Vault";
-import {IKeyManager} from "../../../../common/IKeyManager";
+import { UnspentMonitor } from "./UnspentMonitor";
+import { TransactionMonitor } from "./TransactionMonitor";
+import { Connector } from "../../../ergoplatform/connector/Connector";
+import { Wallet, WalletBox, WalletTx } from "./Wallet";
+import { KeyManager as KeyManager3 } from "../../../../common/KeyManager";
+import { SingleKeyManager } from "../../../../common/SingleKeyManager";
+import TransactionBuilder, { SignedTransaction, UnsignedTransaction } from "./TransactionBuilder";
+import { MoneyUnits } from "../../../../common/MoneyUnits";
+import { Output, TokenValue, Transaction, UnconfirmedTransaction } from "../../../ergoplatform/connector/types";
+import { EventEmitter } from "events";
+import { BIP39, SingleKeyWallet } from "../vault/Vault";
+import { IKeyManager } from "../../../../common/IKeyManager";
 import logger from "../../logger";
 import Signer from "./Signer";
 import { toHexString } from "../../../../common/utils";
@@ -54,14 +54,14 @@ export class WalletImpl extends EventEmitter implements Wallet {
     this.unspentMonitor = new UnspentMonitor(connector, this);
     this.transMonitor = new TransactionMonitor(connector, this);
     //TODO: may be one event with true/false ?
-    this.transMonitor.on('LoadingStarted', ()  => {
+    this.transMonitor.on('LoadingStarted', () => {
       this.emit(WalletImpl.TXS_LOADING, true);
     });
     this.transMonitor.on('LoadingFinished', () => {
       this.emit(WalletImpl.TXS_LOADING, false);
     });
 
-    this.unspentMonitor.on('LoadingStarted', ()  => {
+    this.unspentMonitor.on('LoadingStarted', () => {
       this.emit(WalletImpl.UNSPENT_LOADING, true);
     });
     this.unspentMonitor.on('LoadingFinished', () => {
@@ -94,13 +94,13 @@ export class WalletImpl extends EventEmitter implements Wallet {
     });
 
     // Sign tx
-    const signed = await invoke('sign_tx', 
-    { 
-      secretKeys: privateKeys,
-      boxesToSpend,
-      tx: tx.ergoTx,
-      headers
-    });
+    const signed = await invoke('sign_tx',
+      {
+        secretKeys: privateKeys,
+        boxesToSpend,
+        tx: tx.ergoTx,
+        headers
+      });
     // console.log('Signed TX: ' + JSON.stringify(signed));
     tx.ergoTx = signed;
     return Promise.resolve(tx);
@@ -127,7 +127,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
       (tx.inputs.find(i => i.address === address) || tx.outputs.find(o => o.address === address)) &&
       tx.confirmationsCount > 0;
 
-    return Array.from(this.transactions.values()).filter(tx =>addressFilter(tx));
+    return Array.from(this.transactions.values()).filter(tx => addressFilter(tx));
   }
 
   public addUnspent(box: Output): void {
@@ -145,7 +145,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
         transactionId: box.txId,
         value: box.value.toString(),
         additionalRegisters: box.additionalRegisters,
-        assets: Array.from(box.assets.map((a: TokenValue) => ({tokenId: a.tokenId, amount: a.amount.toString()}))),
+        assets: Array.from(box.assets.map((a: TokenValue) => ({ tokenId: a.tokenId, amount: a.amount.toString() }))),
         index: box.index,
         ergoTree: box.ergoTree,
         creationHeight: Number(box.creationHeight.toString()),
@@ -184,7 +184,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
           transactionId: output.txId,
           value: output.value.toString(),
           additionalRegisters: output.additionalRegisters,
-          assets: Array.from(output.assets.map((a: TokenValue) => ({tokenId: a.tokenId, amount: a.amount.toString()}))),
+          assets: Array.from(output.assets.map((a: TokenValue) => ({ tokenId: a.tokenId, amount: a.amount.toString() }))),
           index: output.index,
           ergoTree: output.ergoTree,
           creationHeight: Number(output.creationHeight.toString()),
@@ -201,7 +201,11 @@ export class WalletImpl extends EventEmitter implements Wallet {
         if (tx.confirmationsCount >= 1) {
           this.unspentBoxes.delete(input.id);
         } else {
-          this.unspentBoxes.get(input.id).spentTransactionId = tx.id;
+          // Check whether input is our
+          const unspentBox = this.unspentBoxes.get(input.id);
+          if (unspentBox) {
+            unspentBox.spentTransactionId = tx.id;
+          } 
         }
       });
 
@@ -210,14 +214,14 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
       // calculate tx value regarding our wallet
       const received = walletOutputs.reduce(
-          (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
-          new MoneyUnits(0, 9)
-        );
+        (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
+        new MoneyUnits(0, 9)
+      );
 
       const spent = walletInputs.reduce(
-          (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
-          new MoneyUnits(0, 9)
-        );
+        (total: MoneyUnits, item: any) => total.plus(new MoneyUnits(item.value, 9)),
+        new MoneyUnits(0, 9)
+      );
 
       const balance = received.minus(spent);
 
