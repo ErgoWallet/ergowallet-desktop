@@ -94,6 +94,12 @@ impl AppBuilder {
                 println!("App config dir: {}", app.path().app_config_dir().unwrap().to_str().unwrap());
                 println!("App data dir: {}", app.path().app_data_dir().unwrap().to_str().unwrap());
 
+                // set window title with application version
+                if let Some(version) = &app.config().package.version {
+                    let main_window = app.get_window("main").unwrap();
+                    let _ = main_window.set_title(&format!("Ergo Wallet v{}", version));
+                }
+
                 let mut network_prefix = NetworkPrefix::Mainnet;
 
                 #[cfg(desktop)]
