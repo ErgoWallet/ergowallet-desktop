@@ -1,8 +1,8 @@
 [package]
 name = "ergo-wallet"
-version = "0.2.0"
+version = "0.2.0-beta"
 description = "Ergo Wallet"
-authors = ["you"]
+authors = ["gagarin55"]
 license = "GPL-3.0"
 repository = ""
 edition = "2021"
@@ -24,7 +24,7 @@ tauri-plugin-store = "2.0.0-alpha"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_derive = "1.0.190"
-ergo-lib = "0.26.0"
+ergo-lib = "0.27.1"
 hex = "0.4.3"
 # specta = "2.0.0-rc"
 # tauri-specta = { version = "2.0.0-rc", features = ["typescript"] }

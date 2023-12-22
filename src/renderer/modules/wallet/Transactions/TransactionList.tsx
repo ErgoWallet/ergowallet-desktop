@@ -50,7 +50,7 @@ function Row(props: { tx: any; onDetailsClick: (tx: any) => void }): React.React
       <Box flexBasis={0} pr={1} pl={1} flexGrow={2} display="flex" justifyContent="flex-end">
         <AssetValue amount={tx.value} decimals={9} symbol="ERG"/>
       </Box>
-      <Box flexBasis={0} flexGrow={4}>
+      <Box flexBasis={0} flexGrow={4} minWidth={"200px"} display={{ xs: 'none', sm: "block" }}>
         <Hex>{tx.id}</Hex>
       </Box>
       <Box flexBasis={0} flexGrow={1} display="flex" alignItems="center" minWidth={"2em"} maxWidth={"2em"}>

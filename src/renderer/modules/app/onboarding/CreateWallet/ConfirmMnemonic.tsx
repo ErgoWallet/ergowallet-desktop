@@ -3,7 +3,7 @@ import { Container, Chip, Button, Grid, Box, Card, CardActions, CardContent, Car
 import * as _ from "lodash";
 
 const unselectedChipsStyle = (theme: any) => ({
-  paddingTop: theme.spacing(0.5),
+  paddingTop: theme.spacing(1.0),
   '& > *': {
     margin: theme.spacing(0.5),
   },
@@ -13,7 +13,7 @@ const unselectedChipsStyle = (theme: any) => ({
 const verifiedBoxStyle = (theme: any) => ({
   border: "1px solid ".concat(theme.palette.divider),
   minHeight: '200px',
-  paddingTop: theme.spacing(0.5),
+  paddingTop: theme.spacing(1.0),
   '& > *': {
     margin: theme.spacing(0.5),
   }
@@ -92,8 +92,9 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
               }
             </Box>
           </Grid>
+          
           <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Container sx={unselectedChipsStyle}>
+            <Box sx={unselectedChipsStyle}>
               {unselected.map((word) => (
                 <Chip
                   key={word}
@@ -101,7 +102,7 @@ function ConfirmMnemonic(props: ConfirmMnemonicProps) {
                   onClick={() => addWord(word)}
                 />))
               }
-            </Container>
+            </Box>
           </Grid>
         </Box>
       </CardContent>

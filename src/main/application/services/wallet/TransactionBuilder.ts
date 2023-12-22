@@ -3,7 +3,7 @@ import {fromErg} from "../../../../common/utils";
 import {minBoxValue} from "../../../../common/constants";
 import {WalletBox} from "./Wallet";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
-import { invoke } from "@tauri-apps/api/primitives";
+import { invoke } from "@tauri-apps/api/core";
 
 // const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 

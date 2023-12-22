@@ -14,7 +14,7 @@ $ yarn
 
 Start application
 ```
-$ yarn start
+$ yarn tauri dev
 ```
 
 ### How to build

@@ -1,3 +1,4 @@
+use std::sync::Mutex;
 use ergo_lib::{
     chain::ergo_state_context::Headers,
     ergotree_ir::chain::{address::NetworkPrefix, ergo_box::ErgoBox},
@@ -15,12 +16,15 @@ pub type SetupHook = Box<dyn FnOnce(&mut App) -> Result<(), Box<dyn std::error::
 
 mod address;
 mod transaction;
+mod wallet;
 
 use hex;
 use transaction::{Transaction, TxInput, TxOutput, UnsignedTransaction};
+use crate::wallet::Wallet;
 
 struct AppState {
     network: NetworkPrefix,
+    wallet: Mutex<Option<Wallet>>
 }
 
 #[tauri::command]
@@ -118,6 +122,7 @@ impl AppBuilder {
 
                 app.manage(AppState {
                     network: network_prefix,
+                    wallet: Default::default()
                 });
 
                 if let Some(setup) = setup {

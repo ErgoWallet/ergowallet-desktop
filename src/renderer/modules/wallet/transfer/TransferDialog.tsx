@@ -22,16 +22,16 @@ interface TransferProps {
 }
 
 const useStyles = ((theme) => ({
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
+  position: "absolute",
+  right: theme.spacing(1),
+  top: theme.spacing(1),
 }));
 
 function TransferDialog(props: TransferProps): React.ReactElement {
   const {onClose, open, fromBoxes, assetId} = props;
 
   const [page, setPage] = React.useState<Page>(Page.INITIAL);
-  const [unsignedTx, setUnsignedTx] = React.useState<UnsignedTransaction|null>(null);
+  const [unsignedTx, setUnsignedTx] = React.useState<UnsignedTransaction | null>(null);
   const [sendingError, setSendingError] = React.useState(null);
   const [resultTxId, setResultTxId] = React.useState<string>('');
 
@@ -52,7 +52,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
 
       if (txId != signedTx.ergoTx.id) {
         console.warn(`Got tx id ${txId} != ${signedTx.ergoTx.id}`);
-        console.debug(JSON.stringify(signedTx.ergoTx))
+        console.debug(JSON.stringify(signedTx.ergoTx));
       }
       setResultTxId(txId);
       setPage(Page.DONE);
@@ -100,7 +100,7 @@ function TransferDialog(props: TransferProps): React.ReactElement {
       <DialogTitle>
         <Typography variant="h6">Transfer {assetId.substring(0, 5)}</Typography>
         <IconButton sx={useStyles} onClick={handleClose}>
-          <CloseIcon />
+          <CloseIcon/>
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>

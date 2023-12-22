@@ -1,15 +1,15 @@
-import * as React from 'react';
-import {Box, Button, Grid} from "@mui/material";
+import * as React from "react";
+import { Box, Button, Grid } from "@mui/material";
 import Input from "../../../components/Input";
-import AssetValueInput, {AssetValueInputState} from "./AssetValueInput";
+import AssetValueInput, { AssetValueInputState } from "./AssetValueInput";
 import AssetValue from "../../../components/AssetValue";
 import Address from "../../../components/Address";
-import {MoneyUnits} from "../../../../common/MoneyUnits";
-import {fromErg} from "../../../../common/utils";
+import { MoneyUnits } from "../../../../common/MoneyUnits";
+import { fromErg } from "../../../../common/utils";
 import TokensValues from "../TokensValues";
-import {minBoxValue} from "../../../../common/constants";
-import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
-import {WalletBox} from "../../../../main/application/services/wallet/Wallet";
+import { minBoxValue } from "../../../../common/constants";
+import { ErgoBoxSet } from "../../../../common/ErgoBoxSet";
+import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
 
 interface InitialStepProps {
   fromBoxes: Array<WalletBox>;
@@ -21,7 +21,7 @@ interface InitialStepProps {
 const initialFee = '0.001';
 
 function InitialStep(props: InitialStepProps): React.ReactElement {
-  const {fromBoxes, assetId, backendApi} = props;
+  const { fromBoxes, assetId, backendApi } = props;
   const amountRef = React.createRef<any>();
 
   // Total nanoERG available
@@ -129,11 +129,11 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
           return (
             <Box display="flex" alignItems="center" key={box.boxId}>
               <Box flexBasis={0} flexGrow={3}>
-                <Address value={box.address} shortened/>
+                <Address value={box.address} shortened />
               </Box>
               <Box flexBasis={0} flexGrow={2} display="flex" alignItems="center">
                 <TokensValues assets={box.assets} />
-                <AssetValue amount={box.value.toString()} decimals={9} symbol="ERG"/>
+                <AssetValue amount={box.value.toString()} decimals={9} symbol="ERG" />
               </Box>
             </Box>
           );
@@ -188,7 +188,7 @@ function InitialStep(props: InitialStepProps): React.ReactElement {
         />
       </Box>
       <Box component="div" mt={2}>
-        Change <AssetValue amount={ergChange.amount} decimals={ergChange.decimals} symbol="ERG"/>
+        Change <AssetValue amount={ergChange.amount} decimals={ergChange.decimals} symbol="ERG" />
       </Box>
       {/* Error while creation ergo tx */}
       {error && (<Box>{JSON.stringify(error)}</Box>)}

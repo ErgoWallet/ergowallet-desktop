@@ -24,14 +24,7 @@ interface TxDetailsProps {
 function TxDetailsDialog(props: TxDetailsProps) {
   const [loading, setLoading] = React.useState(false);
   const [tx, setTx] = React.useState<any>(null);
-  const theme = useTheme();
-  const closeButtonStyle = {
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-  };
   const { onClose, open, txId } = props;
-
 
   React.useEffect(() => {
     const getTx = async () => {
@@ -52,132 +45,147 @@ function TxDetailsDialog(props: TxDetailsProps) {
 
   return (
     <>
-      {tx && (
-        <Dialog
-          fullWidth={true}
-          maxWidth="md"
-          onClose={handleClose}
-          open={open}
-        >
-          <DialogTitle>
-            <Typography variant="h6">Transaction details</Typography>
-            <IconButton sx={closeButtonStyle} onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent dividers>
-            {/* Tx general information */}
-            <Box display="flex" flexDirection="column">
-              <Box display={"flex"}>
-                <Box flexBasis={0} flexGrow={1}>ID</Box>
-                <Box flexBasis={0} flexGrow={3}>
-                  <Link onClick={handleTxIdClick} href="#" variant="body2" title="Open in explorer">
-                    <Hex>{tx.id}</Hex>
-                  </Link>
-
-                  <CopyToClipboard TooltipProps={{ title: "Tx ID Copied" }}>
-                    {({ copy }) => (
-                      <IconButton size="small" onClick={() => copy(tx.id)}>
-                        <FileCopyOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    )}
-                  </CopyToClipboard>
-                </Box>
-              </Box>
-              <Box display={"flex"}>
-                <Box flexBasis={0} flexGrow={1}>Block</Box>
-                <Box flexBasis={0} flexGrow={3}>{tx.inclusionHeight}</Box>
-
-              </Box>
-              <Box display={"flex"}>
-                <Box flexBasis={0} flexGrow={1}>Confirmations</Box>
-                <Box flexBasis={0} flexGrow={3}>{tx.confirmationsCount}</Box>
-              </Box>
-              <Box display={"flex"}>
-                <Box flexBasis={0} flexGrow={1}>Size</Box>
-                <Box flexBasis={0} flexGrow={3}>{tx.size}</Box>
-              </Box>
-            </Box>
-
-            <br />
-
-            {/* Tx Schema - Inputs -> Outputs */}
-            <Grid container direction="column" wrap="nowrap">
-              <Grid item>
-                <Typography component="div" variant="h6" color="primary" gutterBottom>
-                  INPUTS
-                </Typography>
-              </Grid>
-              {/* inputs list */}
-              <Grid item>
-
-                <Grid container direction="column">
-                  {
-                    tx.inputs.map((i: Input) => (
-                      <Box key={i.id} display="flex">
-                        <Box flexBasis={0} flexGrow={2}>
-                          {(i.address.length > 60) ? (
-                            <Address shortened={true} value={i.address} />
-                          ) : (
-                            <Address shortened={false} value={i.address} />
-                          )}
-                        </Box>
-                        <Box
-                          flexBasis={0}
-                          flexGrow={1}
-                          display="flex"
-                          justifyContent="flex-end"
-                          alignItems="center"
-                        >
-                          {/*<TokensValues assets={i.assets} />*/}
-                          <AssetValue amount={i.value.toString()} decimals={9} symbol="ERG" />
-                        </Box>
-                      </Box>
-                    ))
-                  }
-                </Grid>
-              </Grid>
-              <br />
-              <Grid item>
-                <Typography component="div" variant="h6" color="primary" gutterBottom>
-                  OUTPUTS
-                </Typography>
-              </Grid>
-
-              {/* outputs list */}
-              <Grid item>
-                <Grid container direction="column">
-                  {
-                    tx.outputs.map((i: WalletBox) => (
-                      <Box key={i.boxId} display="flex" alignItems="center">
-                        <Box flexBasis={0} flexGrow={2}>
-                          {(i.address.length > 60) ? (
-                            <Address shortened={true} value={i.address} type={i.addressType} />
-                          ) : (
-                            <Address shortened={false} value={i.address} type={i.addressType} />
-                          )}
-                        </Box>
-                        <Box
-                          flexBasis={0}
-                          flexGrow={1}
-                          display="flex"
-                          justifyContent="flex-end"
-                          alignItems="center"
-                        >
-                          <TokensValues assets={i.assets} />
-                          <AssetValue amount={i.value} decimals={9} symbol="ERG" />
-                        </Box>
-                      </Box>
-                    ))
-                  }
-                </Grid>
-              </Grid>
-            </Grid>
-          </DialogContent>
-        </Dialog>
-      )}
+      {tx && (<TxDetailsDialogView
+        tx={tx} open={open} onClose={handleClose} onTxClick={handleTxIdClick}
+      />)}
     </>
   );
 }
 
 export default TxDetailsDialog;
+
+export function TxDetailsDialogView(
+  props: { tx: WalletTx, open: boolean, onClose: any, onTxClick }
+  ) {
+  const theme = useTheme();
+  const closeButtonStyle = {
+    position: "absolute",
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+  };
+  const { tx, open, onClose, onTxClick } = props;
+  return (
+    <Dialog
+    fullWidth={true}
+    maxWidth="md"
+    onClose={onClose}
+    open={open}
+  >
+    <DialogTitle>
+      <Typography variant="h6">Transaction details</Typography>
+      <IconButton sx={closeButtonStyle} onClick={onClose}>
+        <CloseIcon />
+      </IconButton>
+    </DialogTitle>
+    <DialogContent dividers>
+      {/* Tx general information */}
+      <Box display="flex" flexDirection="column">
+        <Box display={"flex"}>
+          <Box flexBasis={0} flexGrow={1}>ID</Box>
+          <Box flexBasis={0} flexGrow={3} pl={1}>
+            <Link onClick={onTxClick} href="#" variant="body2" title="Open in explorer">
+              {/* TODO: on small screens shorten tx id */}
+              <Hex>{tx.id}</Hex>
+            </Link>
+
+            <CopyToClipboard TooltipProps={{ title: "Tx ID Copied" }}>
+              {({ copy }) => (
+                <IconButton size="small" onClick={() => copy(tx.id)}>
+                  <FileCopyOutlinedIcon fontSize="small" />
+                </IconButton>
+              )}
+            </CopyToClipboard>
+          </Box>
+        </Box>
+        <Box display={"flex"}>
+          <Box flexBasis={0} flexGrow={1}>Block</Box>
+          <Box flexBasis={0} flexGrow={3} pl={1}>{tx.inclusionHeight}</Box>
+        </Box>
+        <Box display={"flex"}>
+          <Box flexBasis={0} flexGrow={1}>Confirmations</Box>
+          <Box flexBasis={0} flexGrow={3} pl={1}>{tx.confirmationsCount}</Box>
+        </Box>
+        <Box display={"flex"}>
+          <Box flexBasis={0} flexGrow={1}>Size</Box>
+          <Box flexBasis={0} flexGrow={3} pl={1}>{tx.size}</Box>
+        </Box>
+      </Box>
+
+      <Box height={20}></Box>
+
+      {/* Tx Schema - Inputs -> Outputs */}
+      <Grid container direction="column" wrap="nowrap">
+        <Grid item>
+          <Typography component="div" variant="h6" color="primary" gutterBottom>
+            INPUTS
+          </Typography>
+        </Grid>
+        {/* inputs list */}
+        <Grid item>
+
+          <Grid container direction="column">
+            {
+              tx.inputs.map((i: Input) => (
+                <Box key={i.id} display="flex">
+                  <Box flexBasis={0} flexGrow={2}>
+                    {(i.address.length > 60) ? (
+                      <Address shortened={true} value={i.address} />
+                    ) : (
+                      <Address shortened={false} value={i.address} />
+                    )}
+                  </Box>
+                  <Box
+                    flexBasis={0}
+                    flexGrow={1}
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                  >
+                    {/*<TokensValues assets={i.assets} />*/}
+                    <AssetValue amount={i.value.toString()} decimals={9} symbol="ERG" />
+                  </Box>
+                </Box>
+              ))
+            }
+          </Grid>
+        </Grid>
+        <Box height={20}></Box>
+        <Grid item>
+          <Typography component="div" variant="h6" color="primary" gutterBottom>
+            OUTPUTS
+          </Typography>
+        </Grid>
+
+        {/* outputs list */}
+        <Grid item>
+          <Grid container direction="column">
+            {
+              tx.outputs.map((i: WalletBox) => (
+                <Box key={i.boxId} display="flex" alignItems="center">
+                  <Box flexBasis={0} flexGrow={2}>
+                    {(i.address.length > 60) ? (
+                      <Address shortened={true} value={i.address} type={i.addressType} />
+                    ) : (
+                      <Address shortened={false} value={i.address} type={i.addressType} />
+                    )}
+                  </Box>
+                  <Box
+                    flexBasis={0}
+                    flexGrow={1}
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                  >
+                    <TokensValues assets={i.assets} />
+                    <AssetValue amount={i.value} decimals={9} symbol="ERG" />
+                  </Box>
+                </Box>
+              ))
+            }
+          </Grid>
+        </Grid>
+      </Grid>
+    </DialogContent>
+  </Dialog>
+  )
+}

@@ -24,9 +24,7 @@ function Address(props: AddressProps): React.ReactElement {
 
   return (
     <Box display="flex" alignItems="center">
-      <Box>
-        <Hex backgroundColor={addressBgColor}>{val}</Hex>
-      </Box>
+      <Hex backgroundColor={addressBgColor}>{val}</Hex>
       {(copy||shortened) && (
         <Box ml={1}>
           <CopyToClipboard TooltipProps={{title: "Address Copied"}}>

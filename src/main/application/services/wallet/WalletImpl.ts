@@ -13,7 +13,7 @@ import { IKeyManager } from "../../../../common/IKeyManager";
 import logger from "../../logger";
 import Signer from "./Signer";
 import { toHexString } from "../../../../common/utils";
-import { invoke } from "@tauri-apps/api/primitives";
+import { invoke } from "@tauri-apps/api/core";
 
 // @ts-ignore
 // const {KeyManager, Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");

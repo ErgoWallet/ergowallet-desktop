@@ -128,16 +128,6 @@ impl Transaction {
         tx: &UnsignedTransaction,
         headers: Headers,
     ) -> Result<Transaction, String> {
-        // let secrets: Vec<String> = secret_keys
-        //     .into_iter()
-        //     .map(|x| x.into_serde().unwrap())
-        //     .collect();
-
-        // let boxes_to_spend: Vec<ErgoBox> = boxes_to_spend
-        //     .into_iter()
-        //     .map(|x| x.into_serde().unwrap())
-        //     .collect();
-
         // 1. Construct prover from secret keys
         let prover = TestProver {
             secrets: secret_keys
@@ -151,23 +141,21 @@ impl Transaction {
         };
 
         // 2. Construct unsigned transaction
-        // let unsigned: chain::transaction::unsigned::UnsignedTransaction = tx.0;
-        let tx_context = TransactionContext::new(tx.clone().0, boxes_to_spend, vec![]).unwrap();
+        let tx_context = TransactionContext::new(
+            tx.clone().0,
+            boxes_to_spend,
+            vec![]
+        ).unwrap();
 
-        //     spending_tx: tx.0,
-        //     TxIoVec::from_vec(boxes_to_spend).unwrap(),
-        //     data_boxes: None
-        // };
 
         let pre_header = PreHeader::from(headers[0].clone());
         let res = sign_transaction(
             &prover,
             tx_context,
-            &ErgoStateContext::new(pre_header, headers.try_into().unwrap()),
+            &ErgoStateContext::new(pre_header, headers),
             None
         ).unwrap();
-        // .map_err(|e| JsValue::from_str(&format!("{}", e)))
-        // .map(Transaction::from);
+
 
         Ok(Transaction(res))
     }

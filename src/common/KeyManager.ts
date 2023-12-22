@@ -2,8 +2,8 @@ import * as bip39 from './bip39';
 import { IKeyManager } from "./IKeyManager";
 import { HdPubKey, KeyState } from "./HdPubKey";
 import { HDKey } from '@scure/bip32';
-import { invoke } from "@tauri-apps/api/primitives";
 import { toHexString } from './utils';
+import { invoke } from '@tauri-apps/api/core';
 
 export class KeyManager implements IKeyManager {
   static AccountDerivationPath = "m/44'/429'/0'";
