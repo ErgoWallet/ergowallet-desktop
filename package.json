@@ -25,14 +25,15 @@
     "test": "jest",
     "clean": "rimraf src-tauri/target/ && rimraf node_modules/",
     "compile": "tsc",
-    "start": "yarn build && electron ./app/main/electron.js",
-    "start:debug": "yarn build && electron --inspect ./app/main/electron.js",
-    "build": "rimraf app/ && yarn compile && webpack --config webpack.config.js",
+    "start": "npm run build && electron ./app/main/electron.js",
+    "start:debug": "npm run build && electron --inspect ./app/main/electron.js",
+    "build": "rimraf app/ && npm run compile && webpack --config webpack.config.js",
     "dist": "rimraf dist/ && electron-builder --publish never",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "dev": "webpack-dev-server --mode=development",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "tauri": "tauri"
   },
   "main": "./main/electron.js",
   "devDependencies": {
@@ -163,6 +164,5 @@
         }
       ]
     }
-  },
-  "packageManager": "yarn@4.0.1"
+  }
 }
