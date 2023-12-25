@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './index.css';
 import 'typeface-roboto/index.css';
 import { Provider } from "react-redux";
 import store from "./store/store";

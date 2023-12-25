@@ -117,7 +117,7 @@ const MainScreen = (props: MainScreenProps) => {
     <React.Fragment>
       <AppBar position='static'>
         <Toolbar sx={{paddingRight: 24 }}>
-          <div>
+          <div className=''>
             <Button
               startIcon={<AccountBalanceWalletOutlinedIcon/>}
               color="inherit"

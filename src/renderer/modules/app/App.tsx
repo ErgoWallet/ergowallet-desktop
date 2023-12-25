@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as constants from '../../../common/constants';
-import {Container, CssBaseline, ThemeProvider} from '@mui/material';
+import {Container, CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
 import { BrowserRouter } from "react-router-dom";
@@ -74,10 +74,12 @@ const App = (props: any) => {
 
   if (!app.ready) {
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Loading />
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Loading />
+        </ThemeProvider>
+      </StyledEngineProvider>
     );
   }
 
@@ -141,12 +143,14 @@ const App = (props: any) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {content}
-      <NewVersionNotification />
-      {/*<div>{props.width}</div>*/}
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {content}
+        <NewVersionNotification />
+        {/*<div>{props.width}</div>*/}
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 
