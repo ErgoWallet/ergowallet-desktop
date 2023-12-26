@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 30
     permissions:
       contents: write
     name: Build ${{ matrix.os }}
@@ -35,7 +36,7 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Linux required packages for Tauri
+    - name: install dependencies (ubuntu only)
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
