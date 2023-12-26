@@ -11,6 +11,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
     name: Build ${{ matrix.os }}
     strategy:
       matrix:
@@ -47,8 +49,18 @@ jobs:
     - run: npm i
     # - run: npm run build
     # - run: npm run test
-    - run: npm run tauri build --release
-    - uses: actions/upload-artifact@v3
+    # - run: npm run tauri build --release
+    #- uses: actions/upload-artifact@v3
+    #  with:
+    #    name: ${{ runner.OS }}
+    #    path: src-tauri/target/${{ runner.arch }}/ergo-wallet-*.*
+
+    - uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: ${{ runner.OS }}
-        path: src-tauri/target/${{ runner.arch }}/ergo-wallet-*.*
+        # tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
+        releaseName: 'Ergo Wallet v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
+        releaseBody: 'See the assets to download and install this version.'
+        releaseDraft: true
+        prerelease: false
