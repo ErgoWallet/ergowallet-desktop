@@ -31,10 +31,7 @@ jobs:
     #     python-version: '3.7'
 
     - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
+      uses: dtolnay/rust-toolchain@stable
 
     - name: install dependencies (ubuntu only)
       if: matrix.os == 'ubuntu-latest'
