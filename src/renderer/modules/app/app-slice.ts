@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppThunk} from "../../store/store";
-import * as backend from "../../Backend";
+import * as backend from "../../backend";
 
 const pkg = require('../../../../package.json');
 
@@ -44,6 +44,7 @@ export const {
 
 export const fetchAppSettings = (): AppThunk => async dispatch => {
   const result = await backend.getSettings();
+  console.debug("Settings from backend: " + JSON.stringify(result));
   dispatch(getSettingsSuccess(result));
 };
 

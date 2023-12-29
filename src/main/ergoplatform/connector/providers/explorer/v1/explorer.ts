@@ -1,7 +1,7 @@
-import {Provider} from "../../../Provider";
-import {default as fetch} from 'node-fetch';
-import {AddressTransactionsResponse, TransactionsResponse, TransItem} from "./responses";
-import {AddressSummary, Block, Output, Input, Transaction} from "../../../types";
+import { Provider } from "../../../Provider";
+import { default as fetch } from "../node-fetch";
+import { AddressTransactionsResponse, TransactionsResponse, TransItem } from "./responses";
+import { AddressSummary, Block, Output, Input, Transaction } from "../../../types";
 import { max } from "lodash";
 
 export class ExplorerClient implements Provider {
@@ -9,6 +9,12 @@ export class ExplorerClient implements Provider {
 
   constructor(baseUri: string) {
     this.baseUri = baseUri;
+  }
+
+  async getLatestBlockHeaders(num: number): Promise<any> {
+    const url = `${this.baseUri}/blocks/headers?limit=${num}`;
+    const response = await ExplorerClient.api<any>(url);
+    return response;
   }
 
   public async sendTransaction(tx: any): Promise<string> {
@@ -138,6 +144,6 @@ export class ExplorerClient implements Provider {
       console.error(body);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    return response.json<T>();
+    return response.json() as Promise<T>;
   }
 }

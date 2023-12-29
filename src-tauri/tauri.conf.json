@@ -1,0 +1,85 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:9000",
+    "distDir": "../app"
+  },
+  "package": {
+    "productName": "ergo-wallet",
+    "version": "../package.json"
+  },
+  "plugins": {
+    "cli": {
+      "description": "ErgoWallet CLI",
+      "args": [
+        {
+          "short": "n",
+          "name": "network",
+          "takesValue": true,
+          "description": "Network type",
+          "possibleValues": ["mainnet", "testnet"]
+        }
+      ]
+    },
+    "http": {
+      "scope": [
+        "https://api.ergoplatform.com/api/*"
+      ]
+    },
+    "updater": {
+      "endpoints": []
+    }
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "io.ergowallet",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": ["nsis", "dmg", "appimage"],
+      "updater": {
+        "active": false
+      },
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 650,
+        "resizable": true,
+        "title": "Ergo Wallet",
+        "width": 1024
+      }
+    ]
+  }
+}

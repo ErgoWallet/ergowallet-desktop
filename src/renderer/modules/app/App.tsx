@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as constants from '../../../common/constants';
-import {Container, CssBaseline, ThemeProvider} from '@mui/material';
+import {Container, CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import MainScreen from './MainScreen';
 import LoginScreen from './login/LoginScreen';
-import {createHistory, createMemorySource, LocationProvider,} from "@reach/router"
+import { BrowserRouter } from "react-router-dom";
 import theme from "../../ui/theme";
 import CreateWallet from "./onboarding/CreateWallet/CreateWallet";
 import ImportWallet from "./onboarding/ImportWallet/ImportWallet";
-import * as backend from '../../Backend';
+import * as backend from '../../TauriBackend';
 import {Alert, AlertTitle} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/root-reducer";
@@ -16,8 +16,8 @@ import Terms from "./Terms";
 import NewVersionNotification from "./NewVersionNotification";
 import { onWalletClosed } from '../wallet/wallet-slice';
 
-let source = createMemorySource("/")
-let history = createHistory(source)
+// let source = createMemorySource("/")
+// let history = createHistory(source)
 
 // ****************************************************************************
 // Here we show login screen
@@ -29,10 +29,14 @@ enum CreationMode {
   Import = 1,
   Unknown = -1
 }
+import { listen, emit } from '@tauri-apps/api/event'
+import { appReady } from './app-slice';
+import { Events } from '../../../common/backend-types';
 
 const App = (props: any) => {
   const app = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [creationMode, setCreationMode] = React.useState<CreationMode>(CreationMode.Unknown);
 
@@ -40,7 +44,7 @@ const App = (props: any) => {
     const success = await backend.loadWallet(walletName);
     if (success) {
       setLoggedIn(true);
-      await history.navigate('wallet');
+      // navigate('wallet');
     }
   }
 
@@ -48,7 +52,7 @@ const App = (props: any) => {
     await backend.closeCurrentWallet();
     setLoggedIn(false);
     dispatch(onWalletClosed);
-    await history.navigate('/');
+    // navigate('/');
   }
 
   function handleCreateWallet() {
@@ -70,14 +74,16 @@ const App = (props: any) => {
 
   if (!app.ready) {
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Loading />
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Loading />
+        </ThemeProvider>
+      </StyledEngineProvider>
     );
   }
 
-  if (app.settings.termsVersion && (app.settings.termsVersion !== constants.termsVersion)) {
+  if (!app.settings.termsVersion || (app.settings.termsVersion !== constants.termsVersion)) {
     return (
       <Terms
         onAccepted={handleAcceptTerms}
@@ -129,20 +135,22 @@ const App = (props: any) => {
       );
     } else {
       content = (
-        <LocationProvider history={history}>
+        <BrowserRouter>
           <MainScreen onLogout={handleLogout}/>
-        </LocationProvider>
+        </BrowserRouter>
       );
     }
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {content}
-      <NewVersionNotification />
-      {/*<div>{props.width}</div>*/}
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {content}
+        <NewVersionNotification />
+        {/*<div>{props.width}</div>*/}
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

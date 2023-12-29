@@ -3,8 +3,9 @@ import {fromErg} from "../../../../common/utils";
 import {minBoxValue} from "../../../../common/constants";
 import {WalletBox} from "./Wallet";
 import {ErgoBoxSet} from "../../../../common/ErgoBoxSet";
+import { invoke } from "@tauri-apps/api/core";
 
-const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
+// const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 export interface UnsignedTransaction {
   inputs: Array<{
@@ -44,14 +45,14 @@ export default class TransactionBuilder {
     this.ergoContext = ergoContext;
   }
 
-  createErgTx(
+  async createErgTx(
     spendingBoxes: Array<WalletBox>,
     recipient: string,
     amount: string,
     fee: string,
     changeAddress: string,
     tokenId: string,
-  ): UnsignedTransaction {
+  ): Promise<UnsignedTransaction> {
     const spendingErgAmount = MoneyUnits.fromMainUnits(amount, 9);
     const feeAmount = fromErg(fee);
 
@@ -102,25 +103,30 @@ export default class TransactionBuilder {
       value: spendingErgAmount.amount
     });
 
-    const unsigned = Transaction.create(
-      tx.inputs,
-      tx.outputs,
-      BigInt(feeAmount.amount),
-      this.ergoContext.height
-    );
+    // const unsigned = Transaction.create(
+    //   tx.inputs,
+    //   tx.outputs,
+    //   BigInt(feeAmount.amount),
+    //   this.ergoContext.height
+    // );
 
-    tx.ergoTx = unsigned.to_json();
-    return tx;
+    tx.ergoTx = await invoke("create_tx", {
+      inputs: tx.inputs,
+      outputs: tx.outputs,
+      feeAmount: feeAmount.amount,
+      height: this.ergoContext.height
+    })
+    return Promise.resolve(tx);
   }
 
-  public createTokenTx(
+  public async createTokenTx(
     spendingBoxes: Array<WalletBox>,
     recipient: string,
     amount: string,
     fee: string,
     changeAddress: string,
     tokenId: string,
-  ): UnsignedTransaction {
+  ): Promise<UnsignedTransaction> {
     const feeAmount = fromErg(fee);
     const tx: UnsignedTransaction = {
       fee: feeAmount.amount,
@@ -183,26 +189,34 @@ export default class TransactionBuilder {
       value: recipientErgAmount.amount
     });
 
-    tx.ergoTx = Transaction.create(
-      tx.inputs,
-      tx.outputs,
-      BigInt(feeAmount.amount),
-      this.ergoContext.height
-    ).to_json();
+    // tx.ergoTx = Transaction.create(
+    //   tx.inputs,
+    //   tx.outputs,
+    //   BigInt(feeAmount.amount),
+    //   this.ergoContext.height
+    // ).to_json();
 
-    return tx;
+    // return tx;
+
+    tx.ergoTx = await invoke("create_tx", {
+      inputs: tx.inputs,
+      outputs: tx.outputs,
+      feeAmount: feeAmount.amount,
+      height: this.ergoContext.height
+    })
+    return Promise.resolve(tx);
   }
 
-  public create(
+  public async create(
     spendingBoxes: Array<string>,
     recipient: string,
     amount: string,
     fee: string,
     changeAddress: string,
     tokenId: string,
-  ): UnsignedTransaction {
-    this.assertAddress(recipient, `Invalid recipient address ${recipient}`);
-    this.assertAddress(changeAddress, `Invalid change address ${changeAddress}`);
+  ): Promise<UnsignedTransaction> {
+    await this.assertAddress(recipient, `Invalid recipient address ${recipient}`);
+    await this.assertAddress(changeAddress, `Invalid change address ${changeAddress}`);
 
     const fromBoxes = new Array<WalletBox>();
     spendingBoxes.forEach((id) => {
@@ -220,8 +234,9 @@ export default class TransactionBuilder {
     return this.createTokenTx(fromBoxes, recipient, amount, fee, changeAddress, tokenId);
   }
 
-  private assertAddress(address: string, errorMessage: string) {
-    if (Address.validate(address).length > 0) {
+  private async assertAddress(address: string, errorMessage: string) {
+    const result = await invoke("validate_address", { address })
+    if (!result) {
       throw new Error(errorMessage);
     }
   }

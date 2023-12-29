@@ -4,13 +4,14 @@ import {AdditionalRegisters} from "../../../ergoplatform/connector/types";
 import {MoneyUnits} from "../../../../common/MoneyUnits";
 import {minBoxValue} from "../../../../common/constants";
 
+//@ts-ignore
 const {Address, Transaction} = require("@ergowallet/ergowallet-wasm/ergowallet_wasm");
 
 describe('TransactionBuilder', () => {
   it('should create token transfer tx', () => {
     const token1 = "d3798defcd423bf9609e793959a0114322ce5c4181868341ae772d1a9054e9ca";
     const token2 = "0ecb00855050a124f4100fa9a29a57419961ccceb909d5cacb72f67a0ad53092";
-    const unspent = new Map<string, WalletBox>();
+    let unspent = new Map<string, WalletBox>();
     const context = {
       height: 320
     };
@@ -57,7 +58,7 @@ describe('TransactionBuilder', () => {
   });
 
   it('should create tx', () => {
-    const unspent = new Map<string, WalletBox>();
+    let unspent = new Map<string, WalletBox>();
     const context = {
       height: 320
     };
@@ -111,6 +112,5 @@ describe('TransactionBuilder', () => {
       BigInt(fee),
       0
     );
-
   });
 });

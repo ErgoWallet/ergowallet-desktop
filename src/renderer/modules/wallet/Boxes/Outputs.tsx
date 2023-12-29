@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shell } from 'electron';
+// import { shell } from 'electron';
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -29,7 +29,7 @@ function Row(props: { box: WalletBox; selected: boolean; onSelect: any }): React
   const { box, selected, onSelect } = props;
   const [open, setOpen] = React.useState(false);
   const handleBoxIdClick = () => {
-    shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
+    //shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
   };
   return (
     <React.Fragment>

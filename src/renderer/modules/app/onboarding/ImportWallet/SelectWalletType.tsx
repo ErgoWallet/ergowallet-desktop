@@ -20,16 +20,17 @@ export enum WalletType {
 // ****************************************************************************
 function SelectWalletType(props: {onSubmit?: any; onCancel?: any}) {
   const [type, setType] = React.useState(WalletType.Mnemonic);
+  const {onCancel, onSubmit } = props;
 
   function handleCancel() {
-    if (props.onCancel) {
-      props.onCancel();
+    if (onCancel) {
+      onCancel();
     }
   }
 
   function submit() {
-    if (props.onSubmit) {
-      props.onSubmit(type);
+    if (onSubmit) {
+      onSubmit(type);
     }
   }
 
@@ -41,7 +42,6 @@ function SelectWalletType(props: {onSubmit?: any; onCancel?: any}) {
     <React.Fragment>
       <Grid container direction="column" spacing={1}>
         <Grid item xs={12}>
-
           <FormControl component="fieldset">
             <FormLabel component="legend">Choose which wallet you want to import</FormLabel>
             <RadioGroup name="type" value={type} onChange={handleChange}>
@@ -56,7 +56,6 @@ function SelectWalletType(props: {onSubmit?: any; onCancel?: any}) {
                 label="Private Key" />
             </RadioGroup>
           </FormControl>
-
         </Grid>
         <Grid item xs={12}>
           <Box mt={2}>

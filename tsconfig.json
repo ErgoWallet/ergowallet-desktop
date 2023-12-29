@@ -7,13 +7,17 @@
     "rootDir": "./src",
     "esModuleInterop": true,
     "types": ["react", "jest"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    // "target": "ES2022",
+    // "module": "ES2022"
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts",
+    "src/**/*.stories.ts",
+    "src/stories/*.*",
     "node_modules"
   ]
 }

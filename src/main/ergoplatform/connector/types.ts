@@ -3,6 +3,10 @@ export interface Block {
   height: number;
 }
 
+export interface BlockHeader {
+
+}
+
 export interface AdditionalRegisters {
   R4: string;
   R5: string;

@@ -60,11 +60,11 @@ function InitWalletParams (props: InitWalletProps) {
   const canProceed = isValidForm();
   return (
     <Box>
-      <Grid container spacing={2} alignItems={'center'}>
-        <Grid item lg={3} md={3} sm={3}>
+      <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }} alignItems={'center'}>
+        <Grid item xs={4} md={3} sm={2}>
           Wallet name
         </Grid>
-        <Grid item lg={9} md={9} sm={9}>
+        <Grid item xs={4} md={9} sm={6}>
           <Input
             error={nameError !== ''}
             errorText={nameError}
@@ -74,21 +74,27 @@ function InitWalletParams (props: InitWalletProps) {
             required={true}
           />
         </Grid>
-        <Grid item lg={3} md={3} sm={3}>
+        <Grid item xs={4} md={3} sm={2}>
           Wallet password
         </Grid>
-        <Grid item lg={9} md={9} sm={9}>
-          <Input value={password} onChange={handlePasswordChange} fullWidth={true} type='password' required={true} />
+        <Grid item xs={4} md={9} sm={6}>
+          <Input 
+            value={password} 
+            onChange={handlePasswordChange} 
+            fullWidth={true} 
+            type='password' 
+            required={true} 
+          />
         </Grid>
-        <Grid item lg={3} md={3} sm={3}>
+        <Grid item xs={4} md={3} sm={2}>
           Confirm password
         </Grid>
-        <Grid item lg={9} md={9} sm={9}>
+        <Grid item xs={4} md={9} sm={6}>
           <Input fullWidth={true} type='password' required={true} />
         </Grid>
-        <Grid item lg={3} md={3} sm={3}>
+        <Grid item xs={4} md={3} sm={2}>
         </Grid>
-        <Grid item lg={9} md={9} sm={9}>
+        <Grid item xs={4} md={9} sm={6}>
           <Box mt={2}>
             <Button
               variant={"outlined"}
