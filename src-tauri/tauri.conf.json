@@ -79,7 +79,7 @@
       "hardenedRuntime": true,
       "minimumSystemVersion": "10.13"
     },
-    "targets": "all",
+    "targets": ["nsis", "appimage", "dmg"],
     "useLocalToolsDir": false,
     "windows": {
       "allowDowngrades": true,
