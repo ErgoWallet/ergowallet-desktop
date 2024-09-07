@@ -81,7 +81,7 @@ impl AppBuilder {
     pub fn run(self) {
         let setup = self.setup;
         tauri::Builder::default()
-            .plugin(tauri_plugin_window::init())
+            // .plugin(tauri_plugin_window::init())
             .plugin(tauri_plugin_shell::init())
             .plugin(tauri_plugin_store::Builder::default().build())
             .invoke_handler(tauri::generate_handler![
@@ -94,11 +94,13 @@ impl AppBuilder {
                 println!("App config dir: {}", app.path().app_config_dir().unwrap().to_str().unwrap());
                 println!("App data dir: {}", app.path().app_data_dir().unwrap().to_str().unwrap());
 
-                // set window title with application version
+                //TODO: set window title with application version
+                /*
                 if let Some(version) = &app.config().package.version {
                     let main_window = app.get_window("main").unwrap();
                     let _ = main_window.set_title(&format!("Ergo Wallet v{}", version));
                 }
+                */
 
                 let mut network_prefix = NetworkPrefix::Mainnet;
 
