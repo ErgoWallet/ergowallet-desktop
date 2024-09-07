@@ -31,7 +31,7 @@
     }
   },
   "bundle": {
-    "active": false,
+    "active": true,
     "android": {
       "minSdkVersion": 24
     },
