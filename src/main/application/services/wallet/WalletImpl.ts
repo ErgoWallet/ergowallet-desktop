@@ -204,7 +204,12 @@ export class WalletImpl extends EventEmitter implements Wallet {
           // Check whether input is our
           const unspentBox = this.unspentBoxes.get(input.id);
           if (unspentBox) {
-            unspentBox.spentTransactionId = tx.id;
+            // Output has been spent in this tx
+            const updatedBox = {
+              ...unspentBox,
+              spentTransactionId: tx.id
+            };
+            this.unspentBoxes.set(input.id, updatedBox);
           } 
         }
       });

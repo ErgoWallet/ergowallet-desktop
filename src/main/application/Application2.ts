@@ -21,6 +21,7 @@ import * as bip39 from '../../common/bip39';
 export class Application2 extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
   public static APP_LATEST_VERSION = 'LatestVersion';
+  public static CURRENT_HEIGHT_UPDATED = 'LatestBlockUpdated';
   public static WALLET_UPDATED = 'WalletUpdated';
   public static UNSPENT_LOADING = 'WalletUnspentLoading';
   public static TXS_LOADING = 'WalletHistoryLoading';
@@ -49,6 +50,7 @@ export class Application2 extends EventEmitter {
     this.blockchain = new BlockchainService(this.connector);
     this.blockchain.on(BlockchainService.HEIGHT_CHANGED_EVENT, (event) => {
       logger.debug(JSON.stringify(event));
+      this.emit(Application2.CURRENT_HEIGHT_UPDATED, event);
     });
     this.updater = new UpdateService();
     this.updater.on(UpdateService.CURRENT_VERSION_EVENT, (event) => {

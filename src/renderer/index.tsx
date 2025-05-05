@@ -12,7 +12,12 @@ import {
   onHistoryLoading,
   onUnspentLoading
 } from "./modules/wallet/wallet-slice";
-import { appLatestVersion, appReady, fetchAppSettings } from "./modules/app/app-slice";
+import { 
+  appLatestVersion, 
+  appReady, 
+  fetchAppSettings, 
+  onCurrentHeightUpdated 
+} from "./modules/app/app-slice";
 import { Event, Events } from "../common/backend-types";
 import { createRoot } from 'react-dom/client';
 import { Application2, app } from '../main/application/Application2';
@@ -61,6 +66,9 @@ app.on(Application2.SETTINGS_UPDATED, () => {
   store.dispatch(fetchAppSettings());
 })
 
+app.on(Application2.CURRENT_HEIGHT_UPDATED, (payload) => {
+  store.dispatch(onCurrentHeightUpdated(payload.height));
+});
 // Listen to Electron IPC events
 // ipcRenderer.on("events", (event: IpcRendererEvent, e: Event) => {
 //   console.log(e);
@@ -86,6 +94,7 @@ app.on(Application2.SETTINGS_UPDATED, () => {
 //     case Events.WALLET_UPDATED:
 //       store.dispatch(fetchUnspentBoxes());
 //       store.dispatch(fetchAddresses());
+
 //       break;
 
 //     case Events.APP_READY:

@@ -11,12 +11,14 @@ interface AppState {
   settings: {
     termsVersion?: string
   };
+  currentHeight: number | null;
 }
 
 const initialState: AppState = {
   ready: false,
   version: pkg.version,
-  settings: {}
+  settings: {},
+  currentHeight: null
 };
 
 const appSlice = createSlice({
@@ -32,6 +34,9 @@ const appSlice = createSlice({
     getSettingsSuccess(state, action: PayloadAction<any>) {
       state.settings = action.payload;
     },
+    onCurrentHeightUpdated(state, action: PayloadAction<number>) {
+      state.currentHeight = action.payload;
+    },
   }
 });
 
@@ -39,7 +44,8 @@ const appSlice = createSlice({
 export const {
   appReady,
   appLatestVersion,
-  getSettingsSuccess
+  getSettingsSuccess,
+  onCurrentHeightUpdated
 } = appSlice.actions;
 
 export const fetchAppSettings = (): AppThunk => async dispatch => {
