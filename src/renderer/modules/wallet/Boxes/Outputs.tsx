@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
 import { explorerBaseUri } from "../../../config";
 import { sortBy } from 'lodash';
+import { StoragePeriod } from '../../../../common/constants';
 
 const useRowStyles = {
   '& > *': {
@@ -39,6 +40,8 @@ function Row(
   const handleBoxIdClick = () => {
     //shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
   };
+  const ageBlocks = currentHeight - box.creationHeight;
+  const leftBlocks = StoragePeriod - ageBlocks;
   return (
     <React.Fragment>
       <TableRow sx={useRowStyles}>
@@ -68,7 +71,7 @@ function Row(
           </Box>
         </TableCell>
         <TableCell>
-          {currentHeight - box.creationHeight}
+          {ageBlocks} ({leftBlocks} blocks left)
         </TableCell>
         <TableCell align="right">
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
