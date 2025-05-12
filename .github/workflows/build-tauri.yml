@@ -42,9 +42,13 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm i
-    # - run: npm run build
+        cache: 'pnpm'
+        
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - run: pnpm install
+    - run: pnpm run build
     # - run: npm run test
     # - run: npm run tauri build --release
     #- uses: actions/upload-artifact@v3

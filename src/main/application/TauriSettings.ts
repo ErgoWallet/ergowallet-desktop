@@ -1,7 +1,7 @@
-import { Store } from "@tauri-apps/plugin-store";
+import { LazyStore } from "@tauri-apps/plugin-store";
 import { v4 as uuidv4 } from 'uuid';
 
-const store = new Store(".settings.dat");
+const store = new LazyStore(".settings.dat");
 const settingsVersion = "v0";
 
 type SettingsData = {

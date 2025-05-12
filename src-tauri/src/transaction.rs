@@ -1,19 +1,23 @@
-
 use ergo_lib::{
     chain::{
         self,
         contract::Contract,
-        transaction::{TxIoVec, UnsignedInput}, ergo_state_context::{ErgoStateContext, Headers},
+        ergo_state_context::{ErgoStateContext, Headers},
+        transaction::{TxIoVec, UnsignedInput},
     },
     ergo_chain_types::{Base16DecodedBytes, Digest32, Header, PreHeader},
-    ergotree_interpreter::sigma_protocol::{prover::{ContextExtension, TestProver}, private_input::{PrivateInput, DlogProverInput}},
+    ergotree_interpreter::sigma_protocol::{
+        private_input::{DlogProverInput, PrivateInput},
+        prover::{ContextExtension, TestProver},
+    },
     ergotree_ir::chain::{
         address::{AddressEncoder, NetworkPrefix},
         ergo_box::{
-            box_value::BoxValue, BoxId, BoxTokens, ErgoBoxCandidate, NonMandatoryRegisters, ErgoBox,
+            box_value::BoxValue, BoxId, BoxTokens, ErgoBox, ErgoBoxCandidate, NonMandatoryRegisters,
         },
         token::{Token, TokenAmount, TokenId},
-    }, wallet::{tx_context::TransactionContext, signing::sign_transaction},
+    },
+    wallet::{signing::sign_transaction, tx_context::TransactionContext},
 };
 use serde::{Deserialize, Serialize};
 
@@ -141,25 +145,20 @@ impl Transaction {
         };
 
         // 2. Construct unsigned transaction
-        let tx_context = TransactionContext::new(
-            tx.clone().0,
-            boxes_to_spend,
-            vec![]
-        ).unwrap();
-
+        let tx_context = TransactionContext::new(tx.clone().0, boxes_to_spend, vec![]).unwrap();
 
         let pre_header = PreHeader::from(headers[0].clone());
         let res = sign_transaction(
             &prover,
             tx_context,
             &ErgoStateContext::new(pre_header, headers),
-            None
-        ).unwrap();
-
+            None,
+        )
+        .unwrap();
 
         Ok(Transaction(res))
     }
-    
+
     fn fee_box_candidate(fee_amount: u64, creation_height: u32) -> ErgoBoxCandidate {
         let address_encoder = AddressEncoder::new(NetworkPrefix::Mainnet);
         let miner_fee_address = address_encoder

@@ -7,10 +7,10 @@ pub fn from_pub_key(pub_key: &[u8], network: NetworkPrefix) -> String {
 }
 
 pub fn validate(address: &str, network: NetworkPrefix) -> bool {
-  let encoder = AddressEncoder::new(network);
-  let result = encoder.parse_address_from_str(address);
-  match result {
-      Ok(_addr) => true,
-      Err(_err) => false,
-  }
+    let encoder = AddressEncoder::new(network);
+    let result = encoder.parse_address_from_str(address);
+    match result {
+        Ok(_addr) => true,
+        Err(_err) => false,
+    }
 }

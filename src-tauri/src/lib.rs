@@ -1,9 +1,9 @@
-use std::sync::Mutex;
 use ergo_lib::{
     chain::ergo_state_context::Headers,
     ergotree_ir::chain::{address::NetworkPrefix, ergo_box::ErgoBox},
 };
 use serde_json::Value;
+use std::sync::Mutex;
 use tauri::{App, Manager};
 use tauri_plugin_cli::CliExt;
 
@@ -18,13 +18,13 @@ mod address;
 mod transaction;
 mod wallet;
 
+use crate::wallet::Wallet;
 use hex;
 use transaction::{Transaction, TxInput, TxOutput, UnsignedTransaction};
-use crate::wallet::Wallet;
 
 struct AppState {
     network: NetworkPrefix,
-    wallet: Mutex<Option<Wallet>>
+    wallet: Mutex<Option<Wallet>>,
 }
 
 #[tauri::command]
@@ -81,6 +81,8 @@ impl AppBuilder {
     pub fn run(self) {
         let setup = self.setup;
         tauri::Builder::default()
+            .plugin(tauri_plugin_store::Builder::new().build())
+            .plugin(tauri_plugin_http::init())
             // .plugin(tauri_plugin_window::init())
             .plugin(tauri_plugin_shell::init())
             .plugin(tauri_plugin_store::Builder::default().build())
@@ -91,8 +93,14 @@ impl AppBuilder {
                 sign_tx
             ])
             .setup(move |app| {
-                println!("App config dir: {}", app.path().app_config_dir().unwrap().to_str().unwrap());
-                println!("App data dir: {}", app.path().app_data_dir().unwrap().to_str().unwrap());
+                println!(
+                    "App config dir: {}",
+                    app.path().app_config_dir().unwrap().to_str().unwrap()
+                );
+                println!(
+                    "App data dir: {}",
+                    app.path().app_data_dir().unwrap().to_str().unwrap()
+                );
 
                 //TODO: set window title with application version
                 /*
@@ -111,17 +119,15 @@ impl AppBuilder {
                     let matches = app.cli().matches().unwrap();
                     for (arg, data) in matches.args {
                         match arg.as_str() {
-                            "network" => {
-                                match data.value {
-                                    Value::String(s) => {
-                                        if s == "testnet" {
-                                          network_prefix = NetworkPrefix::Testnet
-                                        } 
-                                    },
-                                    Value::Null => {},
-                                    _ => panic!("Wrong value of network type"),
+                            "network" => match data.value {
+                                Value::String(s) => {
+                                    if s == "testnet" {
+                                        network_prefix = NetworkPrefix::Testnet
+                                    }
                                 }
-                            }
+                                Value::Null => {}
+                                _ => panic!("Wrong value of network type"),
+                            },
                             &_ => {}
                         }
                     }
@@ -130,7 +136,7 @@ impl AppBuilder {
 
                 app.manage(AppState {
                     network: network_prefix,
-                    wallet: Default::default()
+                    wallet: Default::default(),
                 });
 
                 if let Some(setup) = setup {

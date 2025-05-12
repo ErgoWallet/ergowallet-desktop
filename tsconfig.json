@@ -2,11 +2,11 @@
   "compilerOptions": {
     "lib": ["ES2015", "DOM"],
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "./app",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "types": ["react", "jest"],
+    "types": ["react", "react-dom", "jest"],
     "resolveJsonModule": true,
     // "target": "ES2022",
     // "module": "ES2022"

@@ -9,18 +9,18 @@ Non-custodial desktop wallet for [Ergo Platform](https://ergoplatform.org) block
 
 Install dependencies
 ```
-$ npm install
+$ pnpm install
 ```
 
 Start application
 ```
-$ npm run tauri dev
+$ pnpm tauri dev
 ```
 
 ### How to build
 ```
-$ npm run build
-$ npm run dist
+$ pnpm run build
+$ pnpm run dist
 ```
 
 ### How to verify checksums of release

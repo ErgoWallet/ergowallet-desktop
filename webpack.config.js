@@ -78,7 +78,10 @@ const config = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.tsx', '.ts']
+    extensions: ['.js', '.tsx', '.ts'],
+    fallback: {
+      events: require.resolve('events/')
+    }
   }
 }
 

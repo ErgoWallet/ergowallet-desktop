@@ -1,7 +1,3 @@
-// import { getClient, ResponseType } from '@tauri-apps/plugin-http';
+import { fetch } from '@tauri-apps/plugin-http';
+export default fetch;
 
-
-export default async function get(url: string, options?: any) {
-  // const client = await getClient();
-  // return await client.get(url, options);
-}
