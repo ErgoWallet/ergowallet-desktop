@@ -19,7 +19,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
 import { explorerBaseUri } from "../../../config";
 import { sortBy } from 'lodash';
-import { StoragePeriod } from '../../../../common/constants';
+import { BlocksPerDay, StoragePeriod } from '../../../../common/constants';
 
 const useRowStyles = {
   '& > *': {
@@ -42,6 +42,7 @@ function Row(
   };
   const ageBlocks = currentHeight - box.creationHeight;
   const leftBlocks = StoragePeriod - ageBlocks;
+  const leftDays = Math.floor(leftBlocks / BlocksPerDay);
   return (
     <React.Fragment>
       <TableRow sx={useRowStyles}>
@@ -71,7 +72,7 @@ function Row(
           </Box>
         </TableCell>
         <TableCell>
-          {ageBlocks} ({leftBlocks} blocks left)
+          {ageBlocks} ({leftDays} days left)
         </TableCell>
         <TableCell align="right">
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
