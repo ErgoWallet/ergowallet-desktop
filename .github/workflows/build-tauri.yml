@@ -43,9 +43,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
-        
-    - name: Install pnpm
-      run: npm install -g pnpm
+    
+    - name: Set up pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 10
+        run_install: false
 
     - run: pnpm install
     - run: pnpm run build
