@@ -42,7 +42,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+        #cache: 'pnpm'
     
     - name: Set up pnpm
       uses: pnpm/action-setup@v3
