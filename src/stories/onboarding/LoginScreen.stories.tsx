@@ -1,5 +1,5 @@
 import LoginScreen from '../../renderer/modules/app/login/LoginScreen';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof LoginScreen> = {
     title: 'Onboarding/LoginScreen',

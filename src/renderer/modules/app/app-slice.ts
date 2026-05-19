@@ -1,8 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppThunk} from "../../store/store";
 import * as backend from "../../backend";
-
-const pkg = require('../../../../package.json');
+import version from "./version";
 
 interface AppState {
   ready: boolean;
@@ -16,7 +15,7 @@ interface AppState {
 
 const initialState: AppState = {
   ready: false,
-  version: pkg.version,
+  version: version,
   settings: {},
   currentHeight: null
 };

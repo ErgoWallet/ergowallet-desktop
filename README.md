@@ -23,6 +23,11 @@ $ pnpm run build
 $ pnpm run dist
 ```
 
+### Create distibutives
+```
+pnpm tauri build
+```
+
 ### How to verify checksums of release
 
 MacOS, Linux, or Windows with gitbash: `shasum -a 256 <filename>`
@@ -31,4 +36,4 @@ Windows with cmd `certutil -hashfile <filename> SHA256`
 
 ### Help & Support
 
-https://support.ergowallet.io/
+https://ergowallet.io/support

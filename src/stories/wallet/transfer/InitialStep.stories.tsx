@@ -1,6 +1,6 @@
 import { AdditionalRegisters } from '../../../main/ergoplatform/connector/types';
 import InitialStep from '../../../renderer/modules/wallet/transfer/InitialStep';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof InitialStep> = {
     title: 'Wallet/transfer/InitialStep',

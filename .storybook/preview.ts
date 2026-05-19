@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/react-webpack5";
 
 const preview: Preview = {
   parameters: {
@@ -15,6 +15,9 @@ const preview: Preview = {
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import theme from '../src/renderer/ui/theme';
+
+// Tailwind CSS
+import '../src/renderer/index.css';
 
 /* snipped for brevity */
 

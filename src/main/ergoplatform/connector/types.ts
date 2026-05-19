@@ -47,8 +47,10 @@ export interface AddressSummary {
 
 export interface Transaction {
   id: string;
+  headerId: string;
   timestamp: bigint;
   inclusionHeight: number;
+  creationTimestamp: any;
   size: number;
   confirmationsCount: number;
   inputs: Array<Input>;

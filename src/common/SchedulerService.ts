@@ -1,8 +1,36 @@
-import {EventEmitter} from 'events';
+// import {EventEmitter} from 'events';
+
+// export class SchedulerService extends EventEmitter {
+//   private readonly action: () => void;
+//   private timer: NodeJS.Timeout;
+//   private readonly interval: number;
+
+//   constructor(action: () => void, ms: number) {
+//     super();
+//     this.action = action;
+//     this.interval = ms;
+//   }
+
+//   public start(): void {
+//     if (!this.timer) {
+//       this.addListener('run', this.action);
+//       this.timer = global.setInterval(() => this.emit('run'), this.interval);
+//     }
+//   }
+
+//   public stop(): void {
+//     if (this.timer) {
+//       clearInterval(this.timer);
+//       this.removeAllListeners('run');
+//     }
+//   }
+// }
+
+import { EventEmitter } from 'events';
 
 export class SchedulerService extends EventEmitter {
   private readonly action: () => void;
-  private timer: NodeJS.Timeout;
+  private timer: ReturnType<typeof setInterval> | null = null;
   private readonly interval: number;
 
   constructor(action: () => void, ms: number) {
@@ -14,13 +42,17 @@ export class SchedulerService extends EventEmitter {
   public start(): void {
     if (!this.timer) {
       this.addListener('run', this.action);
-      this.timer = global.setInterval(() => this.emit('run'), this.interval);
+
+      this.timer = setInterval(() => {
+        this.emit('run');
+      }, this.interval);
     }
   }
 
   public stop(): void {
     if (this.timer) {
       clearInterval(this.timer);
+      this.timer = null;
       this.removeAllListeners('run');
     }
   }

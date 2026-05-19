@@ -1,19 +1,31 @@
 {
   "compilerOptions": {
-    "lib": ["ES2015", "DOM"],
+    "lib": [
+      "ES2015",
+      "DOM"
+    ],
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "outDir": "./app",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "types": ["react", "react-dom", "jest"],
+    "types": [
+      "react",
+      "react-dom",
+      "jest"
+    ],
     "resolveJsonModule": true,
     // "target": "ES2022",
     // "module": "ES2022"
+
+    /* Linting */
+    //"strict": true,
+    //"noUnusedLocals": true,
+    //"noUnusedParameters": true,
+    //"noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/main/main-window.ts_obsolete"  ],
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*.stories.ts",

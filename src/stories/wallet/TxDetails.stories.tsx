@@ -1,5 +1,5 @@
 import { TxDetailsDialogView } from '../../renderer/modules/wallet/Transactions/TxDetailsDialog';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta: Meta<typeof TxDetailsDialogView> = {

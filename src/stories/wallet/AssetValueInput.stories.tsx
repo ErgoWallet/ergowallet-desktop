@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import AssetValueInput from '../../renderer/modules/wallet/transfer/AssetValueInput';
 
 const meta: Meta<typeof AssetValueInput> = {

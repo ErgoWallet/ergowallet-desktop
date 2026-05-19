@@ -1,5 +1,5 @@
 import InitWalletParams from '../../renderer/modules/app/onboarding/InitWalletParams';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof InitWalletParams> = {
     title: 'Onboarding/InitWalletParams',

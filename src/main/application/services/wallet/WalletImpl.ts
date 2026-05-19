@@ -77,7 +77,7 @@ export class WalletImpl extends EventEmitter implements Wallet {
 
   public async signTransaction(tx: UnsignedTransaction, headers: any): Promise<SignedTransaction> {
     const boxesToSpend = [];
-    const privateKeys = [];
+    const privateKeys: string[] = [];
     tx.ergoTx.inputs.forEach((input) => {
       const box = this.unspentBoxes.get(input.boxId);
       const ergBox = {
@@ -162,6 +162,8 @@ export class WalletImpl extends EventEmitter implements Wallet {
     transactions.forEach((tx: Transaction | UnconfirmedTransaction) => {
 
       const timestamp = (tx as Transaction).timestamp || (tx as UnconfirmedTransaction).creationTimestamp;
+      //TODO: Solve it!
+      //@ts-ignore
       const walletTx: WalletTx = {
         ...tx,
         timestamp,

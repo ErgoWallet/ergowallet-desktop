@@ -1,9 +1,7 @@
 import * as React from 'react';
 import {Box, Link} from "@mui/material";
 // import {shell} from 'electron';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pkg = require('../../../../package.json');
+import version from '../app/version';
 
 function About() {
   const handleReportClick = () => {
@@ -12,7 +10,7 @@ function About() {
 
   return (
     <Box>
-      <Box>Ergo Wallet v{pkg.version}</Box>
+      <Box>Ergo Wallet v{version}</Box>
       <Box mt={1}>
         <Link onClick={handleReportClick} href="#" variant="body2">
           Report an issue

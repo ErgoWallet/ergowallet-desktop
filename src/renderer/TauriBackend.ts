@@ -5,7 +5,6 @@ import {app} from "../main/application/Application2";
 import {WalletBox} from "../main/application/services/wallet/Wallet";
 
 
-
 export function getSettings(): Promise<any> {
   return app.getSettings();
   // return ipcRenderer.invoke(Commands.APP_GET_SETTINGS);

@@ -1,5 +1,5 @@
 import ConfirmationStep from '../../../renderer/modules/wallet/transfer/ConfirmationStep';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof ConfirmationStep> = {
     title: 'Wallet/transfer/ConfirmationStep',

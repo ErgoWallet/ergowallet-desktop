@@ -1,5 +1,5 @@
 import NewMnemonic from '../../../renderer/modules/app/onboarding/CreateWallet/NewMnemonic';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof NewMnemonic> = {
     title: 'Wallet/mnemonic/NewMnemonic',

@@ -1,0 +1,32 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Commands = exports.Events = void 0;
+var Events;
+(function (Events) {
+    Events["WALLET_UPDATED"] = "wallet-updated";
+    Events["WALLET_LOADING_HISTORY"] = "wallet-txs-loading";
+    Events["WALLET_LOADING_UNSPENT"] = "wallet-unspent-loading";
+    Events["APP_READY"] = "app-ready";
+    Events["APP_LATEST_VERSION"] = "app-latest-version";
+    Events["SETTINGS_UPDATED"] = "settings-updated";
+})(Events || (exports.Events = Events = {}));
+var Commands;
+(function (Commands) {
+    Commands["APP_UPDATE_SETTINGS"] = "update-settings";
+    Commands["APP_GET_SETTINGS"] = "get-settings";
+    Commands["GENERATE_MNEMONIC"] = "generate-mnemonic";
+    Commands["VAULT_GET_WALLETS"] = "get-all-wallets";
+    Commands["VAULT_IMPORT_WALLET"] = "import-mnemonic";
+    Commands["VAULT_IMPORT_PRIVATE_KEY"] = "import-private-key";
+    Commands["VAULT_WALLET_EXISTS"] = "check-wallet-name";
+    Commands["LOAD_WALLET"] = "load-wallet";
+    Commands["CLOSE_WALLET"] = "close-wallet";
+    Commands["WALLET_GET_ADDRESSES"] = "wallet-get-addresses";
+    Commands["WALLET_GET_UNSPENT"] = "wallet-get-unspent-boxes";
+    Commands["WALLET_GET_TRANSACTIONS"] = "wallet-get-txs";
+    Commands["WALLET_GET_TX"] = "wallet-get-tx";
+    Commands["WALLET_CREATE_TX"] = "wallet-create-tx";
+    Commands["WALLET_SIGN_TX"] = "wallet-sign-tx";
+    Commands["WALLET_SEND_TX"] = "wallet-send-tx";
+    Commands["VALIDATE_ADDRESS"] = "validate-address";
+})(Commands || (exports.Commands = Commands = {}));

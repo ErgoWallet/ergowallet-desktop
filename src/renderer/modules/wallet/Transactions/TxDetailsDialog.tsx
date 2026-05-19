@@ -55,7 +55,7 @@ function TxDetailsDialog(props: TxDetailsProps) {
 export default TxDetailsDialog;
 
 export function TxDetailsDialogView(
-  props: { tx: WalletTx, open: boolean, onClose: any, onTxClick }
+  props: { tx: WalletTx, open: boolean, onClose: any, onTxClick: any }
   ) {
   const theme = useTheme();
   const closeButtonStyle = {

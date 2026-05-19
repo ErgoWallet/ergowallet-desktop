@@ -1,5 +1,5 @@
 import TransactionList from '../../renderer/modules/wallet/Transactions/TransactionList';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TransactionList> = {
     title: 'Wallet/TransactionList',
