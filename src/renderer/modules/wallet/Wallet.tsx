@@ -32,6 +32,7 @@ function TabPanel(props: TabPanelProps) {
 
 function Wallet(props: any) {
   const wallet = useSelector((state: RootState) => state.wallet);
+  const app = useSelector((state: RootState) => state.app);
   const [tab, setTab] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: number) => {
@@ -65,7 +66,7 @@ function Wallet(props: any) {
       </Tabs>
       <Paper>
         <TabPanel value={tab} index={0}>
-          <Outputs/>
+          <Outputs currentHeight={app.currentHeight!}/>
         </TabPanel>
         <TabPanel value={tab} index={1}>
           <Transactions/>

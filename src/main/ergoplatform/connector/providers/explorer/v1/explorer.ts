@@ -1,7 +1,7 @@
-import {Provider} from "../../../Provider";
-import {default as fetch} from 'node-fetch';
-import {AddressTransactionsResponse, TransactionsResponse, TransItem} from "./responses";
-import {AddressSummary, Block, Output, Input, Transaction} from "../../../types";
+import { Provider } from "../../../Provider";
+import { default as fetch } from "../node-fetch";
+import { AddressTransactionsResponse, TransactionsResponse, TransItem } from "./responses";
+import { AddressSummary, Block, Output, Input, Transaction } from "../../../types";
 import { max } from "lodash";
 
 export class ExplorerClient implements Provider {
@@ -9,6 +9,12 @@ export class ExplorerClient implements Provider {
 
   constructor(baseUri: string) {
     this.baseUri = baseUri;
+  }
+
+  async getLatestBlockHeaders(num: number): Promise<any> {
+    const url = `${this.baseUri}/blocks/headers?limit=${num}`;
+    const response = await ExplorerClient.api<any>(url);
+    return response;
   }
 
   public async sendTransaction(tx: any): Promise<string> {
@@ -60,7 +66,7 @@ export class ExplorerClient implements Provider {
       const url = `${this.baseUri}/boxes/unspent/byAddress/${address}?offset=${offset}&limit=${limit}`;
       const resp = await ExplorerClient.api<{ items: Array<any>, total: number }>(url);
       total = max([total, resp.total]);
-      const dto = resp.items.map(i => <Output>{
+      const dto = resp.items.map(i => ({
         id: i.boxId,
         txId: i.transactionId,
         index: i.index,
@@ -71,7 +77,7 @@ export class ExplorerClient implements Provider {
         spentTransactionId: i.spentTransactionId,
         assets: i.assets,
         additionalRegisters: i.additionalRegisters
-      });
+      }) as Output);
       result.push(...dto);
       offset += limit;
     } while (result.length < total && total > 0);
@@ -92,17 +98,17 @@ export class ExplorerClient implements Provider {
     const result = await ExplorerClient.api<{ total: number, items: Array<any> }>(url);
     return {
       total: result.total,
-      items: result.items.map(i => <Transaction>{
+      items: result.items.map(i => ({
         id: i.id,
         // headerId: i.blockId,
         inclusionHeight: i.inclusionHeight,
         timestamp: i.timestamp, 
         // creationTimestamp: i.creationTimestamp,
         confirmationsCount: i.numConfirmations,
-        inputs: i.inputs.map(x => <Input>{id: x.boxId, txId: x.transactionId, ...x}),
-        outputs: i.outputs.map(x => <Output>{id: x.boxId, txId: x.transactionId, ...x}),
+        inputs: i.inputs.map((x):Input => ({id: x.boxId, txId: x.transactionId, ...x})),
+        outputs: i.outputs.map((x):Output => ({id: x.boxId, txId: x.transactionId, ...x})),
         size: i.size
-      })
+      }) as Transaction)
     };
   }
 
@@ -111,17 +117,17 @@ export class ExplorerClient implements Provider {
     const result = await ExplorerClient.api<{ total: number, items: Array<any> }>(url);
     return {
       total: result.total,
-      items: result.items.map(i => <Transaction>{
+      items: result.items.map((i):Transaction => ({
         id: i.id,
         headerId: i.blockId,
         inclusionHeight: i.inclusionHeight,
         timestamp: i.timestamp, 
         creationTimestamp: i.creationTimestamp,
         confirmationsCount: i.numConfirmations,
-        inputs: i.inputs.map(x => <Input>{id: x.boxId, txId: x.transactionId, ...x}),
-        outputs: i.outputs.map(x => <Output>{id: x.boxId, txId: x.transactionId, ...x}),
+        inputs: i.inputs.map((x):Input => ({id: x.boxId, txId: x.transactionId, ...x})),
+        outputs: i.outputs.map((x):Output => ({id: x.boxId, txId: x.transactionId, ...x})),
         size: i.size
-      })
+      }))
     };
   }
 
@@ -138,6 +144,6 @@ export class ExplorerClient implements Provider {
       console.error(body);
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-    return response.json<T>();
+    return response.json() as Promise<T>;
   }
 }

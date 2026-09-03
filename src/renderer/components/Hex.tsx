@@ -4,16 +4,20 @@ import { PropsWithChildren } from 'react';
 
 interface HexProps {
   backgroundColor?: any;
-  
 }
 
 function Hex(props: PropsWithChildren<HexProps>): React.ReactElement {
   const { children, backgroundColor } = props;
   return (
-    <Box component={"span"} sx={{backgroundColor: backgroundColor, fontFamily: '"Roboto Mono", monospace'}}>
+    <Box component={"span"}
+      sx={{
+        overflowWrap: 'anywhere',
+        backgroundColor: backgroundColor,
+        fontFamily: '"Roboto Mono", monospace'
+      }}>
       {children}
     </Box>
-    );
+  );
 }
 
 export default Hex;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shell } from 'electron';
+// import { shell } from 'electron';
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -18,6 +18,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { WalletBox } from "../../../../main/application/services/wallet/Wallet";
 import { explorerBaseUri } from "../../../config";
+import { sortBy } from 'lodash';
+import { BlocksPerDay, StoragePeriod } from '../../../../common/constants';
 
 const useRowStyles = {
   '& > *': {
@@ -25,12 +27,22 @@ const useRowStyles = {
   },
 };
 
-function Row(props: { box: WalletBox; selected: boolean; onSelect: any }): React.ReactElement {
-  const { box, selected, onSelect } = props;
+function Row(
+  props: { 
+    box: WalletBox;
+    selected: boolean;
+    onSelect: any;
+    currentHeight: number
+  }
+): React.ReactElement {
+  const { box, selected, onSelect, currentHeight } = props;
   const [open, setOpen] = React.useState(false);
   const handleBoxIdClick = () => {
-    shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
+    //shell.openExternal(`${explorerBaseUri}/box/${box.boxId}`);
   };
+  const ageBlocks = currentHeight - box.creationHeight;
+  const leftBlocks = StoragePeriod - ageBlocks;
+  const leftDays = Math.floor(leftBlocks / BlocksPerDay);
   return (
     <React.Fragment>
       <TableRow sx={useRowStyles}>
@@ -60,6 +72,9 @@ function Row(props: { box: WalletBox; selected: boolean; onSelect: any }): React
           </Box>
         </TableCell>
         <TableCell>
+          {ageBlocks} ({leftDays} days left)
+        </TableCell>
+        <TableCell align="right">
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -83,7 +98,8 @@ function Row(props: { box: WalletBox; selected: boolean; onSelect: any }): React
   );
 }
 
-function Outputs(): React.ReactElement {
+function Outputs(props: { currentHeight: number }): React.ReactElement {
+  const { currentHeight } = props;
   const dispatch = useDispatch();
   const wallet: WalletState = useSelector<RootState, WalletState>((state: RootState) => state.wallet);
   const [selected, setSelected] = React.useState<string[]>([]);
@@ -130,7 +146,8 @@ function Outputs(): React.ReactElement {
 
   const numSelected = selected?.length;
   const rowCount = wallet.boxes.length;
-  const selectedBoxes = wallet.boxes.filter((b) => selected.includes(b.boxId));
+  const allBoxesSorted = sortBy(wallet.boxes, (b) => b.creationHeight);
+  const selectedBoxes = allBoxesSorted.filter((b) => selected.includes(b.boxId));
 
   return (
     <>
@@ -147,16 +164,18 @@ function Outputs(): React.ReactElement {
             <TableCell>Address</TableCell>
             <TableCell>ERG</TableCell>
             <TableCell align="left">Assets</TableCell>
+            <TableCell>Age (blocks)</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
-          {wallet.boxes.map((box) => (
+          {allBoxesSorted.map((box) => (
             <Row
               key={box.boxId}
               box={box}
               selected={isItemSelected(box)}
               onSelect={(event) => handleClick(event, box)}
+              currentHeight={currentHeight}
             />
           ))}
         </TableBody>

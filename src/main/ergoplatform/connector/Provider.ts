@@ -2,6 +2,7 @@ import {AddressSummary, Block, Output, Transaction} from "./types";
 
 export interface Provider {
   getLatestBlock(): Promise<Block>;
+  getLatestBlockHeaders(num: number): Promise<any>;
   getBlocks(): Promise<{items: Array<Block>; total: number}>;
   getUnspentOutputs(address: string): Promise<Array<Output>>;
   getAddressSummary(address: string): Promise<AddressSummary>;

@@ -6,15 +6,16 @@ import {ExplorerClient} from '../ergoplatform/connector/providers/explorer/v1/ex
 import {ExplorerClient as ExplorerClientV0} from '../ergoplatform/connector/providers/explorer/v0/explorer';
 import {Vault} from "./services/vault/Vault";
 import {Wallet, WalletBox, WalletTx} from './services/wallet/Wallet';
-import {WalletImpl} from "./services/wallet/WalletImpl";
+import {WalletImpl, buildWallet} from "./services/wallet/WalletImpl";
 import {BlockchainService} from './services/blockchain/BlockchainService';
 import {UpdateService} from "./services/updater/UpdateService";
-import * as bip39 from 'bip39';
+// import * as bip39 from 'bip39';
 import {SignedTransaction, UnsignedTransaction} from "./services/wallet/TransactionBuilder";
 import {EventEmitter} from 'events';
-import Settings from "./Settings";
+import Settings from "./ElectronSettings";
 import _ from "lodash";
 import logger from "./logger";
+import WasmSigner from './services/wallet/WasmSigner';
 
 export default class Application extends EventEmitter {
   public static APP_READY_EVENT = 'AppReady';
@@ -80,7 +81,8 @@ export default class Application extends EventEmitter {
   }
 
   public generateMnemonic(): string {
-    return bip39.generateMnemonic(128);
+    return '';
+    // return bip39.generateMnemonic(128);
   }
 
   public getWallets(): Array<any> {
@@ -100,15 +102,16 @@ export default class Application extends EventEmitter {
     return this.vault.importWallet(walletName, mnemonic, passphrase, walletPassword);
   }
 
-  public loadWallet(walletName: string, walletPassword: string): boolean {
+  public async loadWallet(walletName: string, walletPassword: string): Promise<boolean> {
     const bip39Data = this.vault.getWalletData(walletName);
 
     logger.info(`Loading wallet [${walletName}]`);
 
-    const wallet = new WalletImpl(
+    const wallet = await buildWallet(
       bip39Data,
       this.connector,
-    );
+      new WasmSigner()
+    ) as WalletImpl;
     wallet.on(WalletImpl.UPDATED_EVENT, () => {
       this.emit('WalletUpdated');
     });
@@ -179,11 +182,15 @@ export default class Application extends EventEmitter {
     this.currentWallet = null;
   }
 
-  public validateAddress(address: string): string {
-    return WalletImpl.validateAddress(address);
+  public validateAddress(address: string): Promise<string> {
+    if (this.currentWallet != null) {
+      return this.currentWallet.validateAddress(address);
+    }
+    return Promise.resolve(null);
   }
 
-  public createTx(spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
+  public createTx(
+    spendingBoxes: Array<string>, recipient: string, amount: string, fee: string, tokenId: string) {
     if (this.currentWallet != null) {
       const height = this.blockchain.currentHeight;
       if (!height) {
@@ -195,9 +202,9 @@ export default class Application extends EventEmitter {
     throw new Error('There is no loaded wallet');
   }
 
-  public signTx(tx: UnsignedTransaction): SignedTransaction {
+  public signTx(tx: UnsignedTransaction): Promise<SignedTransaction> {
     if (this.currentWallet != null) {
-      return this.currentWallet.signTransaction(tx);
+      return this.currentWallet.signTransaction(tx, []);
     }
     throw new Error('There is no loaded wallet');
   }

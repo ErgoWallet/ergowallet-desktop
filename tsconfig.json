@@ -1,19 +1,36 @@
 {
   "compilerOptions": {
-    "lib": ["ES2015", "DOM"],
+
     "skipLibCheck": true,
-    "jsx": "react",
-    "outDir": "./app",
+    "jsx": "react-jsx",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "types": ["react", "jest"],
-    "resolveJsonModule": true
+    "types": [
+      "react",
+      "react-dom",
+      "jest"
+    ],
+
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+
+    /* Linting */
+    //"strict": true,
+    //"noUnusedLocals": true,
+    //"noUnusedParameters": true,
+    //"noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts",
+    "src/**/*.stories.ts",
+    "src/stories/*.*",
     "node_modules"
   ]
 }

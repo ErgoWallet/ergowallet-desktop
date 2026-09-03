@@ -1,8 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppThunk} from "../../store/store";
-import * as backend from "../../Backend";
-
-const pkg = require('../../../../package.json');
+import * as backend from "../../backend";
+import version from "./version";
 
 interface AppState {
   ready: boolean;
@@ -11,12 +10,14 @@ interface AppState {
   settings: {
     termsVersion?: string
   };
+  currentHeight: number | null;
 }
 
 const initialState: AppState = {
   ready: false,
-  version: pkg.version,
-  settings: {}
+  version: version,
+  settings: {},
+  currentHeight: null
 };
 
 const appSlice = createSlice({
@@ -32,6 +33,9 @@ const appSlice = createSlice({
     getSettingsSuccess(state, action: PayloadAction<any>) {
       state.settings = action.payload;
     },
+    onCurrentHeightUpdated(state, action: PayloadAction<number>) {
+      state.currentHeight = action.payload;
+    },
   }
 });
 
@@ -39,11 +43,13 @@ const appSlice = createSlice({
 export const {
   appReady,
   appLatestVersion,
-  getSettingsSuccess
+  getSettingsSuccess,
+  onCurrentHeightUpdated
 } = appSlice.actions;
 
 export const fetchAppSettings = (): AppThunk => async dispatch => {
   const result = await backend.getSettings();
+  console.debug("Settings from backend: " + JSON.stringify(result));
   dispatch(getSettingsSuccess(result));
 };
 

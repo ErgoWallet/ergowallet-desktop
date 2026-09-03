@@ -6,6 +6,7 @@ export class BlockchainService extends EventEmitter {
 
   private schedulerService: SchedulerService;
   public currentHeight: number | null = null;
+  public lastHeaders: any;
   private connector: any;
 
   constructor(connector) {
@@ -28,9 +29,12 @@ export class BlockchainService extends EventEmitter {
 
   private async retrieveState(): Promise<void> {
     try {
-      const response = await this.connector.getBlocks();
+      // Retrieve last 10 blocks headers
+      const headers  = await this.connector.getLatestBlockHeaders(10);
+      this.lastHeaders = headers.items;
+      console.debug("Last Block " + this.lastHeaders[0].id + " at " + this.lastHeaders[0].height)
 
-      const newHeight = response.total;
+      const newHeight = this.lastHeaders[0].height;
       const prevHeight = this.currentHeight;
       this.currentHeight = newHeight;
 

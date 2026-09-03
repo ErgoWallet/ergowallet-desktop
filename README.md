@@ -9,18 +9,23 @@ Non-custodial desktop wallet for [Ergo Platform](https://ergoplatform.org) block
 
 Install dependencies
 ```
-$ yarn
+$ pnpm install
 ```
 
 Start application
 ```
-$ yarn start
+$ pnpm tauri dev
 ```
 
 ### How to build
 ```
-$ yarn build
-$ yarn dist
+$ pnpm run build
+$ pnpm run dist
+```
+
+### Create distibutives
+```
+pnpm tauri build
 ```
 
 ### How to verify checksums of release
@@ -31,4 +36,4 @@ Windows with cmd `certutil -hashfile <filename> SHA256`
 
 ### Help & Support
 
-https://support.ergowallet.io/
+https://ergowallet.io/support

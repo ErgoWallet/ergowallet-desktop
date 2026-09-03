@@ -22,6 +22,13 @@ function Addresses(): React.ReactElement {
   }, []);
 
   return (
+    <AddressesView addresses={wallet.addresses} />
+  );
+}
+
+export function AddressesView(props: { addresses: Array<any> }) {
+  const { addresses } = props;
+  return (
     <Table size="small">
       <TableHead>
         <TableRow>
@@ -33,7 +40,7 @@ function Addresses(): React.ReactElement {
         </TableRow>
       </TableHead>
       <TableBody>
-        {wallet.addresses.map((item) => (
+        {addresses.map((item) => (
           <Row key={item.address} item={item} />
         ))}
       </TableBody>
@@ -86,6 +93,10 @@ const Row = (props: { item: any }) => {
                   <Box display="flex">
                     <Box flexBasis={0} flexGrow={1}>Derivation Path</Box>
                     <Box flexBasis={0} flexGrow={1}>{item.path}</Box>
+                  </Box>
+                  <Box display="flex">
+                    <Box flexBasis={0} flexGrow={1}>Public key</Box>
+                    <Box m={1} flexBasis={0} flexGrow={1}>{`0x${item.publicKey}`}</Box>
                   </Box>
                 </Box>
               </Box>

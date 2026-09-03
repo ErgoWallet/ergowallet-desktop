@@ -20,7 +20,7 @@ interface LoginScreenProps {
 }
 
 const submitStyle = (theme: any) => ({
-  margin: theme.spacing(3, 0, 2),
+  margin: theme.spacing(2, 0, 2),
 })
 
 const paperStyle = (theme: any) => ({
