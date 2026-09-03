@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "ES2015",
-      "DOM"
-    ],
+
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "rootDir": "./src",
@@ -13,9 +10,13 @@
       "react-dom",
       "jest"
     ],
+
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    // "target": "ES2022",
-    // "module": "ES2022"
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "noEmit": true,
 
     /* Linting */
     //"strict": true,
@@ -25,7 +26,7 @@
   },
   "include": [
     "src/**/*.ts"
-, "src/main/main-window.ts_obsolete"  ],
+  ],
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*.stories.ts",

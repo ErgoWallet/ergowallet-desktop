@@ -24,8 +24,6 @@
   "scripts": {
     "test": "jest",
     "clean": "rimraf src-tauri/target/ && rimraf node_modules/",
-    "compile": "tsc",
-    "dist": "rimraf dist/ && electron-builder --publish never",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "dev": "vite",
     "storybook": "storybook dev -p 6006",
