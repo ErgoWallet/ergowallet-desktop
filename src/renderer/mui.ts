@@ -1,11 +1,16 @@
 import {
     Box,
     Button,
+    Link,
     Chip
 } from "@mui/material";
 
-export  { 
+import CloseIcon from '@mui/icons-material/Close';
+
+export  {
+    Link, 
     Button,
     Box,
-    Chip 
+    Chip,
+    CloseIcon 
 };

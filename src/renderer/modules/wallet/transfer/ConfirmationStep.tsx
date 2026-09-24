@@ -1,17 +1,20 @@
 import * as React from 'react';
-import {Box, Button, Link} from "@mui/material";
+// import {Box, Button, Link} from "@mui/material";
+import {Box, Button, Link} from "../../../mui";
 import Address from "../../../components/Address";
 import AssetValue from '../../../components/AssetValue';
 import TokensValues from "../TokensValues";
+import { CircularProgress } from '@mui/material';
 
 interface ConfirmProps {
   tx: any;
   error?: any;
   onSend?: () => void;
+  sending: boolean;
 }
 
 function ConfirmationStep(props: ConfirmProps): React.ReactElement {
-  const {tx, onSend, error} = props;
+  const {tx, onSend, error, sending} = props;
   const [showJson, setShowJson] = React.useState(false);
 
   function handleJsonClick(): void {
@@ -60,18 +63,19 @@ function ConfirmationStep(props: ConfirmProps): React.ReactElement {
             {JSON.stringify(tx.ergoTx, null, 2)}
           </Box>
       )}
-      {error && (
-        <Box m={1}>{error}</Box>
-      )}
       <Box mt={2}>
         <Button
+          disabled={sending}
           variant="contained"
           color="secondary"
           onClick={handleSendClick}
         >
-          Sign and Send
+          {sending && (<CircularProgress size={20}/>)} Sign and Send
         </Button>
       </Box>
+      {error && (
+        <Box m={1}>{error}</Box>
+      )}
     </Box>
   );
 }
