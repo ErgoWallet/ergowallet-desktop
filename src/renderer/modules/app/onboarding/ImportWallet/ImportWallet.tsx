@@ -2,7 +2,7 @@ import * as React from "react";
 import InitWalletParams from "../InitWalletParams";
 import InputMnemonic from "./InputMnemonic";
 import {Box, Container} from "@mui/material";
-import * as backend from "../../../../Backend";
+import * as backend from "../../../../backend";
 import SelectWalletType, {WalletType} from "./SelectWalletType";
 import InputPrivateKey from "./InputPrivateKey";
 

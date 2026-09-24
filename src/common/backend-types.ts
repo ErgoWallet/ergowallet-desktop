@@ -3,6 +3,7 @@ import * as walletTypes from '../main/application/services/wallet/Wallet';
 
 export interface AddressInfo {
   address: string;
+  publicKey: string;
 }
 export type ErgoTokenAmount = Omit<TokenValue, 'amount'> & { amount: string };
 

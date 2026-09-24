@@ -1,6 +1,5 @@
-import {Box, Button, CssBaseline, ThemeProvider} from "@mui/material";
+import {Button, CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "../../ui/theme";
-import * as React from "react";
 
 interface TermsProps {
   onAccepted?: any;
@@ -10,8 +9,8 @@ const Terms = (props: TermsProps) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box display="flex" m={2} flexDirection="column" alignItems="center">
-        <Box>
+      <div className="flex flex-col items-center m-2 space-y-2">
+        <div className="space-y-4">
           <p>
             End-User License Agreement for Ergo Wallet<br/>
             Last updated: 12 September 2020
@@ -89,8 +88,8 @@ const Terms = (props: TermsProps) => {
           <p>
             If you have any questions about this AGREEMENT, please contact us.
           </p>
-        </Box>
-        <Box>
+        </div>
+        <div>
           <Button
             variant="contained"
             color="primary"
@@ -98,8 +97,8 @@ const Terms = (props: TermsProps) => {
           >
             Accept
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </ThemeProvider>
   );
 }

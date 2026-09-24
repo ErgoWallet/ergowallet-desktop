@@ -3,7 +3,7 @@ import {Box, Container} from '@mui/material';
 import ConfirmMnemonic from "./ConfirmMnemonic";
 import InitWalletParams from "../InitWalletParams";
 import NewMnemonic from "./NewMnemonic";
-import * as backend from "../../../../Backend";
+import * as backend from "../../../../backend";
 
 // ****************************************************************************
 // This wizard contains following steps:

@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import * as backend from "../../Backend";
+import * as backend from "../../backend";
 import {AppThunk} from "../../store/store";
 import {groupByDay} from "./utils";
 import {WalletBox} from "../../../main/application/services/wallet/Wallet";
 
 export interface WalletState {
-  addresses: any;
+  addresses: Array<any>;
   boxes: Array<WalletBox>;
   transactions: Record<string, Array<any>>;
   txsLoading: boolean;
